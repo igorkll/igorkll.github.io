@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>SComputers - Api Reference</title>
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <a class="text" href="index.html">main page</a>
+        <h1 style="color:white;">SComputers - Api Reference</h1>
+
+        <p style="color:white;">
+            SComputers, this is a fork of the ScriptableComputer mod
+            <br/>
+            this fork is compatible with the code of the original ScriptableComputer
+            <br/>
+            however, programs written for this mod will not work on the original ScriptableComputer
+        </p>
+
+        <p style="color:white;">
+            in the original "ScriptableComputer" luaInLua worked terribly and contained a bunch of bugs,
+            in SComputers most of the luaInLua bugs were fixed
+        </p>
+
+        <p style="color:white;">
+            global lua changes, now the number of iterations is unlimited, but the execution time of one tick is limited, if the computer does not have time to execute the code in time, an error will pop up
+            you can configure how much the computer can "delay" the game-tick in the "Permission Tool" (by default: 4 ticks)
+        </p>
+
+        <p style="color:white;">
+            SComputers has a lag-score mechanic that prevents lags from being called
+            <br/>
+            if the computer runs the code for a long time (it takes a lot of processor time) then he is credited with a lag-score, which can lead to missing clock cycles. which actually means that you won't get control for the next beat of the game
+        </p>
+
+        <br/>
+        <p class="text">warnings</p>
+        <ul class="list">
+            <li><span>exceptions in callback_error, clientInvoke, clientInvokeTo cannot be handled in any way other than viewing game logs/debug console</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">small changes</p>
+        <ul class="list">
+            <li><span>in safe-mode, additional checks have been added to some methods of the SM library (in order to avoid crashes) (previously, only json implementation switched to the built-in json mod library, there were still ways to call bugsplat, and this library has significant differences, so sm.json in safe-mode is now again sm.json but with additional checks)</span></li>
+            <li><span>when using clientInvoke(available only in unsafe-mode), ENV will be saved, however, the code is loaded anew every time</span></li>
+            <li><span>clientInvoke(str, ...) supports arguments</span></li>
+            <li><span>exceptions "path .. underflow" cannot be retrieved. the extra ".." is simply ignored</span></li>
+            <li><span>the combination of characters "\n" (two separate characters and not a new line) can be displayed in the gui as "¦n" this is due to the fact that mygui (which uses scrapmechanic) turns "\n" into a new line (at the same time, "¦n" works like normal "\n")</span></li>
+            <li><span>now, when disabling a component/removing a component, it is guaranteed not to be work</span></li>
+            <li><span>now the stepper motors do not create any force in the off state</span></li>
+            <li><span>now the camera is able to see the units in a separate (by you exposed) color(by default, this color is bright white in all rendering modes)</span></li>
+            <li><span>The camera's FOV is limited to 165 degrees</span></li>
+            <li><span>The radar.getTargets method can now be used only once per tick on one radar (to avoid noise filtering) if you need to filter the noise then use multiple radars</span></li>
+            <li><span>port.nextPacket can now be called even if there are no packets in the buffer without the risk of an error, the method will simply return nil if the packet is not in the buffer</span></li>
+            <li><span>port.nextPacket now it returns 2 values, the first is the packet itself, and the second is the ID of the port from which the packet was sent</span></li>
+            <li><span>fixed a bug that prevented radars from seeing static objects</span></li>
+            <li><span>the print/alert/debug functions will not work by default, for them to work, you need to configure this in the creative Permission Tool</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">recommendations</p>
+        <ul class="list">
+            <li><span>if the antenna on your device works only for receiving then you can put an NFC antenna, the antenna radius affects only the transmission</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">sandbox features</p>
+        <ul class="list">
+            <li><span>if you declare the function "callback_error(str)" then it will be called in cases of an error in the computer
+            before the computer crashes (but it will crash anyway if you not delete the crash information from "crashstate" on callback_error function)
+            at the same time, it will be called before the crash and you will be able to "cancel" the crash
+            using the "getCurrentComputer" method and interacting with the crashstate table
+            if an exception occurs in this function, it can be caught only in the game logs/debug console</span></li>
+            <li><span>ATTENTION, now the "crashstate" table in the public API is a shadow of the real "crashstate" table. as a result, you can read from it, but writing to it will not lead to any result.
+            to undo the computer crash from "callback_error", use the "reboot" method</span></li>
+            <li><span>if you declare the "callback_loop" function, it will be called on the next tick instead of calling the entire program</span></li>
+            <li><span>added the load method, which allows you to set the name of a piece of code and works as in a normal lua, but does not allow you to load bytecode</span></li>
+            <li><span>the crashstate table has been added to the public api of the computer (getChildComputers and getParentComputers and getCurrentComputer)
+            there are two values hasException and exceptionMsg
+            you can write your values there</span></li>
+            <li><span>the _endtick flag that is automatically raised if the computer's tick is the last one</span></li>
+            <li><span>_VERSION contains uses VM name</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">how to use the importer</p>
+        <ul class="list">
+            <li><span>to generate an disk-image, use the importer utility, it is located in $CONTENT_DATA/USER/importer</span></li>
+            <li><span>to import an disk-image, use the disk menu, to do this, press the E button on it</span></li>
+            <li><span>to open this menu on a PC with a built-in disk, use the button in its gui</span></li>
+            <li><span>when importing, old files are not erased, in order to erase them, click clear</span></li>
+            <li><span>you can import your generated disk-image($CONTENT_DATA/USER/importer/disk.json), or a ready-made OS (scrapOS)</span></li>
+            <li><span>at the moment, importing/exporting a custom disk-image only works when you are the host!</span></li>
+            <li><span>the "import from importer" and "export to importer" buttons import and export the disk-image to the importer file(disk.json) the buttons below are responsible for importing/exporting to the "$CONTENT_DATA/USER/userdisks" folder</span></li>
+            <li><span>on "windows", it is usually located along the path: "C:\Program Files (x86)\Steam\steamapps\workshop\content\387990\2949350596\USER\importer"</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">how to use the importer</p>
+        <ul class="list">
+            <li><span>to generate an disk-image, use the importer utility, it is located in $CONTENT_DATA/USER/importer</span></li>
+            <li><span>to import an disk-image, use the disk menu, to do this, press the E button on it</span></li>
+            <li><span>to open this menu on a PC with a built-in disk, use the button in its gui</span></li>
+            <li><span>when importing, old files are not erased, in order to erase them, click clear</span></li>
+            <li><span>you can import your generated disk-image($CONTENT_DATA/USER/importer/disk.json), or a ready-made OS (scrapOS)</span></li>
+            <li><span>at the moment, importing/exporting a custom disk-image only works when you are the host!</span></li>
+            <li><span>the "import from importer" and "export to importer" buttons import and export the disk-image to the importer file(disk.json) the buttons below are responsible for importing/exporting to the "$CONTENT_DATA/USER/userdisks" folder</span></li>
+            <li><span>on "windows", it is usually located along the path: "C:\Program Files (x86)\Steam\steamapps\workshop\content\387990\2949350596\USER\importer"</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">why do the disks in SComputers have such a small volume</p>
+        <ul class="list">
+            disk sizes are GREATLY reduced in order to avoid non-spawning creations and saving bugs.
+            <br/>
+            the game cannot save even megabytes of data to blueprint(max blueprint size 512kb).
+            <br/>
+            now small and embedded disks have a volume of 64kb, a larger 128kb.
+            <br/>
+            creative hard drive has a volume of 1MB, but does not save data after re-entry and when saving.
+            <br/>
+            if you need to save large amounts of data to a disk, then you can use the <a href="addons.html#world_disks" class="hyper">"world disks"</a> addon.
+        </ul>
+
+        <br/>
+        <p class="text">endtick</p>
+        <ul class="list">
+            after adding always on, it is incorrect to use "not input()" to track the shutdown,
+            <br/>
+            use the check "if _endtick then" there is a _endtick flag raised, this means the last tick
+        </ul>
+
+        
+
+
+        <p class="text">documentation sections:</p>
+        <ul class="list">
+            <a class="hyper" href="./env.html"><li><span>environment</span></li></a>
+            <a class="hyper" href="./libraries.html"><li><span>libraries</span></li></a>
+        </ul>
+    </body>
+</html>

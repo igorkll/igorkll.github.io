@@ -1,0 +1,23 @@
+body {
+    background: hsl(201, 100%, 22%) url(background.jpg);
+}
+
+.image {
+    width: 60%;
+    height: 60%;
+}
+
+.text {
+    color: whitesmoke;
+    font-size: medium;
+    padding: 0%;
+}
+
+.list {
+    color: rgb(255, 255, 255);
+    list-style-type: disc;
+}
+
+.hyper {
+    color: rgb(255, 123, 0)
+}
