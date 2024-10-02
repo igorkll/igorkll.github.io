@@ -24,11 +24,12 @@
             component name - camera<br/>
         </p>
 
-        <p class="text">methods:</p>
+        <p class="text">additional methods (in the camera api provided by this block):</p>
         <ul class="list">
             <li><span>isCameraAvailable():boolean - returns true if there is a connection to the camera</span></li>
-            <li><span>setCameraChannel(number:1-6) - sets the camera channel from 1 to 6</span></li>
+            <li><span>setCameraChannel(number:0-31) - sets the camera channel from 0 to 31</span></li>
             <li><span>getCameraChannel():number - returns the set channel</span></li>
+            <li><span>isChannelBusy(number):boolean - returns true if the channel passed to the method already has an image transmitting device that may cause a transmission conflict. It can also be used to search for a transmitter</span></li>
         </ul>
     </body>
 </html>

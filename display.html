@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>SComputers - Api Reference</title>
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="style.css">
+        <link href="highlight.css" rel="stylesheet">
+        <script src="highlight.js"></script>
+        <script>
+			hljs.highlightAll();
+		</script>
+    </head>
+    <body>
+        <a class="text" href="index.html">main page</a>
+        <br/>
+        <a class="text" href="api.html#docsel">main page - api reference</a>
+        <br/>
+        <a class="text" href="components.html">main page - components</a>
+
+        <br/>
+        <p class="text">
+            displays allow you to display information<br/>
+            in SComputers, displays have the best optimization of all mods in the workshop<br/>
+            the colors for the display can be specified in the following formats: 0xrrggbb, "rrggbb", "#rrggbb", sm.color.new(r, g, b)<br/>
+            indexing of the display starts from 0 and up to width/height - 1. however, if you "go beyond the margins" nothing happens, all content that goes beyond the boundaries of the display simply will not be rendered<br/>
+            if you do not have enough variety of sizes and resolutions of displays presented in the basic mod, you can use the <a href="addons.html#stretchable_display" class="hyper">"stretchable display"</a> addon<br/>
+            component name - display
+        </p>
+
+        <p class="text">methods:</p>
+        <ul class="list">
+            <li><span>display.isAllow():boolean - returns true if this display can be used. returns false if it was disabled by the administrator</span></li>
+            <li><span>display.getAudience():number - returns the number of players who are currently looking at the display</span></li>
+            <li><span>display.setFontScale(scaleX:float, scaleY:float) - allows you to stretch and compress the font. fractional values are allowed (by default 1, 1)</span></li>
+            <li><span>display.setFontSize(charX:number, charY:number) - calculates font scaling based on the required size. please note that the calculation may not always be accurate with non-monospaced fonts</span></li>
+            <li><span>display.getFontScale():float, float - returns the value set using display.setFontScale (by default 1, 1)</span></li>
+            <li><span>display.setTextSpacing(number) - sets the distances between characters in pixels (by default 1)</span></li>
+            <li><span>display.getTextSpacing():number - returns the value set using display.setTextSpacing (by default 1)</span></li>
+            <li><span>display.calcTextBox(text:string):number, number - it will return two numbers, this will be the size of the box that your text will occupy with this font and this scale</span></li>
+            <li><span>display.getWidth():number - returns the width of the display in pixels</span></li>
+            <li><span>display.getHeight():number - returns the height of the display in pixels</span></li>
+            <li><span>display.getSize():number, number - returns the width and height of the display</span></li>
+            <li><span>display.setUtf8Support(state:boolean) - set to true if you want to use Russian or other special characters which take up more than one byte (default: false)</span></li>
+            <li><span>display.getUtf8Support():boolean - returns the value set using display.setUtf8Support (default: false)</span></li>
+            <li><span>display.setRenderAtDistance(state:boolean) - allows you to see the contents of the display much further than it is usually visible (requires enable in the mod config) (default: false)</span></li>
+            <li><span>display.getRenderAtDistance():boolean - returns the value set using display.setRenderAtDistance (default: false)</span></li>
+            <li><span>display.setRotation(rotation:number) - programmatically rotates images onto displays. options 0, 1, 2, 3 are allowed. note that in modes 1 and 3, width and height are swapped (including the behavior of the display.getWidth, display.getHeight methods) (default: 0)</span></li>
+            <li><span>display.getRotation():number - returns the value set using display.setRotation (default: 0)</span></li>
+            <li><span>display.setFont(font) - sets a custom font. if the font is from the <a href="fonts.html" class="hyper">"fonts library"</a>, it will not be transmitted over the network. however, if it is a custom font, it will be transmitted over the network (more than one custom font cannot be transmitted per 1 tick)</span></li>
+            <li><span>display.getFontWidth():number - returns the width of a character using scaleX</span></li>
+            <li><span>display.getRealFontWidth():number - returns the width of a character without considering scaleX</span></li>
+            <li><span>display.getRealFontHeight():number - returns the height of a character without considering scaleY</span></li>
+            <li><span>display.setSkipAtNotSight(state:boolean) - if set to true, the screen will not be updated for those players who are not looking at it (which in some cases increases FPS and reduces network load) (default: false)</span></li>
+            <li><span>display.getSkipAtNotSight():boolean - returns the value set using display.setSkipAtNotSight (default: false)</span></li>
+            <li><span>display.reset() - resets all display settings but does not clear it</span></li>
+            
+            <br/>
+            <li><span>display.clear(color) - fills the display with the specified color</span></li>
+            <li><span>display.drawPixel(x, y, color) - sets 1 pixel on display</span></li>
+            <li><span>display.fillRect(x, y, sizeX, sizeY, color) - fills the rectangle</span></li>
+            <li><span>display.drawRect(x, y, sizeX, sizeY, color) - draws an empty rectangle</span></li>
+            <li><span>display.drawText(x, y, text, color) - draws text of a given color at a given position</span></li>
+            <li><span>display.drawLine(x, y, x2, y2, color) - draws a line on the displays from point A to point B</span></li>
+            <li><span>display.drawCircle(x, y, radius, color) - draws an empty circle, please note that this circle cannot be exactly inscribed in a square and does not exactly fit on the display.fillCircle</span></li>
+            <li><span>display.drawCircleEvenly(x, y, radius, color) - a more accurate version of display.drawCircle. it can already be inscribed in a square (for example, drawn over the entire surface of the screen) and lie more evenly on the display.fillCircle (however, it is not ideal)</span></li>
+            <li><span>display.drawCircleVeryEvenly(x, y, radius, color, stroke=1) - fits perfectly on display.fillCircle. can change the stroke size</span></li>
+            <li><span>display.fillCircle(x, y, radius, color) - fills a circle of a given radius at a given position</span></li>
+            <li><span>display.flush() - sends the changes to the display. however, please note that your changes may be "lost" if the skipAtNotSight(this is disabled by default) flag is set and the player is not looking at the display</span></li>
+            <li><span>display.forceFlush() - sends the changes to the screen. ensures that the image reaches the recipient</span></li>
+        </ul>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">--example for display 256x256
+--full fonts list: https://igorkll.github.io/fonts.html
+
+local fonts = require("fonts")
+local display = getComponent("display")
+
+display.reset()
+display.setTextSpacing(6) --in such large fonts, it would be more logical to spread the characters a little more than 1 pixel apart
+display.setFontScale(1.8, 1.8) --is 32x32 small? you can make any font bigger!
+display.clear()
+local posY = 1
+local text = "TEST"
+
+display.setFont(fonts.impact_32)
+local boxX, boxY = display.calcTextBox(text)
+display.fillRect(1, posY, boxX, boxY, 0x00ff00)
+display.drawText(1, posY, text, 0xff0000)
+posY = posY + display.getFontHeight() + 3
+
+display.setFont(fonts.verdana_32)
+local boxX, boxY = display.calcTextBox(text)
+display.fillRect(1, posY, boxX, boxY, 0x00ff00)
+display.drawText(1, posY, text, 0xff0000)
+posY = posY + display.getFontHeight() + 3
+
+display.setFont(fonts.seguibl_32)
+local boxX, boxY = display.calcTextBox(text)
+display.fillRect(1, posY, boxX, boxY, 0x00ff00)
+display.drawText(1, posY, text, 0xff0000)
+posY = posY + display.getFontHeight() + 3
+
+display.setFont(fonts.arial_32)
+local boxX, boxY = display.calcTextBox(text)
+display.fillRect(1, posY, boxX, boxY, 0x00ff00)
+display.drawText(1, posY, text, 0xff0000)
+posY = posY + display.getFontHeight() + 3
+
+display.flush()
+
+function callback_loop()
+    if _endtick then
+        display.clear()
+        display.flush()
+        return
+    end
+end</code>
+        </pre>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">local display = getComponents("display")[1]
+
+display.reset()
+display.clear()
+display.setFont(
+    {
+        width = 3,
+        height = 3,
+        chars = {
+            error = {
+                "111",
+                "1.1",
+                "111"
+            },
+            a = {
+                ".1.",
+                "111",
+                "1.1"
+            },
+            b = {
+                "1..",
+                "111",
+                "111"
+            },
+            c = {
+                "111",
+                "1..",
+                "111"
+            }
+        }
+    }
+)
+display.setFontSize(6, 12)
+local boxX, boxY = display.calcTextBox("abcdef")
+display.fillRect(1, 1, boxX, boxY, 0x00ff00)
+display.drawText(1, 1, "abcdef", "ff0000")
+display.flush()
+
+function callback_loop()
+    if _endtick then
+        display.clear()
+        display.forceFlush()
+    end
+end</code>
+        </pre>
+
+        
+    </body>
+</html>
