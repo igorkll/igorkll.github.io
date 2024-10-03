@@ -21,3 +21,7 @@ body {
 .hyper {
     color: rgb(255, 123, 0)
 }
+
+li {
+    margin: 10px 0;
+}
