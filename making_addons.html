@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>SComputers - Api Reference</title>
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="style.css">
+        <link href="highlight.css" rel="stylesheet">
+        <script src="highlight.js"></script>
+        <script>
+			hljs.highlightAll();
+		</script>
+    </head>
+    <body>
+        <a class="text" href="index.html">main page</a>
+        <br/>
+        <a class="text" href="api.html#docsel">main page - api reference</a>
+
+        <p style="color:white;">
+            SComputers supports the creation of addons<br/>
+            to create add-ons, you don't need to have special permissions or anything like that, you just need to modify your shape script a little by providing an API<br/>
+            please note that SComputers clones the API table and adds its hook to each method, each computer creates its own clone of your API table when you first receive the component table, this can cause confusion. just remember that it is better to re-spawn your test blueprint after you have changed your shape script for debugging
+        </p>
+
+        <p class="text">actions for creating addons:</p>
+        <ul class="list">
+            <li><span>if this mod is purely an addon for SComputers and does not involve use without SComputers. then add [SComputers addon] at the end of the mod name</span></li>
+            <li><span>add the "componentType" field with the component name to your shape class</span></li>
+            <li><span>make the input or output of your component with the sm.interactable.connectionType.composite type (you can combine types using the + operator)</span></li>
+            <li><span>add the sc_component table to the publicData of your interactable, add the type field to it that corresponds to the componentType field of your class and the api field that contains the callback functions of your component</span></li>
+            <li><span>test your add-on</span></li>
+            <li><span>create and publish documentation</span></li>
+            <li><span>create a preview</span></li>
+            <li><span>create a description</span></li>
+            <li><span>upload an addon on steam</span></li>
+            <li><span>add SComputers to the required for your addon</span></li>
+            <li><span>make the addon public</span></li>
+            <li><span><a class="hyper" href="./contact_me.html">contact me</a>, i will double-check your addon and if it works as needed, then I will add your addon to the steam collection and to the <a class="hyper" href="./addons.html">"addon list"</a></span></li>
+        </ul>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">--this code is the basis for creating addons
+exampleComponent = class()
+exampleComponent.maxParentCount = 1
+exampleComponent.maxChildCount = 0
+exampleComponent.connectionInput = sm.interactable.connectionType.composite
+exampleComponent.connectionOutput = sm.interactable.connectionType.none
+exampleComponent.colorNormal = sm.color.new(0x7F7F7Fff)
+exampleComponent.colorHighlight = sm.color.new(0xFFFFFFff)
+exampleComponent.componentType = "example" --absences can cause problems
+
+function exampleComponent:server_onCreate()
+    self.interactable.publicData = {
+        sc_component = {
+            type = exampleComponent.componentType,
+            api = {
+                test = function()
+                    return "ok"
+                end
+            }
+        }
+    }
+end</code>
+        </pre>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">--we check the operation of our component
+print(getComponent("example").test())
+            </code>
+        </pre>
+    </body>
+</html>

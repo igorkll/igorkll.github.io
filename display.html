@@ -51,9 +51,36 @@
             <li><span>display.getFontWidth():number - returns the width of a character using scaleX</span></li>
             <li><span>display.getRealFontWidth():number - returns the width of a character without considering scaleX</span></li>
             <li><span>display.getRealFontHeight():number - returns the height of a character without considering scaleY</span></li>
-            <li><span>display.setSkipAtNotSight(state:boolean) - if set to true, the screen will not be updated for those players who are not looking at it (which in some cases increases FPS and reduces network load) (default: false)</span></li>
+            <li><span>display.setSkipAtNotSight(state:boolean) - if set to true, the display will not be updated for those players who are not looking at it (which in some cases increases FPS and reduces network load) (default: false)</span></li>
             <li><span>display.getSkipAtNotSight():boolean - returns the value set using display.setSkipAtNotSight (default: false)</span></li>
             <li><span>display.reset() - resets all display settings but does not clear it</span></li>
+
+            <br/>
+            <li><span>display.setClicksAllowed(state:boolean) - turns the touchscreen on/off (default: false)</span></li>
+            <li><span>display.getClicksAllowed():boolean -  returns the value set using display.setClicksAllowed (default: false)</span></li>
+            <li><span>display.clearClicks() - clears the click buffer</span></li>
+            <li><span>display.setMaxClicks(number) - sets the maximum number of clicks that fit into the buffer from 1 to 16 (default: 16)</span></li>
+            <li><span>display.getMaxClicks():number - returns the value set using display.setMaxClicks (default: 16)</span></li>
+            <li><span>display.getClick():table - reads a table with information about the click. if there was no click, it will return nil</span></li>
+
+            <pre>
+                <code class="language-lua" style="width: fit-content;">--the structure of the click table
+{
+    --string values
+    x = number, --the position of the click on X. from 0 to width
+    y = number, --the position of the click on Y. from 0 to height
+    state = string, --"pressed" / "released" / "drag"
+    button = number, --1 - left mouse button, 2 - right mouse button
+    nickname = string --player nickname
+
+    --number values
+    1 = number, --the position of the click on X. from 0 to width
+    2 = number, --the position of the click on Y. from 0 to height
+    3 = string, --"pressed" / "released" / "drag"
+    4 = number, --1 - left mouse button, 2 - right mouse button
+    5 = string --player nickname
+}</code>
+            </pre>
             
             <br/>
             <li><span>display.clear(color) - fills the display with the specified color</span></li>
@@ -63,12 +90,14 @@
             <li><span>display.drawText(x, y, text, color) - draws text of a given color at a given position</span></li>
             <li><span>display.drawLine(x, y, x2, y2, color) - draws a line on the displays from point A to point B</span></li>
             <li><span>display.drawCircle(x, y, radius, color) - draws an empty circle, please note that this circle cannot be exactly inscribed in a square and does not exactly fit on the display.fillCircle</span></li>
-            <li><span>display.drawCircleEvenly(x, y, radius, color) - a more accurate version of display.drawCircle. it can already be inscribed in a square (for example, drawn over the entire surface of the screen) and lie more evenly on the display.fillCircle (however, it is not ideal)</span></li>
+            <li><span>display.drawCircleEvenly(x, y, radius, color) - a more accurate version of display.drawCircle. it can already be inscribed in a square (for example, drawn over the entire surface of the display) and lie more evenly on the display.fillCircle (however, it is not ideal)</span></li>
             <li><span>display.drawCircleVeryEvenly(x, y, radius, color, stroke=1) - fits perfectly on display.fillCircle. can change the stroke size</span></li>
             <li><span>display.fillCircle(x, y, radius, color) - fills a circle of a given radius at a given position</span></li>
             <li><span>display.flush() - sends the changes to the display. however, please note that your changes may be "lost" if the skipAtNotSight(this is disabled by default) flag is set and the player is not looking at the display</span></li>
-            <li><span>display.forceFlush() - sends the changes to the screen. ensures that the image reaches the recipient</span></li>
+            <li><span>display.forceFlush() - sends the changes to the display. ensures that the image reaches the recipient</span></li>
         </ul>
+
+        
 
         <pre>
             <code class="language-lua" style="width: fit-content;">--example for display 256x256
@@ -165,7 +194,5 @@ function callback_loop()
     end
 end</code>
         </pre>
-
-        
     </body>
 </html>
