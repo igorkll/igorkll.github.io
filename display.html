@@ -25,6 +25,7 @@
             the colors for the display can be specified in the following formats: 0xrrggbb, "rrggbb", "#rrggbb", sm.color.new(r, g, b)<br/>
             indexing of the display starts from 0 and up to width/height - 1. however, if you "go beyond the margins" nothing happens, all content that goes beyond the boundaries of the display simply will not be rendered<br/>
             if you do not have enough variety of sizes and resolutions of displays presented in the basic mod, you can use the <a href="addons.html#stretchable_display" class="hyper">"stretchable display"</a> addon<br/>
+            note that if the color is not specified (nil), then all rendering methods will perceive it as white, except clear, which perceives nil as black<br/>
             component name - display
         </p>
 
@@ -38,6 +39,8 @@
             <li><span>display.setTextSpacing(number) - sets the distances between characters in pixels (by default 1)</span></li>
             <li><span>display.getTextSpacing():number - returns the value set using display.setTextSpacing (by default 1)</span></li>
             <li><span>display.calcTextBox(text:string):number, number - it will return two numbers, this will be the size of the box that your text will occupy with this font and this scale</span></li>
+            <li><span>display.calcCharsSize(text:string):lens - calculates the length of each character in a string, taking into account its spacing from the next character, and returns a table with these values</span></li>
+            <li><span>display.calcDecreasingTextSizes(text:string):lens - it works almost like display.calcCharsSize. however, each value contains all the previous ones. this is used in the graphic.textBox function, but probably not applicable to any other</span></li>
             <li><span>display.getWidth():number - returns the width of the display in pixels</span></li>
             <li><span>display.getHeight():number - returns the height of the display in pixels</span></li>
             <li><span>display.getSize():number, number - returns the width and height of the display</span></li>
@@ -53,6 +56,9 @@
             <li><span>display.getRealFontHeight():number - returns the height of a character without considering scaleY</span></li>
             <li><span>display.setSkipAtNotSight(state:boolean) - if set to true, the display will not be updated for those players who are not looking at it (which in some cases increases FPS and reduces network load) (default: false)</span></li>
             <li><span>display.getSkipAtNotSight():boolean - returns the value set using display.setSkipAtNotSight (default: false)</span></li>
+            <li><span>display.isMonospacedFont():boolean - returns true if a monospaced font is set</span></li>
+            <li><span>display.setBrightness(float) - sets the brightness multiplier for the screen. after calling this method, redraw the entire screen. it should usually be called at the very beginning of the program, immediately after display.reset. the value must be greater than 0  (default: 1)</span></li>
+            <li><span>display.getBrightness():float - returns the screen brightness multiplier (default: 1)</span></li>
             <li><span>display.reset() - resets all display settings but does not clear it</span></li>
 
             <br/>
@@ -83,7 +89,10 @@
             </pre>
             
             <br/>
-            <li><span>display.clear(color) - fills the display with the specified color</span></li>
+            <li><span>display.clear(color) - fills the display with the specified color. resets the viewport even before clearing</span></li>
+            <li><span>display.setViewport(x:number, y:number, width:number, height:number) - sets the zone in which the rendering will take place, call without arguments to reset. note that flush resets the viewport</span></li>
+            <li><span>display.setInlineViewport(x:number, y:number, width:number, height:number) - sets the viewport as well as the setViewport. except that if the viewport is already installed, then this method will limit the new viewport to the boundaries of the old one (you get a kind of nested viewport without an overhead with checks)</span></li>
+            <li><span>display.getViewport():number, number, number, number - returns the currently installed viewport. or nothing if it is not installed</span></li>
             <li><span>display.drawPixel(x, y, color) - sets 1 pixel on display</span></li>
             <li><span>display.fillRect(x, y, sizeX, sizeY, color) - fills the rectangle</span></li>
             <li><span>display.drawRect(x, y, sizeX, sizeY, color) - draws an empty rectangle</span></li>
@@ -93,7 +102,9 @@
             <li><span>display.drawCircleEvenly(x, y, radius, color) - a more accurate version of display.drawCircle. it can already be inscribed in a square (for example, drawn over the entire surface of the display) and lie more evenly on the display.fillCircle (however, it is not ideal)</span></li>
             <li><span>display.drawCircleVeryEvenly(x, y, radius, color, stroke=1) - fits perfectly on display.fillCircle. can change the stroke size</span></li>
             <li><span>display.fillCircle(x, y, radius, color) - fills a circle of a given radius at a given position</span></li>
-            <li><span>display.flush() - sends the changes to the display. however, please note that your changes may be "lost" if the skipAtNotSight(this is disabled by default) flag is set and the player is not looking at the display</span></li>
+            <li><span>display.drawPoly(color, points:number, x, y, x, y, ...) - draws polygon without filling. pass the color and number of polygon points. then, in turn, x, y for each point. please note that if you pass the wrong number of dots, you will most likely crash the display script. the display does not make such checks in order to avoid loss of performance</span></li>
+            <li><span>display.fillPoly(color, points:number, x, y, x, y, ...) - fill polygon</span></li>
+            <li><span>display.flush() - sends the changes to the display. however, please note that your changes may be "lost" if the skipAtNotSight(this is disabled by default) flag is set and the player is not looking at the display. resets the viewport after sending</span></li>
             <li><span>display.forceFlush() - sends the changes to the display. ensures that the image reaches the recipient</span></li>
         </ul>
 
