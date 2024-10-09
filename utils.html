@@ -34,10 +34,10 @@
             <li><span>utils.splitByMaxSizeWithTool(tool:stringlib/utf8, string, maximum_lenght:number):table - splits a string into substrings with the maximum lenght(uses the library you provided)</span></li>
             <li><span>utils.deepcopy(table):table - clones the table along with the subtables. supports recursive tables. it also clones game userdata objects such as Vec3, Color, Quat</span></li>
             <li><span>utils.copy(table):table - just clones the table. does not support nested tables (they just won't be cloned). it also does not support userdata objects</span></li>
-            <li><span>utils.md5(string):string - calculates the md5 checksum from the string you passed (the maximum string size is 1 kilobyte) THIS FUNCTION CANNOT BE CALLED FREQUENTLY! I recommend that you call her no more than once a second</span></li>
-            <li><span>utils.md5bin(string):string - calculates the md5(binary format) checksum from the string you passed (the maximum string size is 1 kilobyte) THIS FUNCTION CANNOT BE CALLED FREQUENTLY! I recommend that you call her no more than once a second</span></li>
-            <li><span>utils.sha256(string):string - calculates the sha256 checksum from the string you passed (the maximum string size is 1 kilobyte) THIS FUNCTION CANNOT BE CALLED FREQUENTLY! I recommend that you call her no more than once a second</span></li>
-            <li><span>utils.sha256bin(string):string - calculates the sha256(binary format) checksum from the string you passed (the maximum string size is 1 kilobyte) THIS FUNCTION CANNOT BE CALLED FREQUENTLY! I recommend that you call her no more than once a second</span></li>
+            <li><span>utils.md5(string):string - calculates the md5 checksum from the string you passed (the maximum string size is 1 kilobyte)</span></li>
+            <li><span>utils.md5bin(string):string - calculates the md5(binary format) checksum from the string you passed (the maximum string size is 1 kilobyte)</span></li>
+            <li><span>utils.sha256(string):string - calculates the sha256 checksum from the string you passed (the maximum string size is 1 kilobyte)</span></li>
+            <li><span>utils.sha256bin(string):string - calculates the sha256(binary format) checksum from the string you passed (the maximum string size is 1 kilobyte)</span></li>
             <li><span>utils.dist(vec3, vec3):number - calculates the distance between two points</span></li>
             <li><span>utils.fromEuler(vec3):quat - custom fromEuler implementation</span></li>
             <li><span>utils.toEuler(quat):vec3 - converts a quaternion to an Euler angle</span></li>

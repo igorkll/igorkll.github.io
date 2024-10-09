@@ -40,7 +40,7 @@ local paint = getComponent("paint")
 
 function callback_loop()
     if sm.game.getCurrentTick() % 10 == 0 then
-    paint.shot(sm.color.new(colors.hsvToRgb((getUptime() % 160) / 160, 1, 1)))
+        paint.shot(sm.color.new(colors.hsvToRgb((getUptime() % 160) / 160, 1, 1)))
     end
 end</code>
         </pre>
