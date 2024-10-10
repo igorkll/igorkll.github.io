@@ -28,8 +28,13 @@
 
         <p class="text">methods:</p>
         <ul class="list">
-            <li><span>vdisplay.() - </span></li>
+            <li><span>vdisplay.create(callbacks, width, height):vdisplayObject - creates a virtual display</span></li>
+        </ul>
 
+        <p class="text">callbacks:</p>
+        <ul class="list">
+            <li><span>callbacks.set = function(vdisplayObject, x:number, y:number, color:number(0xrrggbb))  end. called if you need to change the pixel on the virtual display</span></li>
+            <li><span>callbacks.flush = function(vdisplayObject, isForce:boolean)  end. called if you need to change the contents of the virtual display</span></li>
         </ul>
 
         <pre>

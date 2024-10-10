@@ -44,7 +44,7 @@
         <br/>
         <p class="text">small changes</p>
         <ul class="list">
-            <li><span>in safe-mode, additional checks have been added to some methods of the SM library (in order to avoid crashes) (previously, only json implementation switched to the built-in json mod library, there were still ways to call bugsplat, and this library has significant differences, so sm.json in safe-mode is now again sm.json but with additional checks)</span></li>
+            <li><span>in safe-mode, additional checks have been added to some methods of the SM library (in order to avoid crashes)</span></li>
             <li><span>when using clientInvoke(available only in unsafe-mode), ENV will be saved, however, the code is loaded anew every time</span></li>
             <li><span>clientInvoke(str, ...) supports arguments</span></li>
             <li><span>exceptions "path .. underflow" cannot be retrieved. the extra ".." is simply ignored</span></li>

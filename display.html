@@ -95,7 +95,7 @@
             <li><span>display.getViewport():number, number, number, number - returns the currently installed viewport. or nothing if it is not installed</span></li>
             <li><span>display.drawPixel(x, y, color) - sets 1 pixel on display</span></li>
             <li><span>display.fillRect(x, y, sizeX, sizeY, color) - fills the rectangle</span></li>
-            <li><span>display.drawRect(x, y, sizeX, sizeY, color) - draws an empty rectangle</span></li>
+            <li><span>display.drawRect(x, y, sizeX, sizeY, color, lineWidth:number) - draws an empty rectangle. the line width is default 1. note that the line width increases "inside" the rectangle, that is, even if the line width of the rectangle is 10, the rectangle itself will still be exactly inscribed in its coordinates</span></li>
             <li><span>display.drawText(x, y, text, color) - draws text of a given color at a given position</span></li>
             <li><span>display.drawLine(x, y, x2, y2, color, width:number, round:boolean) - draws a line on the displays from point A to point B. you can also set the line width. you can pass "round" to make the line rounded, but rasterizing such a line will be VERY SLOW. only makes sense at very high resolutions</span></li>
             <li><span>display.drawCircle(x, y, radius, color) - draws an empty circle, please note that this circle cannot be exactly inscribed in a square and does not exactly fit on the display.fillCircle</span></li>
@@ -103,8 +103,9 @@
             <li><span>display.drawCircleVeryEvenly(x, y, radius, color, stroke=1) - fits perfectly on display.fillCircle. can change the stroke size</span></li>
             <li><span>display.fillCircle(x, y, radius, color) - fills a circle of a given radius at a given position</span></li>
             <li><span>display.drawPoly(color, x, y, x, y, ...) - draws polygon without filling. pass the color and polygon points. then, in turn, x, y for each point</span></li>
-            <li><span>display.drawWidePoly(color, width:number, round:number, x, y, x, y, ...) - allows you to set the width of the line to be used and enable line rounding</span></li>
+            <li><span>display.drawWidePoly(color, width:number, round:boolean, x, y, x, y, ...) - allows you to set the width of the line to be used and enable line rounding</span></li>
             <li><span>display.fillPoly(color, x, y, x, y, ...) - fill polygon</span></li>
+            <li><span>display.fillWidePoly(color, width:number, round:boolean, x, y, x, y, ...) - fills the polygon, but allows you to adjust the width of the line and round it. in fact, it only makes sense if you want to round the polygon using a rounded line</span></li>
             <li><span>display.flush() - sends the changes to the display. however, please note that your changes may be "lost" if the skipAtNotSight(this is disabled by default) flag is set and the player is not looking at the display. resets the viewport after sending</span></li>
             <li><span>display.forceFlush() - sends the changes to the display. ensures that the image reaches the recipient</span></li>
         </ul>
