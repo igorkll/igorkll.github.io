@@ -26,11 +26,15 @@
             indexing of the display starts from 0 and up to width/height - 1. however, if you "go beyond the margins" nothing happens, all content that goes beyond the boundaries of the display simply will not be rendered<br/>
             if you do not have enough variety of sizes and resolutions of displays presented in the basic mod, you can use the <a href="addons.html#stretchable_display" class="hyper">"stretchable display"</a> addon<br/>
             note that if the color is not specified (nil), then all rendering methods will perceive it as white, except clear, which perceives nil as black<br/>
+            please note that the display renders the image using effects. and a large number of effects cause LAGS. despite the best optimization of displays in the workshop at the moment, displays still cause lags due to effects. you can use display.setOptimizationLevel(0-255) to set how similar colors the display can combine. The default value is 16. 0 is a perfect picture and 256 is a very bad picture. For the most part, this optimization only makes sense when using cameras<br/>
             component name - display
         </p>
 
         <p class="text">methods:</p>
         <ul class="list">
+            <li><span>display.setOptimizationLevel(0-255) - sets the value of how similar the adjacent pixels must be in order to be combined into 1 effect. 0 is a perfect picture, 255 is a very poor picture quality. the higher the value, the fewer effects the display will use with a large number of colors on the screen (default: 16)</span></li>
+            <li><span>display.getOptimizationLevel(0-255) - returns the value set using display.setOptimizationLevel (default: 16)</span></li>
+            <br/>
             <li><span>display.isAllow():boolean - returns true if this display can be used. returns false if it was disabled by the administrator</span></li>
             <li><span>display.getAudience():number - returns the number of players who are currently looking at the display</span></li>
             <li><span>display.setFontScale(scaleX:float, scaleY:float) - allows you to stretch and compress the font. fractional values are allowed (by default 1, 1)</span></li>
@@ -52,6 +56,7 @@
             <li><span>display.getRotation():number - returns the value set using display.setRotation (default: 0)</span></li>
             <li><span>display.setFont(font) - sets a custom font. if the font is from the <a href="fonts.html" class="hyper">"fonts library"</a>, it will not be transmitted over the network. however, if it is a custom font, it will be transmitted over the network (more than one custom font cannot be transmitted per 1 tick)</span></li>
             <li><span>display.getFontWidth():number - returns the width of a character using scaleX</span></li>
+            <li><span>display.getFontHeight():number - returns the height of a character using scaleY</span></li>
             <li><span>display.getRealFontWidth():number - returns the width of a character without considering scaleX</span></li>
             <li><span>display.getRealFontHeight():number - returns the height of a character without considering scaleY</span></li>
             <li><span>display.setSkipAtNotSight(state:boolean) - if set to true, the display will not be updated for those players who are not looking at it (which in some cases increases FPS and reduces network load) (default: false)</span></li>

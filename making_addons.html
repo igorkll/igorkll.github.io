@@ -56,7 +56,13 @@ function exampleComponent:server_onCreate()
             api = {
                 test = function()
                     return "ok"
+                end,
+                directTest = function()
+                    --let's assume that this method needs to be called 1000 times per second
                 end
+            },
+            directList = {
+                directTest = true --disables checking for connectivity and component availability for this method. increases the call speed by about 10 times
             }
         }
     }

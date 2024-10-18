@@ -22,6 +22,7 @@
         <p class="text">
             the camera allows you to get a picture from the world and display it on the screen (or process it inside the program)<br/>
             please note that rendering methods may receive not the real display, but the "virtual" one you created. 3 methods should be implemented in the virtual screen: getWidth, getHeight, drawPixel<br/>
+            please note that when transmitting a virtual display, the camera returns colors in string format, which slows down its operation. this is done for compatibility with old software. however, if your code is ready to accept objects with the Color type, then add the "noCameraEncode" field to the table of your virtual display equal to true. The vdisplay library does this by default. in cases where CustomDraw is used with this flag, your virtual display will receive the actual value from the renderer<br/>
             this can be used, for example, to save an image to disk (methods for this are already implemented in the <a href="image.html" class="hyper">image library</a>)<br/>
             however, if you are just going to display the image on the displays, then provide the camera with a REAL DISPLAY. since transferring the virtual display disables very important camera optimizations<br/>
             to connect the camera via the antenna, use <a href="cameraTunnel.html" class="hyper">cameraTunnel component</a>
