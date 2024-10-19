@@ -19,7 +19,8 @@
         <p style="color:white;">
             SComputers supports the creation of addons<br/>
             to create add-ons, you don't need to have special permissions or anything like that, you just need to modify your shape script a little by providing an API<br/>
-            please note that SComputers clones the API table and adds its hook to each method, each computer creates its own clone of your API table when you first receive the component table, this can cause confusion. just remember that it is better to re-spawn your test blueprint after you have changed your shape script for debugging
+            please note that SComputers clones the API table and adds its hook to each method, each computer creates its own clone of your API table when you first receive the component table, this can cause confusion. just remember that it is better to re-spawn your test blueprint after you have changed your shape script for debugging<br/>
+            you can also use the addon API (sm.scomputers) to add additional functionality to your addon
         </p>
 
         <p class="text">actions for creating addons:</p>
@@ -36,6 +37,11 @@
             <li><span>add SComputers to the required for your addon</span></li>
             <li><span>make the addon public</span></li>
             <li><span><a class="hyper" href="./contact_me.html">contact me</a>, i will double-check your addon and if it works as needed, then I will add your addon to the steam collection and to the <a class="hyper" href="./addons.html">"addon list"</a></span></li>
+        </ul>
+
+        <p class="text">additional API for creating addons (sm.scomputers):</p>
+        <ul class="list">
+            <li><span>sm.scomputers.addExample(name:string, code:string) - adds an example to SComputers. you will call 1 time. it is advisable to do this from autotool so that the example is available immediately. call this method 1 time for each client</span></li>
         </ul>
 
         <pre>
