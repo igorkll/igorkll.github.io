@@ -25,6 +25,7 @@
             The keyboard can work in two modes. normal and print mode. in print mode, the graphical interface of the keyboard is not rendered and the virtual ESC and ENTER buttons become unavailable. however, you can still capture pressing the real enter button by detecting a line break in the buffer.<br/>
             in print mode, it makes sense to clear the buffer after reading its contents(since the buffer has a limited size of 32 kilobytes)<br/>
             please note that the contents of the keyboard buffer are SAVED in blueprint even after re-entering the world. in some cases (for example, in print mode) it is better to clear the keyboard buffer at the very beginning of the program<br/>
+            the keyboard can be connected to the seat to open its GUI without getting up<br/>
             component name - keyboard
         </p>
 
