@@ -42,6 +42,8 @@
         <p class="text">additional API for creating addons (sm.scomputers):</p>
         <ul class="list">
             <li><span>sm.scomputers.addExample(name:string, code:string) - adds an example to SComputers. you will call 1 time. it is advisable to do this from autotool so that the example is available immediately. call this method 1 time for each client</span></li>
+            <li><span>sm.scomputers.addLibrary(name:string, function:constructor(self, env):table) - adds the library to SComputers so that it can be accessed using require on all computers. The library is a function that creates the library instance two arguments come to the function. self, env. one computer can create only 1 instance of the library at a time. return the table with the library methods from this library. please do not make a library cheat, the library should not have access to data that the computer itself cannot access, and should not be able to perform actions that the computer itself cannot perform (although this is just an extra recommendation). the library needs to be registered 1 time on the server side from autotool</span></li>
+            
         </ul>
 
         <pre>

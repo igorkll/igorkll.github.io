@@ -37,7 +37,7 @@
         <br/>
         <p class="text">guiinstance methods:</p>
         <ul class="list">
-            <li><span>guiinstance:createScene(nil|color|function(guiscene)):guiscene - creates a new scene on the current gui instance. pass the fill color or fill function. by default, the scene that was created first will be selected</span></li>
+            <li><span>guiinstance:createScene(nil|color|function(guiscene), (optional, background touch detector) function(guiscene, click)):guiscene - creates a new scene on the current gui instance. pass the fill color or fill function. by default, the scene that was created first will be selected</span></li>
             <li><span>guiinstance:tick() - call each tick (in callback_loop)</span></li>
             <li><span>guiinstance:draw() - redraws the scene if necessary (it is better to do the check using needFlush anyway)</span></li>
             <li><span>guiinstance:drawForce() - forcibly redraws the scene. this makes sense if you need to redraw the background (for example, the camera is working on it)</span></li>
