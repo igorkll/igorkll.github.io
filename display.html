@@ -22,7 +22,7 @@
         <p class="text">
             displays allow you to display information<br/>
             in SComputers, displays have the best optimization of all mods in the workshop<br/>
-            the colors for the display can be specified in the following formats: 0xrrggbb, "rrggbb", "#rrggbb", sm.color.new(r, g, b)<br/>
+            the colors for the display can be specified in the following formats: 0xRRGGBB, "rrggbb", "#rrggbb", sm.color.new(r, g, b)<br/>
             indexing of the display starts from 0 and up to width/height - 1. however, if you "go beyond the margins" nothing happens, all content that goes beyond the boundaries of the display simply will not be rendered<br/>
             if you do not have enough variety of sizes and resolutions of displays presented in the basic mod, you can use the <a href="addons.html#stretchable_display" class="hyper">"stretchable display"</a> addon<br/>
             note that if the color is not specified (nil), then all rendering methods will perceive it as white, except clear, which perceives nil as black<br/>
@@ -32,8 +32,7 @@
 
         <p class="text">methods:</p>
         <ul class="list">
-            <li><span>display.getBuffer(x:number, y:number):number - returns the current color in the display buffer at the specified position as a number. the color is taken from the host display</span></li>
-            <li><span>display.getCurrent(x:number, y:number):number - returns the current color in the display (current image) at the specified position as a number. the color is taken from the host display</span></li>
+            <li><span>display.get(x:number, y:number):number - returns the current color in the display buffer at the specified position as a number. the color is taken from the host display. color format: 0xRRGGBB</span></li>
             <br/>
             <li><span>display.setOptimizationLevel(0-255) - sets the value of how similar the adjacent pixels must be in order to be combined into 1 effect. 0 is a perfect picture, 255 is a very poor picture quality. the higher the value, the fewer effects the display will use with a large number of colors on the screen (default: 16)</span></li>
             <li><span>display.getOptimizationLevel(0-255) - returns the value set using display.setOptimizationLevel (default: 16)</span></li>
