@@ -68,7 +68,8 @@
             <li><span>port.nextPacket can now be called even if there are no packets in the buffer without the risk of an error, the method will simply return nil if the packet is not in the buffer</span></li>
             <li><span>port.nextPacket now it returns 2 values, the first is the packet itself, and the second is the ID of the port from which the packet was sent</span></li>
             <li><span>fixed a bug that prevented radars from seeing static objects</span></li>
-            <li><span>the print/alert/debug functions will not work by default, for them to work, you need to configure this in the creative Permission Tool</span></li>
+            <li><span>print/alert/debug functions can be disabled in the Permission Tool</span></li>
+            <li><span>when the computer crashes, it displays an error message on all connected monitors and terminals (if you want to turn this off then create a _disableBsod variable)</span></li>
         </ul>
 
         <br/>
@@ -131,7 +132,7 @@
             <br/>
             now small and embedded disks have a volume of 64kb, a larger 128kb.
             <br/>
-            creative hard drive has a volume of 16 MB, but does not save data after re-entry and when saving.
+            creative hard drive has a volume of 1024 MB, but does not save data after re-entry and when saving.
             <br/>
             if you need to save large amounts of data to a disk, then you can use the <a href="addons.html#world_disks" class="hyper">"world disks"</a> addon.
         </ul>
