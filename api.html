@@ -76,10 +76,11 @@
         <p class="text">recommendations</p>
         <ul class="list">
             <li><span>if the antenna on your device works only for receiving then you can put an NFC antenna, the antenna radius affects only the transmission</span></li>
+            <li><span>it is not necessary to update the display every clock cycle, often it does not make sense. in most cases, updating 4 times per second will be enough, for this it is enough to insert "if <a href="env.html#getTick" class="hyper">getTick()</a> % 4 == 0 then --[[display update code]] end" at your program</span></li>
         </ul>
 
         <br/>
-        <p class="text">sandbox features</p>
+        <p class="text">features</p>
         <ul class="list">
             <li><span>if you declare the function "callback_error(str)" then it will be called in cases of an error in the computer
             before the computer crashes (but it will crash anyway if you not delete the crash information from "crashstate" on callback_error function)
@@ -95,6 +96,7 @@
             you can write your values there</span></li>
             <li><span>the _endtick flag that is automatically raised if the computer's tick is the last one</span></li>
             <li><span>_VERSION contains uses VM name</span></li>
+            <li><span>components such as the keyboard, terminal and reboot gate can be connected to the seat</span></li>
         </ul>
 
         <br/>

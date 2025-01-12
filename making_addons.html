@@ -36,7 +36,7 @@
             <li><span>upload an addon on steam</span></li>
             <li><span>add SComputers to the required for your addon</span></li>
             <li><span>make the addon public</span></li>
-            <li><span><a class="hyper" href="./contact_me.html">contact me</a>, i will double-check your addon and if it works as needed, then I will add your addon to the steam collection and to the <a class="hyper" href="./addons.html">"addon list"</a></span></li>
+            <li><span><a class="hyper" href="./contact_me.html">contact me</a>, i will double-check your addon and if it works as needed, then I will add your addon to the <a class="hyper" href="https://steamcommunity.com/workshop/filedetails/?id=3154813944">"steam collection"</a> and to the <a class="hyper" href="./addons.html">"addon list"</a></span></li>
         </ul>
 
         <p class="text">additional API for creating addons (sm.scomputers):</p>
@@ -72,7 +72,10 @@ function exampleComponent:server_onCreate()
             },
             directList = {
                 directTest = true --disables checking for connectivity and component availability for this method. increases the call speed by about 10 times
-            }
+            },
+            label = function() --optional. this function should return the current label of the component so that it can be accessed using getComponentByLabel.
+                return "label"
+            end
         }
     }
 end</code>

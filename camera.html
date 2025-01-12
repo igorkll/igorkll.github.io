@@ -128,8 +128,23 @@
             <li><span>getFovY():number - returns the camera's fov by Y</span></li>
             <li><span>getFov():number - returns the camera's fov. if the fov is not square it returns the maximum value</span></li>
             <li><span>getNextPixel():number - returns the current value of the counter</span></li>
+            <li><span>setNextPixel(number) - sets the value of the pixel counter</span></li>
             <li><span>resetCounter() - resets the camera pixel counter (starts rendering the screen first)</span></li>
             <li><span>rawRay(xAngle:number, yAngle:number, distance:number):table - ray shoots from the camera and gives out a table {color = smcolor, distance = distance, fraction = (distance / maxdist), uuid = uuid, type = character/shape/harvestable/lift/joint/terrain/asset/limiter, normalWorld=some of the information from raycast}. maxdist is the maximum distance for raycast in meters. please note that the angle can be set from -82.5 to 82.5 degrees, it is transmitted in radians. limiter is the wall of the world. please note that not all types of objects have the "uuid" field. please note that getting the uuid of a block only works if it is no further than 4 meters (16 blocks) from the camera(this is done to maintain a balance)</span></li>
+            <li><span>setViewport(x, y, sizeX, sizeY) - you can specify the frame inside which the camera will display the image on the display. to reset you need call without arguments</span></li>
+            <li><span>getViewport():x, y, sizeX, sizeY - returns what was set using setViewport</span></li>
+            <li><span>resetDetectableObjects() - selects all the objects that the camera will see</span></li>
+            <li><span>setDetectableObjects({<br/>
+                liquids = boolean,<br/>
+                dynamicBody = boolean,<br/>
+                staticBody = boolean,<br/>
+                characters = boolean,<br/>
+                joints = boolean,<br/>
+                terrain = boolean,<br/>
+                assets = boolean,<br/>
+                harvestable = boolean<br/>
+            }) - sets the list of objects that the camera will see, by default, all are selected</span></li>
+            <li><span>getDetectableObjects():table - returns a reference to the last table passed to setDetectableObjects. However, if you edit it, you must send it to setDetectableObjects again so that the camera can see the changes.</span></li>
         </ul>
 
         <br/>

@@ -29,10 +29,66 @@
         <p class="text">elements:</p>
         <ul class="list">
             <li><span>objs.panel - just fills the rectangle with a certain color, pass the color as the first argument (it is often better to use a window for these purposes, but the panel option can also be used)</span></li>
+            <li><span>objs.camera - allows you to display the contents of the camera in the GUI</span></li>
         </ul>
 
         <pre>
             <code class="language-lua" style="width: fit-content;">--example for display 64x64
+
+local display = getComponent("display")
+
+local width, height = display.getSize()
+display.reset()
+display.clearClicks()
+display.setClicksAllowed(true)
+display.clear()
+display.flush()
+
+local gui = require("gui").new(display)
+local objs = require("objs")
+local styles = require("styles")
+local scene = gui:createScene(0x444444)
+
+local function createSwitch(parentObject)
+    local offsetX = 3
+    local offsetY = 3
+    local switchWidth = parentObject.sizeX - 6
+    for i = 1, 5 do
+        local switch = scene:createButton(nil, nil, switchWidth, 8, true, nil, "444444", "ffffff", "44b300", "ffffff")
+        switch:setCustomStyle(styles.switch)
+        switch:setOffsetPosition(parentObject, offsetX, offsetY)
+        parentObject = switch
+        offsetX = 0
+        offsetY = 10
+    end
+end
+
+local panel1 = scene:createCustom(2, 2, (width / 2) - 3, height - 4, objs.panel, 0xff0000)
+createSwitch(panel1)
+
+local panel2 = scene:createCustom((width / 2) + 1, 2, (width / 2) - 3, height - 4, objs.panel, 0xff00ff)
+createSwitch(panel2)
+
+scene:select()
+
+function callback_loop()
+    if _endtick then
+        display.clear()
+        display.flush()
+        return
+    end
+
+    gui:tick()
+
+    if gui:needFlush() then
+        gui:draw()
+        display.flush()
+    end
+end</code>
+        </pre>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">--example for display 128x128
 
 local display = getComponent("display")
 

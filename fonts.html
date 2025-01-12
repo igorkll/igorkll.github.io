@@ -78,8 +78,53 @@ function callback_loop()
 end</code>
         </pre>
 
-        <a class="text">the full list of fonts in the library at the moment:</a>
+        <pre>
+            <code class="language-lua" style="width: fit-content;">--example for display 256x256
+--full fonts list: https://igorkll.github.io/fonts.html
+
+local fonts = require("fonts")
+local display = getComponent("display")
+
+display.reset()
+display.setFont(fonts.lgc_5x5)
+display.setUtf8Support(true)
+display.clear()
+
+local posY = 1
+local function drawText(text)
+    local boxX, boxY = display.calcTextBox(text)
+    display.fillRect(1, posY, boxX, boxY, 0x005500)
+    display.drawText(1, posY, text)
+    posY = posY + display.getFontHeight() + 3
+end
+
+drawText("font - 5x5")
+drawText("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+drawText("abcdefghijklmnopqrstuvwxyz")
+drawText("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ")
+drawText("абвгдеёжзийклмнопрстуфхцчшщъыьэюя")
+drawText("01234567890")
+drawText("+-*/\\\"'@#!<>?{}[]()&^%$#")
+display.flush()
+
+function callback_loop()
+    if _endtick then
+        display.clear()
+        display.flush()
+        return
+    end
+end</code>
+        </pre>     
+
+        <a class="text">fonts made especially for SComputers:</a>
+        <p class="text">
+            lgc_5x4 - the standard font for monitors. it will be setted if you pass nil to display.setFont (monospaced)<br/>
+            lgc_5x5 - just a 5x5 (square) font (monospaced)<br/>
+            lgc_3x3 - just a 3x3 (square) font (monospaced)<br/>
+        </p>
         <br/>
+
+        <a class="text">bitmap fonts from microsoft windows:</a>
         <p class="text">
             arial_16<br/>
             arial_32<br/>

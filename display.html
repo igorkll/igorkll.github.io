@@ -60,8 +60,10 @@
             <li><span>display.getFont():font - returns the value set using setFont (default by nil)</span></li>
             <li><span>display.getFontWidth():number - returns the width of a character using scaleX</span></li>
             <li><span>display.getFontHeight():number - returns the height of a character using scaleY</span></li>
+            <li><span>display.getFontSize():number, number - returns the width and height of a character using scaleX and scaleY</span></li>
             <li><span>display.getRealFontWidth():number - returns the width of a character without considering scaleX</span></li>
             <li><span>display.getRealFontHeight():number - returns the height of a character without considering scaleY</span></li>
+            <li><span>display.getRealFontSize():number, number - returns the width and height of a character without considering scale</span></li>
             <li><span>display.setSkipAtNotSight(state:boolean) - if set to true, the display will not be updated for those players who are not looking at it (which in some cases increases FPS and reduces network load) (default: false)</span></li>
             <li><span>display.getSkipAtNotSight():boolean - returns the value set using display.setSkipAtNotSight (default: false)</span></li>
             <li><span>display.isMonospacedFont():boolean - returns true if a monospaced font is set</span></li>
@@ -116,8 +118,10 @@
             <li><span>display.drawWidePoly(color, width:number, round:boolean, x, y, x, y, ...) - allows you to set the width of the line to be used and enable line rounding</span></li>
             <li><span>display.fillPoly(color, x, y, x, y, ...) - fill polygon</span></li>
             <li><span>display.fillWidePoly(color, width:number, round:boolean, x, y, x, y, ...) - fills the polygon, but allows you to adjust the width of the line and round it. in fact, it only makes sense if you want to round the polygon using a rounded line</span></li>
+            <li><span>display.drawTriangle(x1, y1, x2, y2, x3, y3, color) - draws a triangle</span></li>
+            <li><span>display.fillTriangle(x1, y1, x2, y2, x3, y3, color) - fills a triangle</span></li>
             <li><span>display.flush() - sends the changes to the display. however, please note that your changes may be "lost" if the skipAtNotSight(this is disabled by default) flag is set and the player is not looking at the display. resets the viewport after sending</span></li>
-            <li><span>display.forceFlush() - sends the changes to the display. ensures that the image reaches the recipient</span></li>
+            <li><span>display.forceFlush() - sends the changes to the display. ensures that the image reaches the recipient. it ONLY makes sense if setSkipAtNotSight mode is enabled, but you still want to update the image for all users. doesn't make sense in others</span></li>
         </ul>
 
         
