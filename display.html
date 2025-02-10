@@ -27,9 +27,21 @@
             if you do not have enough variety of sizes and resolutions of displays presented in the basic mod, you can use the <a href="addons.html#stretchable_display" class="hyper">"stretchable display"</a> addon<br/>
             note that if the color is not specified (nil), then all rendering methods will perceive it as white, except clear, which perceives nil as black<br/>
             please note that the display renders the image using effects. and a large number of effects cause LAGS. despite the best optimization of displays in the workshop at the moment, displays still cause lags due to effects. you can use display.setOptimizationLevel(0-255) to set how similar colors the display can combine. The default value is 16. 0 is a perfect picture and 256 is a very bad picture. For the most part, this optimization only makes sense when using cameras<br/>
+            attention. if your display usage scenario does not involve rendering a full-color image, then it is better to disable optimization using: display.setOptimizationLevel(0) (this way the display will work faster)<br/>
             component name - display
         </p>
 
+        <br/>
+        <p class="text">list of materials for the display (can be setted using display.setMaterial):</p>
+        <ul class="list">
+            <li><span>material 0 - transparent (default for holographic displays, not supported on a regular display)</span></li>
+            <li><span>material 1 - glowing (default for displays)</span></li>
+            <li><span>material 2 - general block</span></li>
+            <li><span>material 3 - smoothed (to work, you will need to enable the blur effect in the game graphics settings)</span></li>
+            <li><span>material 4 - glowing (alternative)</span></li>
+        </ul>
+
+        <br/>
         <p class="text">methods:</p>
         <ul class="list">
             <li><span>display.get(x:number, y:number):number - returns the current color in the display buffer at the specified position as a number. the color is taken from the host display. color format: 0xRRGGBB</span></li>
@@ -109,6 +121,7 @@
             <li><span>display.fillRect(x, y, sizeX, sizeY, color) - fills the rectangle</span></li>
             <li><span>display.drawRect(x, y, sizeX, sizeY, color, lineWidth:number) - draws an empty rectangle. the line width is default 1. note that the line width increases "inside" the rectangle, that is, even if the line width of the rectangle is 10, the rectangle itself will still be exactly inscribed in its coordinates</span></li>
             <li><span>display.drawText(x, y, text, color) - draws text of a given color at a given position</span></li>
+            <li><span>display.drawCenteredText(x, y, text, color, centerX:boolean (default: true), centerY:boolean (default: true)) - centers the text when rendering</span></li>
             <li><span>display.drawLine(x, y, x2, y2, color, width:number, round:boolean) - draws a line on the displays from point A to point B. you can also set the line width. you can pass "round" to make the line rounded, but rasterizing such a line will be VERY SLOW. only makes sense at very high resolutions</span></li>
             <li><span>display.drawCircle(x, y, radius, color) - draws an empty circle, please note that this circle cannot be exactly inscribed in a square and does not exactly fit on the display.fillCircle</span></li>
             <li><span>display.drawCircleEvenly(x, y, radius, color) - a more accurate version of display.drawCircle. it can already be inscribed in a square (for example, drawn over the entire surface of the display) and lie more evenly on the display.fillCircle (however, it is not ideal)</span></li>
@@ -122,9 +135,22 @@
             <li><span>display.fillTriangle(x1, y1, x2, y2, x3, y3, color) - fills a triangle</span></li>
             <li><span>display.flush() - sends the changes to the display. however, please note that your changes may be "lost" if the skipAtNotSight(this is disabled by default) flag is set and the player is not looking at the display. resets the viewport after sending</span></li>
             <li><span>display.forceFlush() - sends the changes to the display. ensures that the image reaches the recipient. it ONLY makes sense if setSkipAtNotSight mode is enabled, but you still want to update the image for all users. doesn't make sense in others</span></li>
+            <br/>
+            <li><span>display.setMaterial(material:number) - sets the display material</span></li>
+            <li><span>display.getMaterial():number - returns the current display material</span></li>
+            <li><span>display.getDefaultMaterial():number - returns the default material for this display</span></li>
         </ul>
 
-        
+        <br/>
+        <p class="text">only for holographic displays:</p>
+        <ul class="list">
+            <li><span>display.setHoloOffset(x, y, z) - changes the displacement of the hologram relative to the display. the maximum offset is 5</span></li>
+            <li><span>display.getHoloOffset():x, y, z - returns the value set using display.setOffset</span></li>
+            <li><span>display.setHoloRotation(x, y, z) - changes the rotation of the hologram relative to the display</span></li>
+            <li><span>display.getHoloRotation():x, y, z - returns the value set using display.setRotation</span></li>
+            <li><span>display.setHoloScale(x, y) - sets the scale of the hologram. the maximum scale is 5</span></li>
+            <li><span>display.getHoloScale():x, y - returns the value set using display.setScale</span></li>
+        </ul>
 
         <pre>
             <code class="language-lua" style="width: fit-content;">--example for display 256x256

@@ -21,14 +21,14 @@
         <br/>
         <p class="text">
             usage: require("colors")<br/>
-            for the most part, this is a library containing color codes from paint tool
+            for the most part, this is a library containing color codes from paint tool<br/>
+            It also contains functions for working with color
         </p>
 
         <br/>
         <p class="text">
             colors.names = {"Gray", "Yellow", "LimeGreen", "Green", "Cyan", "Blue", "Violet", "Magenta", "Red", "Orange"}
         </p>
-        
 
         <p class="text">number consts:</p>
         <ul class="list">
@@ -42,6 +42,20 @@
             <li><span>colors.num.Magenta    = {0xEE7BF0, 0xCF11D2, 0x720A74, 0x520653}</span></li>
             <li><span>colors.num.Red        = {0xF06767, 0xD02525, 0x7C0000, 0x560202}</span></li>
             <li><span>colors.num.Orange     = {0xEEAF5C, 0xDF7F00, 0x673B00, 0x472800}</span></li>
+        </ul>
+
+        <p class="text">number consts (alias):</p>
+        <ul class="list">
+            <li><span>colors.Gray	    = {0xEEEEEE, 0x7F7F7F, 0x4A4A4A, 0x222222}</span></li>
+            <li><span>colors.Yellow     = {0xF5F071, 0xE2DB13, 0x817C00, 0x323000}</span></li>
+            <li><span>colors.LimeGreen  = {0xCBF66F, 0xA0EA00, 0x577D07, 0x375000}</span></li>
+            <li><span>colors.Green	    = {0x68FF88, 0x19E753, 0x0E8031, 0x064023}</span></li>
+            <li><span>colors.Cyan       = {0x7EEDED, 0x2CE6E6, 0x118787, 0x0A4444}</span></li>
+            <li><span>colors.Blue       = {0x4C6FE3, 0x0A3EE2, 0x0F2E91, 0x0A1D5A}</span></li>
+            <li><span>colors.Violet     = {0xAE79F0, 0x7514ED, 0x500AA6, 0x35086C}</span></li>
+            <li><span>colors.Magenta    = {0xEE7BF0, 0xCF11D2, 0x720A74, 0x520653}</span></li>
+            <li><span>colors.Red        = {0xF06767, 0xD02525, 0x7C0000, 0x560202}</span></li>
+            <li><span>colors.Orange     = {0xEEAF5C, 0xDF7F00, 0x673B00, 0x472800}</span></li>
         </ul>
 
         <p class="text">string consts:</p>
@@ -71,10 +85,22 @@
             <li><span>colors.sm.Red         = {smcolor, smcolor, smcolor, smcolor}</span></li>
             <li><span>colors.sm.Orange      = {smcolor, smcolor, smcolor, smcolor}</span></li>
         </ul>
+        <br/>
 
         <p class="text">methods:</p>
         <ul class="list">
             <li><span>colors.hsvToRgb(h, s, v):r,g,b - all arguments have a range from 0 to 1, the output values also have a range from 0 to 1</span></li>
+            <li><span>colors.hsvToRgb256(h, s, v):r,g,b - all arguments have a range from 0 to 255, the output values also have a range from 0 to 255 (It works faster)</span></li>
+            <li><span>colors.pack(r:number, g:number, b:number):color - converts rgb (from 0 to 255) to 0xRRGGBB</span></li>
+            <li><span>colors.unpack(color):r,g,b - converts 0xRRGGBB to rgb (from 0 to 255)</span></li>
+            <li><span>colors.packFloat(r:number, g:number, b:number):color - converts rgb (from 0 to 1) to 0xRRGGBB</span></li>
+            <li><span>colors.unpackFloat(color):r,g,b - converts 0xRRGGBB to rgb (from 0 to 1)</span></li>
+            <li><span>colors.formatToNumber(color):number - converts color from any format to 0xRRGGBB</span></li>
+            <li><span>colors.formatToColor(color):number - converts color from any format to smcolor object</span></li>
+            <li><span>colors.formatToString(color):number - converts color from any format to "RRGGBB"</span></li>
+            <li><span>colors.combineColorToNumber(value:0-1, anycolor, anycolor):number - makes a color gradient (output 0xRRGGBB)</span></li>
+            <li><span>colors.combineColorToColor(value:0-1, anycolor, anycolor):number - makes a color gradient (output smcolor)</span></li>
+            <li><span>colors.combineColorToString(value:0-1, anycolor, anycolor):number - makes a color gradient (output "RRGGBB")</span></li>
         </ul>
 
         <br/>
@@ -110,9 +136,57 @@ function callback_loop()
         return
     end
 
-    display.clear(tostring(sm.color.new(colors.hsvToRgb((getUptime() % 120) / 120, 1, 1))))
+    display.clear(colors.pack(colors.hsvToRgb256(getUptime() % 256, 255, 255)))
     display.flush()
 end</code>
+            </pre>
+        </p>
+
+        <br/>
+        <p class="text">
+            format color
+            <pre>
+                <code class="language-lua" style="width: fit-content;">local colors = require("colors")
+
+local function result(title, val)
+    print(title, type(val), val)
+end
+
+result("formatToNumber(number)", colors.formatToNumber(0x663399))
+result("formatToNumber(string)", colors.formatToNumber("663399"))
+result("formatToNumber(color)", colors.formatToNumber(sm.color.new(0x663399ff)))
+print("")
+
+result("formatToColor(number)", colors.formatToColor(0x663399))
+result("formatToColor(string)", colors.formatToColor("663399"))
+result("formatToColor(color)", colors.formatToColor(sm.color.new(0x663399ff)))
+print("")
+
+result("formatToString(number)", colors.formatToString(0x663399))
+result("formatToString(string)", colors.formatToString("663399"))
+result("formatToString(color)", colors.formatToString(sm.color.new(0x663399ff)))
+
+function callback_loop() end</code>
+            </pre>
+        </p>
+
+        <br/>
+        <p class="text">
+            the color gradient
+            <pre>
+                <code class="language-lua" style="width: fit-content;">local colors = require("colors")
+local display = getComponent("display")
+
+local color1, color2 = 0xff0000, 0xff00ff
+local width = display.getWidth()
+local maxWidth = width - 1
+
+for ix = 0, maxWidth do
+    display.fillRect(ix, 0, 1, display.getHeight(), colors.combineColorToNumber(ix / maxWidth, color1, color2))
+end
+display.flush()
+
+function callback_loop() end</code>
             </pre>
         </p>
     </body>

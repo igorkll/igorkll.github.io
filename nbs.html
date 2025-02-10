@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>SComputers - Api Reference</title>
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="style.css">
+        <link href="highlight.css" rel="stylesheet">
+        <script src="highlight.js"></script>
+        <script>
+			hljs.highlightAll();
+		</script>
+    </head>
+    <body>
+        <a class="text" href="index.html">main page</a>
+        <br/>
+        <a class="text" href="api.html#docsel">main page - api reference</a>
+        <br/>
+        <a class="text" href="libraries.html">main page - libraries</a>
+
+        <br/>
+        <p class="text">
+            usage: require("nbs")<br/>
+            the nbs library allows you to play nbs files on synthesizers. you can load a nbs file from a disk or binary string<br/>
+            if you want to somehow transfer the sound from the library to another source, provide it with the virtual synthesizer API (you will have to do it yourself)<br/>
+            to edit files in the NBS format, I recommend using the <a href="https://opennbs.org/" class="hyper">Note Block Studio</a> program<br/>
+        </p>
+
+        <p class="text">methods:</p>
+        <ul class="list">
+            <li><span>nbs.create():nbsPlayer - creates a new nbs player</span></li>
+        </ul>
+
+        <p class="text">nbsPlayer methods:</p>
+        <ul class="list">
+            <li><span>nbsPlayer:load(disk, path:string) - load a nbs file to the player</span></li>
+            <li><span>nbsPlayer:loadStr(content:string) - loads a nbs file from a string</span></li>
+            <li><span>nbsPlayer:setSynthesizers(synthesizers:table) - sets the synthesizers table</span></li>
+            <li><span>nbsPlayer:tick() - call each tick in the callback_loop. automatically makes a correction from <a href="env.html#getSkippedTicks" class="hyper">getSkippedTicks()</a></span></li>
+            <li><span>nbsPlayer:isPlaying():boolean - returns the current state of the player, that is, whether it is playing now</span></li>
+            <li><span>nbsPlayer:start() - starts playback of the track</span></li>
+            <li><span>nbsPlayer:stop() - stops the playback of the track</span></li>
+            <li><span>nbsPlayer:setVolume(volume:float) - sets the volume from 0.1 to 1. By default, the volume 0.1 (the standard volume of robot heads) volume 1 increases it by 10 times. It is better not to set the volume to more than 0.3</span></li>
+            <li><span>nbsPlayer:setSpeed(speed:float) - sets the playback speed, by default 1. if you set 2, it will be twice as fast, if you set 0.5, it will be twice as slow. this is a fractional number</span></li>
+            <li><span>nbsPlayer:setDefaultInstrument(id:number) - sets the ID of the tool to be used if it was not possible to select a tool from the "instrumentTable" (default: 4)</span></li>
+            <li><span>nbsPlayer:setNoteShift(shift:number) - sets the offset of the notes relative to the notes of the robot's head (default: -39)</span></li>
+            <li><span>nbsPlayer:setNoteAlignment(alignment:number) - if set to 0, the notes that have gone beyond the playback limit will not be played. if 1 is set, the notes that have gone beyond the limit will still be reproduced but with distortion (default: 1)</span></li>
+            <li><span>nbsPlayer:setNoteDuration(noteDuration:number, flushMode:boolean) - sets how many ticks will be allocated for each note. (default: 0) (the note will immediately stop playing as soon as it ends in the nbs file)</span></li>
+            <li><span>nbsPlayer:getCurrentNotes():table {{instrument, note}, {instrument, note}, ...} - returns the notes and the instrument that are currently being played. The sheet music and instrument are in NBS format rather than synthesizer. You can receive this information even if you start the player without synthesizers connected, so you can output audio data to another output. if your music is still playing poorly when this value is greater than 0, try passing true as the second argument</span></li>
+        </ul>
+
+        <p class="text">nbsPlayer fields:</p>
+        <ul class="list">
+            <li><span>nbsPlayer.instrumentTable - the current matching table for the instrument selection. if you want to play the entire track with default instrument, then assign this table to an empty one.
+                <br/>default: {<br/>
+                4,<br/>
+                8,<br/>
+                5,<br/>
+                5,<br/>
+                5,<br/>
+                8,<br/>
+                7,<br/>
+                7,<br/>
+                4,<br/>
+                5<br/>
+            }</span></li>
+            <li><span>nbsPlayer.synthesizers - current synthesizer table (default: {})</span></li>
+            <li><span>nbsPlayer.instrument - the current default instrument (default: 4)</span></li>
+            <li><span>nbsPlayer.volume (default: 0.1)</span></li>
+            <li><span>nbsPlayer.noteshift (default: -39)</span></li>
+            <li><span>nbsPlayer.notealigment (default: 1)</span></li>
+            <li><span>nbsPlayer.speed (default: 1)</span></li>
+            <li><span>nbsPlayer.noteDuration (default: 0)</span></li>
+            <li><span>nbsPlayer.flushMode (default: false)</span></li>
+        </ul>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">local nbs = require("nbs")
+
+local synthesizers = getComponents("synthesizer")
+local disk = getComponent("disk")
+
+local player = nbs.create()
+--player.instrumentTable = {} --uncomment if you want everything to be played with one instrument
+--player:load(disk, "as.nbs")
+--player:load(disk, "axelf.nbs")
+--player:load(disk, "bad_apple.nbs")
+--player:load(disk, "clocks.nbs")
+--player:load(disk, "despacito.nbs")
+--player:load(disk, "dr_mario.nbs")
+--player:load(disk, "dsm.nbs")
+--player:load(disk, "fireflies.nbs")
+--player:load(disk, "ground_yellow.nbs")
+--player:load(disk, "mario.nbs")
+--player:load(disk, "mario_world.nbs")
+--player:load(disk, "mario3.nbs")
+--player:load(disk, "nyan_cat.nbs")
+--player:load(disk, "pokemon_theme.nbs")
+--player:load(disk, "pv.nbs")
+--player:load(disk, "rockstar.nbs")
+--player:load(disk, "smash.nbs")
+--player:load(disk, "tetrisA.nbs")
+player:load(disk, "tetrisB.nbs") --all the nbs that are contained in the standard example on the disk. but you can upload your own
+--player:load(disk, "turkish_march.nbs")
+--player:load(disk, "whatislove.nb")
+player:setSynthesizers(synthesizers)
+player:setSpeed(1)
+player:setNoteShift(-39)
+player:setNoteAligment(1)
+player:setVolume(0.1)
+player:setDefaultInstrument(4)
+player:setNoteDuration(0) --you can try to increase this value if your chosen NBS is playing poorly on standard settings
+
+function callback_loop()
+    if _endtick then
+        player:stop()
+        return
+    end
+    if not player:isPlaying() then
+        player:start()
+    end
+    player:tick()
+end</code>
+        </pre>
+    </body>
+</html>
