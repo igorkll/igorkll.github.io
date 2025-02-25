@@ -55,6 +55,8 @@
             <li><span>inertialEngine.raw_globalRotation(vec3) - creates a rotation relative to the coordinates of the world. it cannot be called more than once per tick, the maximum value of the vector element is 8. Note that the momentum is multiplied by the mass of the creation</span></li>
             <li><span>inertialEngine.raw_move(vec3) - makes the pulse relative to the current rotation. it cannot be called more than once per tick, the maximum value of the vector element is 5. Note that the momentum is multiplied by the mass of the creation</span></li>
             <li><span>inertialEngine.raw_globalMove(vec3) - creates an impulse relative to the coordinates of the world. it cannot be called more than once per tick, the maximum value of the vector element is 5. Note that the momentum is multiplied by the mass of the creation</span></li>
+            <li><span>inertialEngine.raw_rawMove(vec3, worldSpace:boolean) - full alias on sm.physics.applyImpulse(self.shape.body, vec, worldSpace). available only on creative inertialEngine</span></li>
+            <li><span>inertialEngine.raw_rawRotation(vec3, worldSpace:boolean) - full alias on sm.physics.applyTorque(self.shape.body, vec, worldSpace). available only on creative inertialEngine</span></li>
             <li><span>inertialEngine.setSoundType(type:number) - sets the inertialEngine sound type:<br/>
                 0 - off<br/>
                 1 - standard sound<br/>

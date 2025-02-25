@@ -29,6 +29,8 @@
             to upload binary files to this disk, you can use the "importer" utility written in python, which is in mod along the path: USER/importer<br/>
             this program collects all files from the files folder into a json file where all files are represented as base64 strings<br/>
             this program allows you to import files as on a regular disk (using the import button in the disk menu) the same applies to the ROM disk (by moving the json to the blueprint folder)<br/>
+            after the first successful read from rom.open, the disk caches the result<br/>
+            to clear the cache, you can open the disk menu and click "done", re-enter into the world, or call the rom.clearCache Disk method.<br/>
             component name - rom
         </p>
 
@@ -49,6 +51,7 @@
         <p class="text">methods:</p>
         <ul class="list">
             <li><span>rom.open() - returns the result of sm.json.open with the path specified in the ROM disk menu. please note that reading is only possible in the file that was manually specified in the rom menu</span></li>
+            <li><span>rom.clearCache() - clears the rom disk cache</span></li>
             <li><span>rom.isAvailable():boolean - returns true if the contents of the ROM disk can be read and false if it does not specify the file path or is incorrect</span></li>
         </ul>
 

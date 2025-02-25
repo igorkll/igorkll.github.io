@@ -22,6 +22,7 @@
         <p class="text">
             allows you to render voxels in three-dimensional space<br/>
             please note that holographic projectors for survival mode have limitations that are written in its description<br/>
+			voxel_type - this is the voxel type number. it can be a UUID indicating a custom object that should be displayed<br/>
             component name - holoprojector
         </p>
 
@@ -37,7 +38,7 @@
         <p class="text">methods:</p>
         <ul class="list">
             <li><span>holoprojector.reset() - resets offset, rotation, scale</span></li>
-            <li><span>holoprojector.addVoxel(x, y, z, color, voxel_type:number|nil, localScale:vec3|nil):id - creates a new voxel</span></li>
+            <li><span>holoprojector.addVoxel(x, y, z, color, voxel_type:number|uuid|string|nil, localScale:vec3|nil, localRotation:vec3|nil):id - creates a new voxel</span></li>
             <li><span>holoprojector.delVoxel(id:number) - deletes a voxel with the specified ID</span></li>
             <li><span>holoprojector.clear() - deletes all voxels</span></li>
             <li><span>holoprojector.flush() - applies changes</span></li>
