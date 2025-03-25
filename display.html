@@ -142,7 +142,7 @@
         </ul>
 
         <br/>
-        <p class="text">only for holographic displays:</p>
+        <p class="text">only for holographic/world displays:</p>
         <ul class="list">
             <li><span>display.setHoloOffset(x, y, z) - changes the displacement of the hologram relative to the display. the maximum offset is 5</span></li>
             <li><span>display.getHoloOffset():x, y, z - returns the value set using display.setOffset</span></li>
@@ -150,6 +150,12 @@
             <li><span>display.getHoloRotation():x, y, z - returns the value set using display.setRotation</span></li>
             <li><span>display.setHoloScale(x, y) - sets the scale of the hologram. the maximum scale is 5</span></li>
             <li><span>display.getHoloScale():x, y - returns the value set using display.setScale</span></li>
+        </ul>
+		
+		<br/>
+        <p class="text">only for world/unrestricted displays:</p>
+        <ul class="list">
+            <li><span>display.setResolution(x:number, y:number) - changes the display resolution in real time</span></li>
         </ul>
 
         <pre>
