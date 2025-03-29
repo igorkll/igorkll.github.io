@@ -8,8 +8,8 @@
         <link href="highlight.css" rel="stylesheet">
         <script src="highlight.js"></script>
         <script>
-			hljs.highlightAll();
-		</script>
+            hljs.highlightAll();
+        </script>
     </head>
     <body>
         <a class="text" href="index.html">main page</a>
@@ -145,9 +145,53 @@
                 harvestable = boolean<br/>
             }) - sets the list of objects that the camera will see, by default, all are selected</span></li>
             <li><span>getDetectableObjects():table - returns a reference to the last table passed to setDetectableObjects. However, if you edit it, you must send it to setDetectableObjects again so that the camera can see the changes.</span></li>
-			<li><span>setImageRotation(rotation:number) - sets the image rotation in radians (default is 0)</span></li>
-			<li><span>getImageRotation():number - returns image rotation in radians (by default 0)</span></li>
+            <li><span>setImageRotation(rotation:number) - sets the image rotation in radians (default is 0)</span></li>
+            <li><span>getImageRotation():number - returns image rotation in radians (by default 0)</span></li>
+            <li><span>getSkyColor(constDayLightValue:number|nil):smcolor - returns the color of the sky that would be displayed in drawAdvanced, regardless of whether the camera sees the sky. can be used for use in drawCustom</span></li>
+            <li><span>getDayLightValue():number - returns the current time in the world. the host's sm.render.getOutdoorLighting() alias</span></li>
+            <li><span>getGlobalSunMul(constDayLightValue:number|nil):number - returns the multiplier of light for the sun, can be used with drawCustom and is calculated inside the function using the following formula: max(1 - (abs(getDayLightValue() - 0.5) * 2), 0.3)</span></li>
+            <li><span>drawOverlay(display, mainDrawFunction:function, args:table, overlayDrawer:function, overlayArgs:table) - combines any rendering mode with drawCustom</span></li>
+			<li><span>setDownScale(downscale:number) - reduces the resolution of the camera rendering by the specified number of times (default: 1)</span></li>
+			<li><span>getDownScale():number - returns the value set using setDownScale (default: 1)</span></li>
         </ul>
+
+        <br/>
+        <p class="text">
+            
+            <pre>
+                <code class="language-lua" style="width: fit-content;">local fastmode = false
+                    
+local display = getComponent("display")
+display.reset()
+display.clear()
+display.setSkipAtNotSight(true) --in order for the picture not to be updated for those who do not look at the screen
+
+local camera = getComponent("camera")
+local fov = math.rad(60)
+camera.setNonSquareFov(fov * (display.getWidth() / display.getHeight()), fov)
+camera.setStep(512)
+
+function callback_loop()
+    if _endtick then
+        display.clear()
+        display.forceFlush()
+        return
+    end
+
+    if display.getAudience() > 0 then --if no one is looking at the screen at all, then the camera will not work
+        camera.drawOverlay(display, camera.drawAdvanced, {fastmode}, function(x, y, raydata)
+            if not raydata then return end
+            if raydata.type == "shape" then
+                return sm.color.new(math.random(), 0, 0)
+            elseif raydata.type == "character" then
+                return sm.color.new(0, math.random(), 0)
+            end
+        end, {})
+        display.flush()
+    end
+end</code>
+            </pre>
+        </p>
 
         <br/>
         <p class="text">
