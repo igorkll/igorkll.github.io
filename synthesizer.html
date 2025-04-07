@@ -22,23 +22,33 @@
         <p class="text">
             allows you to make sounds of robot heads and horns<br/>
             you can also run loop effects that will simulate engine sounds<br/>
-            the maximum number of audio effects that can be transmitted in 1 tick is 16<br/>
-            the maximum number of simultaneously fired loop effects is 4<br/>
+            with betterAPI, you can load ANY SOUND AT ALL!<br/>
+            the maximum number of audio effects is 32<br/>
+            the maximum number of simultaneously fired loop effects is 8<br/>
             number of simultaneously loaded samples: 32<br/>
             component name - synthesizer
         </p>
 
         <br/>
-        <p class="text">sound api:</p>
+        <p class="text">new sound api:</p>
         <ul class="list">
-            <li><span></span>synthesizer.stop() - stops all currently playing sounds (does not touch loop sounds)</li>
+            <li><span></span>synthesizer.stop() - stops all currently playing sounds (does not stop loop effects and samples)</li>
+            <li><span></span>synthesizer.hornBeep(pitch:number (0 - 1), duration:number|nil):id - makes a horn sound</li>
+            <li><span></span>synthesizer.ballBeep(velocity:number (0 - 50), duration:number|nil):id - generates the sound of the challengeball_rolling</li>
+            <li><span></span>synthesizer.toteBeep(device:number (1 - 9), note:number (0 - 24), duration:number|nil):id - it can emit both the sound of a horn (instrument 0) and the sound of robot heads. but it's designed for robot heads (since it accepts a note)</li>
+            <li><span></span>synthesizer.stopBeep(id:number) - accepts the index of the beep, which is returned by the function that makes the sound. stops this sound instantly</li>
+        </ul>
+
+        <br/>
+        <p class="text">sound api (it is outdated, it is better not to use it):</p>
+        <ul class="list">
+            <li><span></span>synthesizer.stop() - stops all currently playing sounds (does not stop loop effects and samples)</li>
             <li><span></span>synthesizer.clear() - clears the sound buffer</li>
             <li><span></span>synthesizer.delBeep(index:number) - cancels addBeep with the passed index</li>
             <li><span></span>synthesizer.addBeep(device:number|nil, pitch:number|nil, volume:number|nil (in fact, it starts the same sound several times, from 1 to 10 it is not recommended to set this parameter to more than 0.3), duration:number|nil):index - adds sound to the buffer</li>
             <li><span></span>synthesizer.flush() - sends the audio buffer to clients, but does not clear it. do not forget to clear the buffer yourself so as not to overflow it</li>
             <li><span></span>synthesizer.flushWithStop() - it works the same way as flush, but stops playback of all previously started sounds that were not updated in this call</li>
             <li><span></span>synthesizer.flushWithBind() - it works the same way as flush, but it doesn't restart sounds with similar instruments that are already playing, instead it updates them with the remaining time</li>
-            
         </ul>
 
         <br/>
@@ -61,8 +71,88 @@
             <li><span>synthesizer.stopSample(slot:number (1-32)) - stop the sample</span></li>
             <li><span>synthesizer.pauseSample(slot:number (1-32)) - pause the sample</span></li>
             <li><span>synthesizer.loopSample(slot:number (1-32), state:boolean) - enables or disables sample looping</span></li>
-            <li><span>synthesizer.setSampleVolume(slot:number (1-32), volume (0-1)) - set the sample volume</span></li>
+            <li><span>synthesizer.setSampleVolume(slot:number (1-32), volume (0 - 3)) - set the sample volume</span></li>
+            <li><span>synthesizer.setSampleRate(slot:number (1-32), rate:number) - set the sample rate (default: 1) changes the speed without changing the pitch</span></li>
+            <li><span>synthesizer.setSamplePitch(slot:number (1-32), pitch:number) - set the sample pitch [-60...0...60] (default: 0)</span></li>
+            <li><span>synthesizer.setSampleSpeed(slot:number (1-32), speed:number) - set the sample speed (default: 1) changes the speed and tone</span></li>
         </ul>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">--the sample api requires a betterAPI to work!
+--https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610
+
+local synthesizer = getComponent("synthesizer")
+
+synthesizer.loadSampleFromURL(1, "https://raw.githubusercontent.com/igorkll/trashfolder/refs/heads/main/sound/1.mp3")
+synthesizer.loopSample(1, true)
+synthesizer.setSampleVolume(1, 0.5)
+synthesizer.startSample(1)
+
+function callback_loop()
+    if _endtick then
+        synthesizer.loopSample(1, false)
+        synthesizer.stopSample(1)
+        return
+    end
+end</code>
+        </pre>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">--the sample api requires a betterAPI to work!
+--https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610
+
+local timerhost = require("timer").createHost()
+local synthesizer = getComponent("synthesizer")
+
+synthesizer.loadSampleFromTTS(1, "hello world")
+synthesizer.loadSampleFromTTS(2, "danger")
+synthesizer.loadSampleFromTTS(3, "evacuation")
+
+local timer = timerhost:createTimer(40, false, function ()
+    synthesizer.startSample(1)
+
+    local timer = timerhost:createTimer(80, false, function ()
+        synthesizer.startSample(2)
+
+        local timer = timerhost:createTimer(40, true, function ()
+            synthesizer.startSample(3)
+        end)
+        timer:reset()
+        timer:setEnabled(true)
+    end)
+    timer:reset()
+    timer:setEnabled(true)
+end)
+timer:reset()
+timer:setEnabled(true)
+
+function callback_loop()
+    if _endtick then
+        synthesizer.stopSample(1)
+        synthesizer.stopSample(2)
+        synthesizer.stopSample(3)
+        return
+    end
+
+    timerhost:tick()
+end</code>
+        </pre>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">local utils = require("utils")
+local synthesizer = getComponent("synthesizer")
+
+function onTick(dt)
+    local sin = math.sin(math.rad(getTick() * 4))
+    synthesizer.ballBeep(utils.map(sin, -1, 1, 25, 40), 5)
+end
+
+function onStop()
+    synthesizer.stop()
+end
+
+_enableCallbacks = true</code>
+        </pre>
 
         <pre>
             <code class="language-lua" style="width: fit-content;">synthesizers = getComponents("synthesizer")

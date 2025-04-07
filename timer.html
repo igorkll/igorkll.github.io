@@ -31,7 +31,9 @@
 
         <p class="text">timerhost methods:</p>
         <ul class="list">
-            <li><span>timerhost:createTimer(period:number, autoReset:boolean, callback:function(optional)):timer - creates a new timer</span></li>
+            <li><span>timerhost:createTimer(period:number, autoReset:boolean, callback:function(self)[optional]):timer - creates a new timer</span></li>
+			<li><span>timerhost:callLater(time:number, callback:function(self)):timer - creates an default enabled and resetted timer without autoReset</span></li>
+			<li><span>timerhost:task(period:number, callback:function(self)):timer - creates an default enabled timer with autoReset</span></li>
             <li><span>timerhost:tick() - call this every tick(in callback_loop) for the timers to work</span></li>
             <li><span>timerhost:setEnabledAll(enable:boolean) - turns off/on all timers created at the moment</span></li>
         </ul>

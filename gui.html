@@ -8,8 +8,8 @@
         <link href="highlight.css" rel="stylesheet">
         <script src="highlight.js"></script>
         <script>
-			hljs.highlightAll();
-		</script>
+            hljs.highlightAll();
+        </script>
     </head>
     <body>
         <a class="text" href="index.html">main page</a>
@@ -72,6 +72,7 @@
             <li><span>guiscene:createTextBox(x, y, sizeX, sizeY, text, bg(optional), fg, centerX, centerY, spacingY, autoNewline, tool):guiobject - creates a textbox(the layer above the graphic.textBox)</span></li>
             <li><span>guiscene:createCustom(x, y, sizeX, sizeY, objectClass:table, ...):guiobject - creates a custom object with your class and arguments</span></li>
             <li><span>guiscene:createWindow(x, y, sizeX, sizeY, color):guiwindow - creates a window. you can create elements on it just like on a scene. by default, it does not move and does not have an upper panel</span></li>
+            <li><span>guiscene:createGrid(x, y, sizeX, sizeY, gridSizeX, gridSizeY, defaultObjectSizeXmul (default: 1), defaultObjectSizeYmul (default: 1)):guigrid - creates a new grid. the grid itself places the elements inside itself according to the grid. when creating an element, instead of its position, pass the index to the grid from 0 to the grid size along this axis - 1. if you do not specify the size of the element, it will be calculated automatically to fill the entire grid cell</span></li>
         </ul>
 
         <br/>
@@ -81,7 +82,8 @@
             <li><span>guiwindow:setAutoViewport(boolean) - if you call this with the true argument, then all elements inside the window cannot be rendered outside the window</span></li>
             <li><span>guiwindow:setColor(color|function(guiwindow)) - sets the background color of the window. it can be a drawer function</span></li>
             <li><span>guiwindow:upPanel(color, textcolor, title:string, collapsibility:boolean) - configures the top panel of the window</span></li>
-            <li><span>guiwindow:panelButton(sizeX:number, toggle:boolean, title, bg, fg, bg_press, fg_press) - adds a button to the top window panel</span></li>
+            <li><span>guiwindow:panelButton(sizeX:number, toggle:boolean, title, bg, fg, bg_press, fg_press) - adds a button to the top window panel. if you pass nil instead of sizeX, the button will be square</span></li>
+            <li><span>guiwindow:panelObject(contructorname:string, sizeX:number, ...) - it works the same way as panelButton, but it allows you to create any object: window:panelObject("createCustom", nil, class, ...)</span></li>
             <li><span>guiwindow:minimize(state:boolean) - minimizes or expands the window</span></li>
         </ul>
 
@@ -131,6 +133,14 @@
         </ul>
 
         <br/>
+        <p class="text">grid object methods:</p>
+        <ul class="list">
+            <li><span>guiobject:getGridObject(x:number, y:number) - return an object from the grid by its position. the grid is indexed from 0</span></li>
+            <li><span>guiobject:getGridSize():x, y - return the size of the grid</span></li>
+            <li><span>guiobject:getGridItemSize():x, y - returns the default size of the element in the grid</span></li>
+        </ul>
+
+        <br/>
         <p class="text">any object methods (these methods are relevant for any type of object, including custom and window):</p>
         <ul class="list">
             <li><span>guiobject:destroy() - deletes an object. after calling this method, do not use the handle of this object</span></li>
@@ -159,7 +169,43 @@
             <li><span>guiobject:setCenterUp(guiobject, padding (default: 1)) - sets the position of one element relative to the position of another element. centers on a different coordinate</span></li>
             <li><span>guiobject:setCenterDown(guiobject, padding (default: 1)) - sets the position of one element relative to the position of another element. centers on a different coordinate</span></li>
             <li><span>guiobject:setFontParameters(font:table|nil, sizeX:number|nil, sizeY:number|nil) - sets the font and its size for a specific element</span></li>
+            <li><span>guiobject:redraw() - redraw an object right now</span></li>
         </ul>
+
+        <br/>
+        <h2 class="text">auto-placement of elements (grid):</h2>
+        <pre>
+            <code class="language-lua" style="width: fit-content;">local display = getComponent("display")
+display.reset()
+display.clearClicks()
+display.setClicksAllowed(true)
+local rx, ry = display.getWidth(), display.getHeight()
+
+local gui = require("gui").new(display)
+local scene = gui:createScene("0000ff")
+local grid = scene:createGrid(0, 0, nil, nil, 3, 3, 0.8, 0.8)
+
+local gridSizeX, gridSizeY = grid:getGridSize()
+for ix = 0, gridSizeX - 1 do
+    for iy = 0, gridSizeY - 1 do
+        grid:createButton(ix, iy, nil, nil, false, ix .. ":" .. iy)
+    end
+end
+
+function callback_loop()
+    if _endtick then
+        display.clear()
+        display.flush()
+        return
+    end
+
+    gui:tick()
+    if gui:needFlush() then
+        gui:draw()
+        display.flush()
+    end
+end</code>
+        </pre>
 
         <br/>
         <h2 class="text">custom element example:</h2>

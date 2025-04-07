@@ -45,7 +45,7 @@
             <li><span>nbsPlayer:setDefaultInstrument(id:number) - sets the ID of the tool to be used if it was not possible to select a tool from the "instrumentTable" (default: 4)</span></li>
             <li><span>nbsPlayer:setNoteShift(shift:number) - sets the offset of the notes relative to the notes of the robot's head (default: -39)</span></li>
             <li><span>nbsPlayer:setNoteAlignment(alignment:number) - if set to 0, the notes that have gone beyond the playback limit will not be played. if 1 is set, the notes that have gone beyond the limit will still be reproduced but with distortion (default: 1)</span></li>
-            <li><span>nbsPlayer:setNoteDuration(noteDuration:number, flushMode:boolean) - sets how many ticks will be allocated for each note. (default: 0) (the note will immediately stop playing as soon as it ends in the nbs file)</span></li>
+            <li><span>nbsPlayer:setNoteDuration(noteDuration:number, flushMode:boolean) - sets how many ticks will be allocated for each note. (default: 0) (the note will immediately stop playing as soon as it ends in the nbs file) if flushMode is set to true, the sounds cannot stop before the timer</span></li>
             <li><span>nbsPlayer:getCurrentNotes():table {{instrument, note}, {instrument, note}, ...} - returns the notes and the instrument that are currently being played. The sheet music and instrument are in NBS format rather than synthesizer. You can receive this information even if you start the player without synthesizers connected, so you can output audio data to another output. if your music is still playing poorly when this value is greater than 0, try passing true as the second argument</span></li>
         </ul>
 
