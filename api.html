@@ -20,22 +20,26 @@
 
         <p style="color:white;">
             in the original "ScriptableComputer" luaInLua worked terribly and contained a bunch of bugs.
+            <br/>
             SComputers uses a FiOne_lua virtual machine that runs about 5 times faster
+            <br/>
             and it does not contain any bugs except for the lack of "goto" support.
         </p>
 
         <p style="color:white;">
-            global lua changes, now the number of iterations is unlimited, but the execution time of one tick is limited, if the computer does not have time to execute the code in time, an error will pop up
+            global lua changes
+            <br/>
+            now the number of iterations is unlimited, but the execution time of one tick is limited, if the computer does not have time to execute the code in time, an error will pop up
+            <br/>
             you can configure how much the computer can "delay" the game-tick in the "Permission Tool" (by default: 4 ticks)
         </p>
 
         <p style="color:white;">
             SComputers has a lag-score mechanic that prevents lags from being called
             <br/>
-            if the computer runs the code for a long time (it takes a lot of processor time) then he is credited with a lag-score, which can lead to missing clock cycles. which actually means that you won't get control for the next beat of the game
+            if the computer runs the code for a long time (it takes a lot of processor time) then he is credited with a lag-score, which can lead to missing clock cycles. which actually means that you won't get control for the next tick of the game
         </p>
 
-        <a name="docsel"></a>
         <p class="text">documentation sections:</p>
         <ul class="list">
             <a class="hyper" href="./env.html"><li><span>environment</span></li></a>
@@ -50,6 +54,14 @@
         <ul class="list">
             <li><span>exceptions in callback_error, clientInvoke, clientInvokeTo cannot be handled in any way other than viewing game logs/debug console</span></li>
             <li><span>on a computer with an embedded disk, it will always be defined as the first disk, and the connected external disk will always be the second</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">recommendations</p>
+        <ul class="list">
+            <li><span>It is recommended to install a dll mod: <a class="hyper" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610">betterAPI</a> this will increase the mod's performance and add new functionality</span></li>
+            <li><span>if the antenna on your device works only for receiving then you can put an NFC antenna, the antenna radius affects only the transmission</span></li>
+            <li><span>it is not necessary to update the display every clock cycle, often it does not make sense. in most cases, updating 4 times per second will be enough, for this it is enough to insert "if <a href="env.html#getTick" class="hyper">getTick()</a> % 4 == 0 then --[[display update code]] end" at your program</span></li>
         </ul>
 
         <br/>
@@ -73,13 +85,6 @@
         </ul>
 
         <br/>
-        <p class="text">recommendations</p>
-        <ul class="list">
-            <li><span>if the antenna on your device works only for receiving then you can put an NFC antenna, the antenna radius affects only the transmission</span></li>
-            <li><span>it is not necessary to update the display every clock cycle, often it does not make sense. in most cases, updating 4 times per second will be enough, for this it is enough to insert "if <a href="env.html#getTick" class="hyper">getTick()</a> % 4 == 0 then --[[display update code]] end" at your program</span></li>
-        </ul>
-
-        <br/>
         <p class="text">features</p>
         <ul class="list">
             <li><span>if you declare the function "callback_error(str)" then it will be called in cases of an error in the computer
@@ -97,19 +102,6 @@
             <li><span>the _endtick flag that is automatically raised if the computer's tick is the last one</span></li>
             <li><span>_VERSION contains uses VM name</span></li>
             <li><span>components such as the keyboard, terminal and reboot gate can be connected to the seat</span></li>
-        </ul>
-
-        <br/>
-        <p class="text">how to use the importer</p>
-        <ul class="list">
-            <li><span>to generate an disk-image, use the importer utility, it is located in $CONTENT_DATA/USER/importer</span></li>
-            <li><span>to import an disk-image, use the disk menu, to do this, press the E button on it</span></li>
-            <li><span>to open this menu on a PC with a built-in disk, use the button in its gui</span></li>
-            <li><span>when importing, old files are not erased, in order to erase them, click clear</span></li>
-            <li><span>you can import your generated disk-image($CONTENT_DATA/USER/importer/disk.json), or a ready-made OS (scriptableOS)</span></li>
-            <li><span>at the moment, importing/exporting a custom disk-image only works when you are the host!</span></li>
-            <li><span>the "import from importer" and "export to importer" buttons import and export the disk-image to the importer file(disk.json) the buttons below are responsible for importing/exporting to the "$CONTENT_DATA/USER/userdisks" folder</span></li>
-            <li><span>on "windows", it is usually located along the path: "C:\Program Files (x86)\Steam\steamapps\workshop\content\387990\2949350596\USER\importer"</span></li>
         </ul>
 
         <br/>

@@ -1,5 +1,7 @@
 body {
-    background: hsl(201, 100%, 22%) url(background.jpg);
+    background: hsl(0, 0%, 12%);
+    font-family: 'Roboto', sans-serif;
+    margin: 20px
 }
 
 .image {
