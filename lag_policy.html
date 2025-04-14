@@ -16,6 +16,12 @@
         <br/>
         <a class="text" href="api.html#docsel">main page - api reference</a>
 
+        <p style="color:white;">
+            SComputers has a lag-score mechanic that prevents lags from being called
+            <br/>
+            if the computer runs the code for a long time (it takes a lot of processor time) then he is credited with a lag-score, which can lead to missing clock cycles. which actually means that you won't get control for the next tick of the game
+        </p>
+
         <ul class="list">
             <li><span>SComputers has excellent display optimization</span></li>
             <li><span>however, your code can still cause lags if it uses too much CPU time</span></li>
@@ -29,7 +35,8 @@
             <li><span>if your code causes lags, it may start skipping a lot of ticks at once</span></li>
             <li><span>also, your code can start skipping bars if the game is lagging for another reason</span></li>
             <li><span>you can get the lag score value using getLagScore(). you can also get the number of missed ticks using getSkippedTicks()</span></li>
-            <li><span>if your code skipped a clock cycle/clock cycles then getUptime will skip the value. consider this</span></li>
+            <li><span>if your code skipped a clock cycle/clock cycles then getUptime() will skip the value. consider this</span></li>
+            <li><span>getTick() does not skip ticks when the computer skips them. it counts each iteration of the computer, regardless of how many ticks have passed between iterations</span></li>
             <li><span>the <a class="hyper" href="./timer.html">timer library</a> makes automatic correction based on the ticks missed by the computer</span></li>
         </ul>
 

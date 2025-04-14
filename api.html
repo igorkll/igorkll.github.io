@@ -18,28 +18,29 @@
             however, programs written for this mod will not work on the original ScriptableComputer
         </p>
 
+        <br/>
         <p style="color:white;">
             in the original "ScriptableComputer" luaInLua worked terribly and contained a bunch of bugs.
             <br/>
             SComputers uses a FiOne_lua virtual machine that runs about 5 times faster
             <br/>
             and it does not contain any bugs except for the lack of "goto" support.
-        </p>
-
-        <p style="color:white;">
-            global lua changes
             <br/>
             now the number of iterations is unlimited, but the execution time of one tick is limited, if the computer does not have time to execute the code in time, an error will pop up
             <br/>
             you can configure how much the computer can "delay" the game-tick in the "Permission Tool" (by default: 4 ticks)
+            <br/>
+            if you install the <a class="hyper" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610">betterAPI</a> dll mod, SComputers will use native lua, which will significantly increase performance.
         </p>
 
+        <br/>
         <p style="color:white;">
             SComputers has a lag-score mechanic that prevents lags from being called
             <br/>
             if the computer runs the code for a long time (it takes a lot of processor time) then he is credited with a lag-score, which can lead to missing clock cycles. which actually means that you won't get control for the next tick of the game
         </p>
 
+        <br/>
         <p class="text">documentation sections:</p>
         <ul class="list">
             <a class="hyper" href="./env.html"><li><span>environment</span></li></a>
@@ -52,14 +53,14 @@
         <br/>
         <p class="text">warnings</p>
         <ul class="list">
-            <li><span>exceptions in callback_error, clientInvoke, clientInvokeTo cannot be handled in any way other than viewing game logs/debug console</span></li>
+            <li><span>exceptions in callback_error, onError, clientInvoke, clientInvokeTo cannot be handled in any way other than viewing game logs/debug console</span></li>
             <li><span>on a computer with an embedded disk, it will always be defined as the first disk, and the connected external disk will always be the second</span></li>
         </ul>
 
         <br/>
         <p class="text">recommendations</p>
         <ul class="list">
-            <li><span>It is recommended to install a dll mod: <a class="hyper" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610">betterAPI</a> this will increase the mod's performance and add new functionality</span></li>
+            <li><span>it is recommended to install a dll mod: <a class="hyper" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610">betterAPI</a> this will increase the mod's performance and add new functionality</span></li>
             <li><span>if the antenna on your device works only for receiving then you can put an NFC antenna, the antenna radius affects only the transmission</span></li>
             <li><span>it is not necessary to update the display every clock cycle, often it does not make sense. in most cases, updating 4 times per second will be enough, for this it is enough to insert "if <a href="env.html#getTick" class="hyper">getTick()</a> % 4 == 0 then --[[display update code]] end" at your program</span></li>
         </ul>
@@ -75,8 +76,8 @@
             <li><span>now, when disabling a component/removing a component, it is guaranteed not to be work</span></li>
             <li><span>now the stepper motors do not create any force in the off state</span></li>
             <li><span>now the camera is able to see the units in a separate (by you exposed) color(by default, this color is bright white in all rendering modes)</span></li>
-            <li><span>The camera's FOV is limited to 165 degrees</span></li>
-            <li><span>The radar.getTargets method can now be used only once per tick on one radar (to avoid noise filtering) if you need to filter the noise then use multiple radars</span></li>
+            <li><span>the camera's FOV is limited to 165 degrees</span></li>
+            <li><span>the radar.getTargets method can now be used only once per tick on one radar (to avoid noise filtering) if you need to filter the noise then use multiple radars</span></li>
             <li><span>port.nextPacket can now be called even if there are no packets in the buffer without the risk of an error, the method will simply return nil if the packet is not in the buffer</span></li>
             <li><span>port.nextPacket now it returns 2 values, the first is the packet itself, and the second is the ID of the port from which the packet was sent</span></li>
             <li><span>fixed a bug that prevented radars from seeing static objects</span></li>
@@ -87,20 +88,11 @@
         <br/>
         <p class="text">features</p>
         <ul class="list">
-            <li><span>if you declare the function "callback_error(str)" then it will be called in cases of an error in the computer
-            before the computer crashes (but it will crash anyway if you not delete the crash information from "crashstate" on callback_error function)
-            at the same time, it will be called before the crash and you will be able to "cancel" the crash
-            using the "getCurrentComputer" method and interacting with the crashstate table
-            if an exception occurs in this function, it can be caught only in the game logs/debug console</span></li>
-            <li><span>ATTENTION, now the "crashstate" table in the public API is a shadow of the real "crashstate" table. as a result, you can read from it, but writing to it will not lead to any result.
-            to undo the computer crash from "callback_error", use the "reboot" method</span></li>
-            <li><span>if you declare the "callback_loop" function, it will be called on the next tick instead of calling the entire program</span></li>
-            <li><span>added the load method, which allows you to set the name of a piece of code and works as in a normal lua, but does not allow you to load bytecode</span></li>
-            <li><span>the crashstate table has been added to the public api of the computer (getChildComputers and getParentComputers and getCurrentComputer)
-            there are two values hasException and exceptionMsg
-            you can write your values there</span></li>
-            <li><span>the _endtick flag that is automatically raised if the computer's tick is the last one</span></li>
-            <li><span>_VERSION contains uses VM name</span></li>
+            <li><span>
+                the crashstate table has been added to the public api of the computer (getChildComputers and getParentComputers and getCurrentComputer)<br/>
+                there are two values hasException and exceptionMsg<br/>
+                ATTENTION, the "crashstate" table in the public API is a shadow of the real "crashstate" table. as a result, you can read from it, but writing to it will not lead to any result
+            </span></li>
             <li><span>components such as the keyboard, terminal and reboot gate can be connected to the seat</span></li>
         </ul>
 
@@ -131,14 +123,6 @@
             if you need to save large amounts of data to a disk, then you can use the <a href="addons.html#world_disks" class="hyper">"world disks"</a> addon.
             <br/>
             if you need to distribute a large amount of data along with your creation in the workshop, you can use <a href="rom.html" class="hyper">"ROM disk"</a>
-        </ul>
-
-        <br/>
-        <p class="text">endtick</p>
-        <ul class="list">
-            after adding always on, it is incorrect to use "not input()" to track the shutdown,
-            <br/>
-            use the check "if _endtick then" there is a _endtick flag raised, this means the last tick
         </ul>
     </body>
 </html>
