@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksky_os=self.webpackChunksky_os||[]).push([[1903],{1912:s=>{s.exports=JSON.parse('{"blogBasePath":"/skyOS/blog","blogTitle":"Blog","authorsListPath":"/skyOS/blog/authors"}')}}]);

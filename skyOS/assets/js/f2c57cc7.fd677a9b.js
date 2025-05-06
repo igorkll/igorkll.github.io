@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksky_os=self.webpackChunksky_os||[]).push([[5751],{8117:s=>{s.exports=JSON.parse('{"metadata":{"permalink":"/skyOS/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
