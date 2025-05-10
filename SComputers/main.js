@@ -32,10 +32,31 @@ if (themeToggleButton !== null) {
     });
 }
 
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'en'
+    }, 'google_translate_element');
+}
+
+setInterval(() => {
+    const elements = document.querySelectorAll('.skiptranslate');
+
+    elements.forEach(element => {
+        if (element.classList.length === 1) {
+            element.remove();
+        }
+    });
+}, 1000);
+
+
 function loadWindow() {
     var script = document.createElement('script');
     script.async = true;
     script.src = "https://cse.google.com/cse.js?cx=319af69f537d9450e";
+    document.body.insertAdjacentElement('afterbegin', script);
+
+    var script = document.createElement('script');
+    script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     document.body.insertAdjacentElement('afterbegin', script);
 
     var htmlString = `
@@ -50,6 +71,7 @@ function loadWindow() {
             <img src="forward.png" alt="forward" />
         </button>
         <div class="gcse-search"></div>
+        <div id="google_translate_element"></div>
     </div>
     `;
     document.body.insertAdjacentHTML('afterbegin', htmlString);
