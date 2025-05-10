@@ -1,0 +1,100 @@
+body {
+    background: hsl(0, 0%, 12%);
+    font-family: 'Roboto', sans-serif;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.image {
+    width: 60%;
+    height: 60%;
+}
+
+.text {
+    color: whitesmoke;
+    font-size: medium;
+    padding: 0%;
+}
+
+.list {
+    color: rgb(255, 255, 255);
+    list-style-type: disc;
+}
+
+.hyper {
+    color: rgb(255, 123, 0)
+}
+
+li {
+    margin: 20px 0;
+}
+
+.cool-text {
+    background-color: #5d5d5d;
+    color: white;
+    border: none;
+    padding: 20px 20px;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.cool-button {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.15s;
+}
+
+.red {
+    background-color: #cb3636;
+}
+
+.red:hover {
+    background-color: #e57070;
+}
+
+.green {
+    background-color: #36cb3b;
+}
+
+.green:hover {
+    background-color: #84dc87;
+}
+
+.brown {
+    background-color: #c36225;
+}
+
+.brown:hover {
+    background-color: #f19459;
+}
+
+.blue {
+    background-color: #368dcb;
+}
+
+.blue:hover {
+    background-color: #7dc0f0;
+}
+
+.yellow {
+    background-color: #daa620;
+}
+
+.yellow:hover {
+    background-color: #f4cb63;
+}
