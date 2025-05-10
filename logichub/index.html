@@ -16,13 +16,15 @@
                 on github, my nickname is igorkll. Historically, I have a lot of nicknames, I think it's too late to change anything.</br>
                 My favorite game is ScrapMechanic! I can play it for hours on end, and I love making mods in this game.</br>
                 I write code in languages such as: C, lua, C#, C++, python, bash</br>
+                This is where I publish my projects.</br>
+                I have quite a few projects, and I decided to centralize.
             </p>
             
             </br>
             <div class="cool-frame" style="width: 70%; max-width: 1200px;">
                 <center>
                     <h2>SComputers</h2>
-                    <img src="/SComputers/preview.png" class="image"/>
+                    <img src="images/SComputers.png" class="image"/>
 
                     </br>
                     <div class="cool-text">
@@ -47,6 +49,112 @@
 
                     </br>
                     <button class="cool-button red" onclick="window.open('https://igorkll.github.io/SComputers/', '_blank').focus();">project page</button>
+                </center>
+            </div>
+
+            </br>
+            <div class="cool-frame" style="width: 70%; max-width: 1200px;">
+                <center>
+                    <h2>betterAPI</h2>
+                    <img src="images/betterAPI.jpg" class="image"/>
+
+                    </br>
+                    <div class="cool-text">
+                        this API adds additional methods to the game.</br>
+                        however, it does not provide full access to the lua API.</br>
+                        this mod implements methods such as "loadstring" and "loadfile", however, bytecode loading is not available and the transfer of the user's ENV is mandatory.</br>
+                        if someone has found a vulnerability here, PLEASE let me know.</br>
+                        vulnerability is considered to be any opportunity to execute arbitrary code, as well as to use the filesystem outside the "BetterFS" directory and game mods.</br>
+                        my plans are to implement a framework for creating screens and integrate with the browser and "Visual Studio Code".</br>
+                        betterAPI is also able to speed up the execution of lua code in the game, as it uses a newer version of luajit.</br>
+                    </div>
+
+                    </br>
+                    <button class="cool-button red" onclick="window.open('https://igorkll.github.io/betterAPI/', '_blank').focus();">project page</button>
+                </center>
+            </div>
+
+            </br>
+            <div class="cool-frame" style="width: 70%; max-width: 1200px;">
+                <center>
+                    <h2>NES Emulator</h2>
+                    <img src="images/NES_Emulator.jpg" class="image"/>
+
+                    </br>
+                    <div class="cool-text">
+                        this mod allows you to emulate your favorite games from the NES platform right inside Scrap Mechanic!</br>
+                        this is a real emulator running inside the game, you can even connect a second controller and play with your friends!</br>
+                        just connect the console to the display and the joysticks to the console. insert the cartridge and play the NES right inside Scrap Mechanic!</br>
+                        the list of games will be updated, as well as in the future there will be support for add-ons for additional cartridges</br>
+                        audio emulation is not supported at the moment, but it will be supported in the future.</br>
+                        unfortunately, due to the restricted API of the game, when pressing several buttons in the joystick GUI, bugs sometimes occur and other buttons are released. if you install betterAPI, the button processing works fine, otherwise it is better to connect the controller with the seat.</br>
+                        you can connect the joystick to the seat to control the game from it. to import other control buttons, use the "Control Import" unit and connect it to the joystick.</br>
+                        </br>
+                        controls:</br>
+                        wasd - crosshair</br>
+                        enter - start</br>
+                        i - select</br>
+                        o - B</br>
+                        p - A</br>
+                        </br>
+                        unfortunately, the mod causes the STRONGEST LAGS!!! without betterAPI, the game runs at about 4-7 FPS and the console is slow. with betterAPI starting from version 40 (I added multithreading), the game outputs 70-120 FPS and the console runs at normal speed</br>
+                        i wish the developers of ScrapMechanic health and patience, and FINALLY MAKE A MULTITHREADED API FOR LUA!!</br>
+                        the emulator always works on the server side so that the game is synchronous for all players, so it is better that the host has a powerful processor. for the mod to work well, you need a single stream (high frequency)</br>
+                    </div>
+
+                    </br>
+                    <button class="cool-button red" onclick="window.open('https://igorkll.github.io/betterAPI/', '_blank').focus();">project page</button>
+                </center>
+            </div>
+
+            </br>
+            <div class="cool-frame" style="width: 70%; max-width: 1200px;">
+                <center>
+                    <h2>Scrap Mechanic Server</h2>
+                    <img src="images/smserver.png" class="image"/>
+
+                    </br>
+                    <div class="cool-text">
+                        This is a survival server with mods</br>
+                        Here you can play with other people</br>
+                        You can build houses, create your own settlement, farm, or become a programmer and write code for SComputers!</br>
+                        The server has protection against crashes and dupes</br>
+                    </div>
+
+                    </br>
+                    <button class="cool-button red" onclick="window.open('https://igorkll.github.io/smserver/', '_blank').focus();">project page</button>
+                </center>
+            </div>
+
+            </br>
+            <div class="cool-frame" style="width: 70%; max-width: 1200px;">
+                <center>
+                    <h2>esp32 opencomputers</h2>
+                    <img src="images/temporarily_unavailable.png" class="image"/>
+
+                    </br>
+                    <div class="cool-text">
+                        <h1 style="font-size: 32px; font-weight: bold; margin: 11px 0;">ESP32 - opencomputers emulator</h1><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">emulates opencomputers on esp32</li><li style="margin: 8px 0;">the original opencomputers font</li><li style="margin: 8px 0;">sound is supported</li><li style="margin: 8px 0;">support screen backlight control via screen.turnOff / screen.turnOn</li><li style="margin: 8px 0;">screen.getAspectRatio returns the actual aspect ratio of the display</li><li style="margin: 8px 0;">all work with esp-idf is done in the "hal.h" and "hal.c" files so that the code can be easily adapted to different platforms and peripherals</li><li style="margin: 8px 0;">supports unicode</li><li style="margin: 8px 0;">to simulate the right mouse button, use a long press at one point of the screen</li><li style="margin: 8px 0;">computer case LEDs are supported</li><li style="margin: 8px 0;">a large number of settings in config.h</li><li style="margin: 8px 0;">hardware on/off/reboot buttons are supported</li><li style="margin: 8px 0;">self-locking power is supported</li><li style="margin: 8px 0;">the UUIDs of all components are randomly generated when the device is turned on for the first time</li><li style="margin: 8px 0;">screen precise mode is supported</li><li style="margin: 8px 0;">an SD card is supported (it is defined as a floppy disk)</li><li style="margin: 8px 0;">disk_drive.eject() unmounts the sd card. after that, it can be extracted without the risk of damaging the filesystem</li><li style="margin: 8px 0;">you can assign a separate LED to the memory card, which will blink when it is accessed</li></ul>
+                    </div>
+
+                    </br>
+                    <button class="cool-button red" onclick="window.open('https://github.com/igorkll/esp32_opencomputers', '_blank').focus();">project page</button>
+                </center>
+            </div>
+
+            </br>
+            <div class="cool-frame" style="width: 70%; max-width: 1200px;">
+                <center>
+                    <h2>os in opencomputers - liked</h2>
+                    <img src="images/temporarily_unavailable.png" class="image"/>
+
+                    </br>
+                    <div class="cool-text">
+                        <h1 style="font-size: 32px; font-weight: bold; margin: 11px 0;">liked &amp; likeOS</h1><p style="margin: 16px 0; line-height: 1.6; color: #ffffff;">liked is a system based on likeOS.<br>designed for computers from the OpenComputers mod for Minecraft.<br>the installer can be run from any other OS or from the eeprom firmware.</p><h3 style="font-size: 19px; font-weight: bold; margin: 14px 0;">minimum system requirements:</h3><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">video card - tier2</li><li style="margin: 8px 0;">monitor - tier2</li><li style="margin: 8px 0;">RAM - 768KB</li><li style="margin: 8px 0;">processor - tier1</li><li style="margin: 8px 0;">hdd - tier2</li></ul><h3 style="font-size: 19px; font-weight: bold; margin: 14px 0;">recommended system requirements:</h3><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">video card - tier3</li><li style="margin: 8px 0;">monitor - tier3</li><li style="margin: 8px 0;">RAM - 1536KB</li><li style="margin: 8px 0;">processor - tier2</li><li style="margin: 8px 0;">hdd - tier2</li></ul><p style="margin: 16px 0; line-height: 1.6; color: #ffffff;">if openOS is installed on the device, then during installation, liked will offer to save your OS.<br>after which it can be launched with a single click on the liked desktop.</p><h2 style="font-size: 24px; font-weight: bold; margin: 12px 0;">installer link</h2><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">installer: <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua</a></li><li style="margin: 8px 0;">computercraft version(not supported yet): <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua</a></li></ul><h2 style="font-size: 24px; font-weight: bold; margin: 12px 0;">installation commands:</h2><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">openOS : wget <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua</a> /tmp/like; /tmp/like</li><li style="margin: 8px 0;">craftOS: wget run <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua</a></li></ul>
+                    </div>
+
+                    </br>
+                    <button class="cool-button red" onclick="window.open('https://github.com/igorkll/liked', '_blank').focus();">project page</button>
                 </center>
             </div>
         </center>

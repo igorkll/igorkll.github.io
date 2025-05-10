@@ -1,4 +1,4 @@
-const CACHE_NAME = 'logichub-app-v1';
+const CACHE_NAME = 'logichub-app-v2';
 
 const urlsToCache = [
     'service-worker.js',
@@ -8,7 +8,11 @@ const urlsToCache = [
     'index.html',
     'main.js',
     'manifest.json',
-    'SComputers/preview.png'
+    'images/SComputers.png',
+    'images/smserver.png',
+    'images/temporarily_unavailable.png',
+    'images/betterAPI.jpg',
+    'images/NES_Emulator.jpg'
 ];
 
 self.addEventListener('install', (event) => {
