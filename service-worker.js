@@ -1,4 +1,4 @@
-const CACHE_NAME = 'logic-hub-app-v12';
+const CACHE_NAME = 'logichub-app-v1';
 
 const urlsToCache = [
     'service-worker.js',
@@ -7,7 +7,8 @@ const urlsToCache = [
     'favicon.jpg',
     'index.html',
     'main.js',
-    'manifest.json'
+    'manifest.json',
+    'SComputers/preview.png'
 ];
 
 self.addEventListener('install', (event) => {
