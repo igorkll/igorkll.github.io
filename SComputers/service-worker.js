@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SComputers-app-v1';
+const CACHE_NAME = 'SComputers-app-v2';
 
 const urlsToCache = [
     'addons/Controllers.jpg',
