@@ -5,7 +5,7 @@
         <title>SComputers</title>
         <link rel="icon" href="favicon.ico">
         <link rel="stylesheet" href="style.css">
-        <link rel="manifest" href="/manifest.json">
+        <link rel="manifest" href="manifest.json">
     </head>
     <body>
         <center>
@@ -45,7 +45,7 @@
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/service-worker.js')
+                    navigator.serviceWorker.register('service-worker.js')
                         .then((registration) => {
                             console.log('ServiceWorker registration successful with scope: ', registration.scope);
                         })
