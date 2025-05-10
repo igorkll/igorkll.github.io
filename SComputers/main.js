@@ -31,3 +31,28 @@ if (themeToggleButton !== null) {
         localStorage.setItem('theme', themes[currentThemeIndex].style);
     });
 }
+
+function loadWindow() {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = "https://cse.google.com/cse.js?cx=319af69f537d9450e";
+    document.body.insertAdjacentElement('afterbegin', script);
+
+    var htmlString = `
+    <div class="cool-block">
+        <button class="image-button" onclick="window.history.back();">
+            <img src="back.png" alt="back" />
+        </button>
+        <button class="image-button" onclick="window.location.href = 'index.html'">
+            <img src="favicon.png" alt="SComputers" />
+        </button>
+        <button class="image-button" onclick="window.history.forward();">
+            <img src="forward.png" alt="forward" />
+        </button>
+        <div class="gcse-search"></div>
+    </div>
+    `;
+    document.body.insertAdjacentHTML('afterbegin', htmlString);
+}
+
+window.onload = loadWindow;
