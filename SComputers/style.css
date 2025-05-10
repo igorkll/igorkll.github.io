@@ -162,3 +162,19 @@ li {
 .gray:hover {
     background-color: #c5c5c5;
 }
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #383838;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #626262;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
