@@ -2,9 +2,9 @@ const themeToggleButton = document.getElementById('theme-toggle');
 const themeStylesheet = document.querySelector('link[rel="stylesheet"]');
 
 const themes = [
-    { style: 'style.css', color: '#000000' },
-    { style: 'style2.css', color: '#ffffff' },
-    { style: 'style3.css', color: '#054a6d' }
+    { style: 'style.css', color: '#a3a3a3' },
+    { style: 'style2.css', color: '#c0c0c0' },
+    { style: 'style3.css', color: '#13425a' }
 ];
 
 const currentTheme = localStorage.getItem('theme');
