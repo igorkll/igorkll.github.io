@@ -40,12 +40,24 @@ function googleTranslateElementInit() {
 
 setTimeout(() => {
     setInterval(() => {
-        const elements = document.querySelectorAll('.skiptranslate');
+        var elements = document.querySelectorAll('.skiptranslate');
     
         elements.forEach(element => {
             if (element.classList.length === 1) {
                 element.remove();
             }
+        });
+
+        var elements = document.querySelectorAll('#___gcse_0');
+    
+        elements.forEach(element => {
+            element.style="width: 100% !important;";
+        });
+
+        var elements = document.querySelectorAll('.gsc-control-cse');
+    
+        elements.forEach(element => {
+            element.style="background: none !important; border: none !important;";
         });
     }, 1000);
 }, 1000);
@@ -72,8 +84,8 @@ function loadWindow() {
         <button class="image-button" onclick="window.history.forward();">
             <img src="forward.png" alt="forward" />
         </button>
-        <div class="gcse-search" style="background: none !important; border: none !important; width: 100% !important; margin-left: 50px !important; margin-right: 50px !important;"></div>
-        <div id="google_translate_element" style="margin-right: 50px !important;"></div>
+        <div class="gcse-search"></div>
+        <div id="google_translate_element" style="margin-left: 15px !important; margin-right: 20px !important;"></div>
     </div>
     `;
     document.body.insertAdjacentHTML('afterbegin', htmlString);
