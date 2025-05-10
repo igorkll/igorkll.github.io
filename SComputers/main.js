@@ -38,14 +38,16 @@ function googleTranslateElementInit() {
     }, 'google_translate_element');
 }
 
-setInterval(() => {
-    const elements = document.querySelectorAll('.skiptranslate');
-
-    elements.forEach(element => {
-        if (element.classList.length === 1) {
-            element.remove();
-        }
-    });
+setTimeout(() => {
+    setInterval(() => {
+        const elements = document.querySelectorAll('.skiptranslate');
+    
+        elements.forEach(element => {
+            if (element.classList.length === 1) {
+                element.remove();
+            }
+        });
+    }, 1000);
 }, 1000);
 
 
@@ -70,8 +72,8 @@ function loadWindow() {
         <button class="image-button" onclick="window.history.forward();">
             <img src="forward.png" alt="forward" />
         </button>
-        <div class="gcse-search"></div>
-        <div id="google_translate_element"></div>
+        <div class="gcse-search" style="background: none !important; border: none !important; width: 100% !important; margin-left: 50px !important; margin-right: 50px !important;"></div>
+        <div id="google_translate_element" style="margin-right: 50px !important;"></div>
     </div>
     `;
     document.body.insertAdjacentHTML('afterbegin', htmlString);
