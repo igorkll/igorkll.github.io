@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SComputers-app-v3';
+const CACHE_NAME = 'SComputers-app-v4';
 
 const urlsToCache = [
     'addons/Controllers.jpg',
@@ -60,6 +60,8 @@ const urlsToCache = [
     'safeSmEnv.html',
     'service-worker.js',
     'style.css',
+    'style2.css',
+    'style3.css',
     'styles.html',
     'syntax.html',
     'synthesizer.html',
