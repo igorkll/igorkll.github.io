@@ -3,7 +3,7 @@ const themeStylesheet = document.querySelector('link[rel="stylesheet"]');
 
 const themes = [
     { style: 'style.css', color: '#a3a3a3' },
-    { style: 'style2.css', color: '#c0c0c0' },
+    { style: 'style2.css', color: '#474747' },
     { style: 'style3.css', color: '#13425a' }
 ];
 
