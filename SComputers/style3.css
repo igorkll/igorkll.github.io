@@ -1,5 +1,5 @@
 body {
-    background: hsl(0, 0%, 12%);
+    background: hsl(0, 0%, 0%);
     font-family: 'Roboto', sans-serif;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -13,7 +13,7 @@ body {
 }
 
 .text {
-    color: whitesmoke;
+    color: rgb(255, 255, 255);
     font-size: medium;
     padding: 0%;
 }
@@ -40,7 +40,7 @@ p {
 }
 
 .hyper {
-    color: rgb(255, 123, 0)
+    color: rgb(0, 153, 255)
 }
 
 li {
@@ -48,8 +48,8 @@ li {
 }
 
 .cool-text {
-    background-color: #5d5d5d;
-    color: white;
+    background-color: #3b3b3b;
+    color: rgb(255, 255, 255);
     border: none;
     padding: 20px 20px;
     text-align: left;
@@ -61,7 +61,7 @@ li {
 }
 
 .cool-frame {
-    background-color: #a3a3a3;
+    background-color: #696969;
     color: white;
     border: none;
     padding: 20px 20px;
