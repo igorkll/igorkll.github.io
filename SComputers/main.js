@@ -60,7 +60,7 @@ setTimeout(() => {
             element.style="background: none !important; border: none !important;";
         });
     }, 1000);
-}, 1000);
+}, 500);
 
 
 function loadWindow() {
