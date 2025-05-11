@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SComputers-app-v12';
+const CACHE_NAME = 'SComputers-app-v13';
 
 const urlsToCache = [
     'addons/brainf_ck_language.jpg',
