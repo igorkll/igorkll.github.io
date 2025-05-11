@@ -87,13 +87,13 @@ function loadWindow() {
 
     var htmlString = `
     <div class="cool-block">
-        <button class="image-button" onclick="window.history.back(); setTimeout(function() {location.reload();}, 100);">
+        <button class="image-button" onclick="window.history.back(); setTimeout(function() {location.reload();}, 250);">
             <img src="back.png" alt="back" />
         </button>
         <button class="image-button" onclick="window.location.href = 'index.html'">
             <img src="favicon.png" alt="SComputers" />
         </button>
-        <button class="image-button" onclick="window.history.forward(); setTimeout(function() {location.reload();}, 100);">
+        <button class="image-button" onclick="window.history.forward(); setTimeout(function() {location.reload();}, 250);">
             <img src="forward.png" alt="forward" />
         </button>
         <div class="gcse-search"></div>
