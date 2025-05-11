@@ -52,10 +52,12 @@ function googleTranslateElementInit() {
 
 setTimeout(() => {
     setInterval(() => {
-        var elements = document.querySelectorAll('.skiptranslate');
+        //var element = document.getElementById('.skiptranslate');
 
-        elements.forEach(element => {
-            if (element.id !== "google_translate_element") {
+        var element = document.getElementById('google_translate_element');
+        if (element != null) {
+            element = element.children[0];
+            if (element) {
                 const children = Array.from(element.children);
                 children.slice(1).forEach(child => {
                     child.remove();
@@ -67,10 +69,16 @@ setTimeout(() => {
                         child.remove();
                     }
                 });
-            } else {
-                element.remove();
+
+                var elements = document.querySelectorAll('.skiptranslate');
+                elements.forEach(element => {
+                    if (element.classList.length === 1) {
+                        element.remove();
+                        document.body.style.top = 0;
+                    }
+                });
             }
-        });
+        }
 
         var elements = document.querySelectorAll('#___gcse_0');
     
