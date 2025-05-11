@@ -53,9 +53,21 @@ function googleTranslateElementInit() {
 setTimeout(() => {
     setInterval(() => {
         var elements = document.querySelectorAll('.skiptranslate');
-    
+
         elements.forEach(element => {
-            if (element.classList.length === 1) {
+            if (element.id !== "google_translate_element") {
+                const children = Array.from(element.children);
+                children.slice(1).forEach(child => {
+                    child.remove();
+                });
+
+                const childNodes = Array.from(element.childNodes);
+                childNodes.forEach(child => {
+                    if (child.nodeType === Node.TEXT_NODE) {
+                        child.remove();
+                    }
+                });
+            } else {
                 element.remove();
             }
         });
@@ -72,7 +84,7 @@ setTimeout(() => {
             element.style="background: none !important; border: none !important;";
         });
     }, 1000);
-}, 500);
+}, 100);
 
 
 function loadWindow() {
