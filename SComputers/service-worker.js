@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SComputers-app-v17';
+const CACHE_NAME = 'SComputers-app-v18';
 
 const urlsToCache = [
     'addons/brainf_ck_language.jpg',
@@ -11,6 +11,7 @@ const urlsToCache = [
     'addons/power_toys.jpg',
     'addons/stretchable_display.jpg',
     'addons/world_disks.jpg',
+    'addons/mt_fast_logic.jpg',
     'service-worker.js',
     'style.css',
     'style2.css',

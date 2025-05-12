@@ -1,4 +1,4 @@
-const CACHE_NAME = 'logichub-app-v4';
+const CACHE_NAME = 'logichub-app-v5';
 
 const urlsToCache = [
     'service-worker.js',
