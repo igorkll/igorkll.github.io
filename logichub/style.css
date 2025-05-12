@@ -1,10 +1,10 @@
 body {
     background: hsl(0, 0%, 12%);
     font-family: 'Roboto', sans-serif;
-    margin-top: 20px;
+    margin-top: 100px;
     margin-bottom: 20px;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .image {
@@ -47,16 +47,45 @@ li {
     margin: 20px 0;
 }
 
+.barimage {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.barimage img {
+    width: 60px;
+    height: auto;
+}
+
+.barimage {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.barimage img {
+    width: 60px;
+    height: auto;
+}
+
 .image-button {
     background-color: transparent;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .image-button img {
-    width: 50px;
+    width: 60px;
     height: auto;
 }
 
@@ -70,7 +99,7 @@ li {
     display: inline-block;
     font-size: 16px;
     margin: 20px 20px;
-    border-radius: 5px;
+    border-radius: 25px;
 }
 
 .cool-frame {
@@ -83,7 +112,7 @@ li {
     display: inline-block;
     font-size: 16px;
     margin: 20px 20px;
-    border-radius: 5px;
+    border-radius: 25px;
 }
 
 .cool-block {
@@ -93,8 +122,8 @@ li {
     left: 0;
     width: 100%;
     z-index: 1000;
-    height: 60px;
-    padding: 10px;
+    height: 80px;
+    padding: 5px;
     box-sizing: border-box;
     display: flex;
     align-items: center;

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'logichub-app-v3';
+const CACHE_NAME = 'logichub-app-v4';
 
 const urlsToCache = [
     'service-worker.js',
@@ -8,11 +8,19 @@ const urlsToCache = [
     'index.html',
     'main.js',
     'manifest.json',
+    'bananapen.png',
     'images/SComputers.png',
     'images/smserver.png',
     'images/temporarily_unavailable.png',
     'images/betterAPI.jpg',
-    'images/NES_Emulator.jpg'
+    'images/NES_Emulator.jpg',
+    'icons/discord.png',
+    'icons/discord_raw.png',
+    'icons/discord_server.pdn',
+    'icons/discord_server.png',
+    'icons/discord_server_raw.png',
+    'icons/github.png',
+    'icons/steam.png'
 ];
 
 self.addEventListener('install', (event) => {
