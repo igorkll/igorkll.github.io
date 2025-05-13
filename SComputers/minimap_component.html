@@ -47,7 +47,9 @@
             <li><span>camera.getMinimapOffset():number, number</span></li>
             <li><span>camera.getWaypoints(width, height):{{x, y, color}, ...} - searches for all labels for a specific monitor resolution. all of them get a position on a specific point of the monitor - accordingly, they are not relevant for long</span></li>
             <li><span>camera.drawWaypoints(display, drawer:function(display, waypoint)) - draws all the waypoints on the monitor in a pre-prepared way. if you do not pass the drawer function, then the rendering will take place in the form of ordinary circles</span></li>
-            <li><span>camera.getRealRotation(display):number - returns the actual rotation of the minimap</span></li>
+            <li><span>camera.getRealRotation():number - returns the actual rotation of the minimap</span></li>
+            <li><span>camera.setWorldMode(boolean) - enables the world positioning mode in which you set the position of the minimap relative to the center of the game map using setMinimapOffset. When using this mode, it is recommended to disable rotateSync ( camera.setMinimapRotation(0, false) ) (default: false)</span></li>
+            <li><span>camera.isWorldMode():boolean - returns the value set using setWorldMode</span></li>
         </ul>
 
         <pre>
@@ -67,6 +69,7 @@ camera.setStep(512)
 camera.setDistance(2048)
 camera.setMinimapOffset(0, 0)
 camera.setMinimapRotation(0, true)
+camera.setWorldMode(false)
 
 local function rotateVector(x, y, angle)
     local x_new = x * math.cos(angle) - y * math.sin(angle)
@@ -91,6 +94,12 @@ local function setIsometric(_isometric)
     end
 end
 setIsometric(true)
+
+local function setMinimapOffset(_offsetX, _offsetY)
+    offsetX = _offsetX
+    offsetY = _offsetY
+    camera.setMinimapOffset(offsetX, offsetY)
+end
 
 local renderSettings = {
     lampLighting = false,
@@ -148,8 +157,22 @@ local waypointsSwitchText = scene:createText(nil, nil, "waypoints")
 waypointsSwitchText.sizeY = fheight
 waypointsSwitchText:setCenterRight(waypointsSwitch, 3)
 
+local worldSwitch = scene:createButton(nil, nil, 16, fheight + 2, true, nil, "444444", "ffffff", "ee2222", "ffffff")
+worldSwitch:setDown(waypointsSwitch, 3)
+worldSwitch.state = false
+worldSwitch:setCustomStyle(styles.switch)
+worldSwitch:attachCallback(function (_, state)
+    setMinimapOffset(0, 0)
+    camera.setMinimapRotation(0, not state)
+    camera.setWorldMode(state)
+end)
+
+local worldSwitchText = scene:createText(nil, nil, "world mode")
+worldSwitchText.sizeY = fheight
+worldSwitchText:setCenterRight(worldSwitch, 3)
+
 local increaseScale = scene:createButton(nil, nil, 8, 8, false, "+")
-increaseScale:setDown(waypointsSwitch, 3)
+increaseScale:setDown(worldSwitch, 3)
 increaseScale:attachCallback(function (_, state)
     if state then
         zoneSize = zoneSize + 16
@@ -212,9 +235,7 @@ local resetOffset = scene:createButton(nil, nil, nil, 8, false, "RESET OFFSET")
 resetOffset:setDown(increaseStep, 2)
 resetOffset:attachCallback(function (_, state)
     if state then
-        offsetX = 0
-        offsetY = 0
-        camera.setMinimapOffset(offsetX, offsetY)
+        setMinimapOffset(0, 0)
     end
 end)
 
