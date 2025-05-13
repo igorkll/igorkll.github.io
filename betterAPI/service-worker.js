@@ -1,4 +1,4 @@
-const CACHE_NAME = 'betterAPI-app-v1';
+const CACHE_NAME = 'betterAPI-app-v2';
 
 const urlsToCache = [
     'service-worker.js',
