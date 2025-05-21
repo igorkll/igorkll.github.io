@@ -30,7 +30,8 @@
             <li><span>inertialEngine.getAvailableBatteries():number - returns the number of batteries available to the engine</span></li>
             <li><span>inertialEngine.getAvailableGas():number - returns the amount of fuel available to the engine</span></li>
             <li><span>inertialEngine.addRotation(offset:vec3) - adds an angle in radians to the target angle of rotation of the engine</span></li>
-            <li><span>inertialEngine.addPosition(offset:vec3) - adds a position in meters to the target position of the engine(the position is added taking into account the rotation, the target rotation angle is taken into account, not the real one)</span></li>
+            <li><span>inertialEngine.addPosition(offset:vec3) - adds a position in meters to the target position of the engine (the position is added taking into account the rotation, the target rotation angle is taken into account, not the real one)</span></li>
+            <li><span>inertialEngine.addGlobalPosition(offset:vec3) - adds a position in meters to the target position of the engine (uses the world coordinate, does not take into account the actual and target rotation of the creation)</span></li>
             <li><span>inertialEngine.setStableMode(mode) - sets the stabilization mode (default 1) to a maximum of 4. this changes the stabilization force. set to 0 to disable stabilization:<br/>
                 0 - no stabilization<br/>
                 1 - small creation<br/>
@@ -48,8 +49,8 @@
             <li><span>inertialEngine.raw_globalRotation(vec3) - creates a rotation relative to the coordinates of the world. it cannot be called more than once per tick, the maximum value of the vector element is 8. Note that the momentum is multiplied by the mass of the creation</span></li>
             <li><span>inertialEngine.raw_move(vec3) - makes the pulse relative to the current rotation. it cannot be called more than once per tick, the maximum value of the vector element is 5. Note that the momentum is multiplied by the mass of the creation</span></li>
             <li><span>inertialEngine.raw_globalMove(vec3) - creates an impulse relative to the coordinates of the world. it cannot be called more than once per tick, the maximum value of the vector element is 5. Note that the momentum is multiplied by the mass of the creation</span></li>
-            <li><span>inertialEngine.raw_rawMove(vec3, worldSpace:boolean) - full alias on sm.physics.applyImpulse(self.shape.body, vec, worldSpace). available only on creative inertialEngine</span></li>
-            <li><span>inertialEngine.raw_rawRotation(vec3, worldSpace:boolean) - full alias on sm.physics.applyTorque(self.shape.body, vec, worldSpace). available only on creative inertialEngine</span></li>
+            <li><span>inertialEngine.raw_rawMove(vec3, worldSpace:boolean) - alias on sm.physics.applyImpulse(self.shape.body, vec, worldSpace). available only on creative inertialEngine</span></li>
+            <li><span>inertialEngine.raw_rawRotation(vec3, worldSpace:boolean) - alias on sm.physics.applyTorque(self.shape.body, vec, worldSpace). available only on creative inertialEngine</span></li>
             <li><span>inertialEngine.setSoundType(type:number) - sets the inertialEngine sound type:<br/>
                 0 - off<br/>
                 1 - standard sound<br/>

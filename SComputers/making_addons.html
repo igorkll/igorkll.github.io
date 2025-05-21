@@ -46,7 +46,14 @@
 			<li><span>sm.scomputers.addEnvHook(function:envhook(self, env)) - it will be called every time the computer sandbox is created. you get access to the computer's self and its sandbox if you want to add something there</span></li>
 			<li><span>sm.scomputers.addClEnvHook(function:envhook(self, env)) - adds an envhook for clientInvoke. call once from the client's side</span></li>
 			<li><span>sm.scomputers.require(self:table, name:string) - require the library from the mod. it requires self because it needs to create a library cache and transfer library access to env. if the library you want to connect does not need the env of the computer and you do not have a self computer, then simply pass an empty table instead of self or your self</span></li>
-            <li><span>sm.scomputers.isComputerConnected(interactable):boolean - returns true if at least 1 computer is connected to this interactable</span></li>
+            <li><span>sm.scomputers.realIsComputerConnected(interactable):boolean - returns true if at least 1 computer is connected to this interactable</span></li>
+            <li><span>sm.scomputers.isComputerConnected(interactable):boolean - it works the same way as sm.scomputers.realIsComputerConnected, but it returns true, not only if the computer is connected, but also if the component connection check is turned off</span></li>
+            <li><span>sm.scomputers.base64_encode(string):string</span></li>
+            <li><span>sm.scomputers.base64_decode(string):string</span></li>
+            <li><span>sm.scomputers.sha256_bin(string):string</span></li>
+            <li><span>sm.scomputers.sha256_hex(string):string</span></li>
+            <li><span>sm.scomputers.md5_bin(string):string</span></li>
+            <li><span>sm.scomputers.md5_hex(string):string</span></li>
         </ul>
 
         <pre>

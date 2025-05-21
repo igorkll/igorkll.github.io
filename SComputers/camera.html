@@ -18,6 +18,7 @@
             please note that when transmitting a virtual display, the camera returns colors in string format, which slows down its operation. this is done for compatibility with old software. however, if your code is ready to accept objects with the Color type, then add the "noCameraEncode" field to the table of your virtual display equal to true. The vdisplay library does this by default. in cases where CustomDraw is used with this flag, your virtual display will receive the actual value from the renderer<br/>
             this can be used, for example, to save an image to disk (methods for this are already implemented in the <a href="image.html" class="hyper">image library</a>)<br/>
             however, if you are just going to display the image on the displays, then provide the camera with a REAL DISPLAY. since transferring the virtual display disables very important camera optimizations<br/>
+            if you want to use the same camera from two different locations, use the camera.fork function to create a new instance with a separate counter and viewport. you can also use camera.fork with the value true to create a copy of all the parameters (fov, step, rotation, etc.)<br/>
             to connect the camera via the antenna, use <a href="cameraTunnel.html" class="hyper">cameraTunnel component</a>
         </p>
 
@@ -106,28 +107,29 @@
             </p>
 
             <br/>
-            <li><span>drawAdvanced(display, settings:table|boolean|nil) - it gives the best picture for the camera at the moment. supports the sun, the change of day and night, shadows, lamp lighting, the color of the earth</span></li>
-            <li><span>drawColorWithDepth(display, noCollideColor, terrainColor, unitsColor) - a fairly simple display mode</span></li>
-            <li><span>drawColor(display, noCollideColor, terrainColor, unitsColor) - the fastest display mode. it gives a picture of not the best quality</span></li>
-            <li><span>drawDepth(display, baseColor, noCollideColor, unitsColor) - It doesn't give a very pretty picture</span></li>
-            <li><span>drawCustom(display, drawer, ...) - allows you to make your own display mode. it is suitable for creating various kinds of thermal imagers, etc. however, this mode is very laggy (especially in multiplayer)</span></li>
-            <li><span>setStep(number) - sets the number of pixels that the camera will render per tick (maximum 4096)</span></li>
-            <li><span>getStep():number - returns the number of pixels that the camera will render in tick</span></li>
-            <li><span>setDistance(number) - sets the drawing distance for the camera in meters (maximum 2048)</span></li>
-            <li><span>getDistance():number - returns the camera's drawing distance</span></li>
-            <li><span>setFov(number) - sets the fov for the camera by X and by Y (maximum 165, minimum 1)</span></li>
-            <li><span>setNonSquareFov(number, number) - sets a non-square FOV for the camera, ideal for non-square displays (maximum 165, minimum 1)</span></li>
-            <li><span>getFovX():number - returns the camera's fov by X</span></li>
-            <li><span>getFovY():number - returns the camera's fov by Y</span></li>
-            <li><span>getFov():number - returns the camera's fov. if the fov is not square it returns the maximum value</span></li>
-            <li><span>getNextPixel():number - returns the current value of the counter</span></li>
-            <li><span>setNextPixel(number) - sets the value of the pixel counter</span></li>
-            <li><span>resetCounter() - resets the camera pixel counter (starts rendering the screen first)</span></li>
-            <li><span>rawRay(xAngle:number, yAngle:number, distance:number):table - ray shoots from the camera and gives out a table {color = smcolor, distance = distance, fraction = (distance / maxdist), uuid = uuid, type = character/shape/harvestable/lift/joint/terrain/asset/limiter, normalWorld=some of the information from raycast}. maxdist is the maximum distance for raycast in meters. please note that the angle can be set from -82.5 to 82.5 degrees, it is transmitted in radians. limiter is the wall of the world. please note that not all types of objects have the "uuid" field. please note that getting the uuid of a block only works if it is no further than 4 meters (16 blocks) from the camera(this is done to maintain a balance)</span></li>
-            <li><span>setViewport(x, y, sizeX, sizeY) - you can specify the frame inside which the camera will display the image on the display. to reset you need call without arguments</span></li>
-            <li><span>getViewport():x, y, sizeX, sizeY - returns what was set using setViewport</span></li>
-            <li><span>resetDetectableObjects() - selects all the objects that the camera will see</span></li>
-            <li><span>setDetectableObjects({<br/>
+            <li><span>camera.fork(cloneSettings:boolean):camera - creates a clone of the camera with a separate counter and viewport for use from two locations. you can pass true to clone settings (fov, step, rotation, etc.)</span></li>
+            <li><span>camera.drawAdvanced(display, settings:table|boolean|nil) - it gives the best picture for the camera at the moment. supports the sun, the change of day and night, shadows, lamp lighting, the color of the earth</span></li>
+            <li><span>camera.drawColorWithDepth(display, noCollideColor, terrainColor, unitsColor) - a fairly simple display mode</span></li>
+            <li><span>camera.drawColor(display, noCollideColor, terrainColor, unitsColor) - the fastest display mode. it gives a picture of not the best quality</span></li>
+            <li><span>camera.drawDepth(display, baseColor, noCollideColor, unitsColor) - It doesn't give a very pretty picture</span></li>
+            <li><span>camera.drawCustom(display, drawer, ...) - allows you to make your own display mode. it is suitable for creating various kinds of thermal imagers, etc. however, this mode is very laggy (especially in multiplayer)</span></li>
+            <li><span>camera.setStep(number) - sets the number of pixels that the camera will render per tick (maximum 4096)</span></li>
+            <li><span>camera.getStep():number - returns the number of pixels that the camera will render in tick</span></li>
+            <li><span>camera.setDistance(number) - sets the drawing distance for the camera in meters (maximum 2048)</span></li>
+            <li><span>camera.getDistance():number - returns the camera's drawing distance</span></li>
+            <li><span>camera.setFov(number) - sets the fov for the camera by X and by Y (maximum 165, minimum 1)</span></li>
+            <li><span>camera.setNonSquareFov(number, number) - sets a non-square FOV for the camera, ideal for non-square displays (maximum 165, minimum 1)</span></li>
+            <li><span>camera.getFovX():number - returns the camera's fov by X</span></li>
+            <li><span>camera.getFovY():number - returns the camera's fov by Y</span></li>
+            <li><span>camera.getFov():number - returns the camera's fov. if the fov is not square it returns the maximum value</span></li>
+            <li><span>camera.getNextPixel():number - returns the current value of the counter</span></li>
+            <li><span>camera.setNextPixel(number) - sets the value of the pixel counter</span></li>
+            <li><span>camera.resetCounter() - resets the camera pixel counter (starts rendering the screen first)</span></li>
+            <li><span>camera.rawRay(xAngle:number, yAngle:number, distance:number):table - ray shoots from the camera and gives out a table {color = smcolor, distance = distance, fraction = (distance / maxdist), uuid = uuid, type = character/shape/harvestable/lift/joint/terrain/asset/limiter, normalWorld=some of the information from raycast}. maxdist is the maximum distance for raycast in meters. please note that the angle can be set from -82.5 to 82.5 degrees, it is transmitted in radians. limiter is the wall of the world. please note that not all types of objects have the "uuid" field. please note that getting the uuid of a block only works if it is no further than 4 meters (16 blocks) from the camera(this is done to maintain a balance)</span></li>
+            <li><span>camera.setViewport(x, y, sizeX, sizeY) - you can specify the frame inside which the camera will display the image on the display. to reset you need call without arguments</span></li>
+            <li><span>camera.getViewport():x, y, sizeX, sizeY - returns what was set using setViewport</span></li>
+            <li><span>camera.resetDetectableObjects() - selects all the objects that the camera will see</span></li>
+            <li><span>camera.setDetectableObjects({<br/>
                 liquids = boolean,<br/>
                 dynamicBody = boolean,<br/>
                 staticBody = boolean,<br/>
@@ -137,15 +139,15 @@
                 assets = boolean,<br/>
                 harvestable = boolean<br/>
             }) - sets the list of objects that the camera will see, by default, all are selected</span></li>
-            <li><span>getDetectableObjects():table - returns a reference to the last table passed to setDetectableObjects. However, if you edit it, you must send it to setDetectableObjects again so that the camera can see the changes.</span></li>
-            <li><span>setImageRotation(rotation:number) - sets the image rotation in radians (default is 0)</span></li>
-            <li><span>getImageRotation():number - returns image rotation in radians (by default 0)</span></li>
-            <li><span>getSkyColor(constDayLightValue:number|nil):smcolor - returns the color of the sky that would be displayed in drawAdvanced, regardless of whether the camera sees the sky. can be used for use in drawCustom</span></li>
-            <li><span>getDayLightValue():number - returns the current time in the world. the host's sm.render.getOutdoorLighting() alias</span></li>
-            <li><span>getGlobalSunMul(constDayLightValue:number|nil):number - returns the multiplier of light for the sun, can be used with drawCustom and is calculated inside the function using the following formula: max(1 - (abs(getDayLightValue() - 0.5) * 2), 0.3)</span></li>
-            <li><span>drawOverlay(display, mainDrawFunction:function, args:table, overlayDrawer:function, overlayArgs:table) - combines any rendering mode with drawCustom</span></li>
-			<li><span>setDownScale(downscale:number) - reduces the resolution of the camera rendering by the specified number of times (default: 1)</span></li>
-			<li><span>getDownScale():number - returns the value set using setDownScale (default: 1)</span></li>
+            <li><span>camera.getDetectableObjects():table - returns a reference to the last table passed to setDetectableObjects. However, if you edit it, you must send it to setDetectableObjects again so that the camera can see the changes.</span></li>
+            <li><span>camera.setImageRotation(rotation:number) - sets the image rotation in radians (default is 0)</span></li>
+            <li><span>camera.getImageRotation():number - returns image rotation in radians (by default 0)</span></li>
+            <li><span>camera.getSkyColor(constDayLightValue:number|nil):smcolor - returns the color of the sky that would be displayed in drawAdvanced, regardless of whether the camera sees the sky. can be used for use in drawCustom</span></li>
+            <li><span>camera.getDayLightValue():number - returns the current time in the world. the host's sm.render.getOutdoorLighting() alias</span></li>
+            <li><span>camera.getGlobalSunMul(constDayLightValue:number|nil):number - returns the multiplier of light for the sun, can be used with drawCustom and is calculated inside the function using the following formula: max(1 - (abs(getDayLightValue() - 0.5) * 2), 0.3)</span></li>
+            <li><span>camera.drawOverlay(display, mainDrawFunction:function, args:table, overlayDrawer:function, overlayArgs:table) - combines any rendering mode with drawCustom</span></li>
+			<li><span>camera.setDownScale(downscale:number) - reduces the resolution of the camera rendering by the specified number of times (default: 1)</span></li>
+			<li><span>camera.getDownScale():number - returns the value set using setDownScale (default: 1)</span></li>
         </ul>
 
         <br/>

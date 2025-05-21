@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SComputers-app-v19';
+const CACHE_NAME = 'SComputers-app-v22';
 
 const urlsToCache = [
     'addons/brainf_ck_language.jpg',
@@ -12,6 +12,16 @@ const urlsToCache = [
     'addons/stretchable_display.jpg',
     'addons/world_disks.jpg',
     'addons/mt_fast_logic.jpg',
+    'icons/discord.png',
+    'icons/discord_raw.png',
+    'icons/discord_server.pdn',
+    'icons/discord_server.png',
+    'icons/discord_server_raw.png',
+    'icons/github.png',
+    'icons/logichub.png',
+    'icons/steam.png',
+    'scmframework/build_scmframework.lua',
+    'scmframework/scmframework.lua',
     'service-worker.js',
     'style.css',
     'style2.css',
@@ -78,7 +88,15 @@ const urlsToCache = [
     'radarDetector.html',
     'ramfs.html',
     'rom.html',
-    'safeSmEnv.html'
+    'safeSmEnv.html',
+    'process.html',
+    'vfs.html',
+    'scriptableOS.html',
+    'cameraControl.html',
+    'scriptableOS_indev.html',
+    'scmframework.html',
+    'scmframework_indev.html',
+    'indev.html'
 ];
 
 self.addEventListener('install', (event) => {

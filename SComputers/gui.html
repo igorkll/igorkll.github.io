@@ -16,7 +16,8 @@
             usage: require("gui")<br/>
             this is probably the most useful library in SComputers<br/>
             it makes it easy to create graphical interfaces and even windows<br/>
-            the library supports only the basic objects, but you are not limited by them! you can create your own objects and add them to the GUI<br/>
+            the library supports automatic calculation of the size and position of elements<br/>
+            the library supports only the basic objects, but you are not restricted by them! you can create your own objects and add them to the GUI<br/>
             there is also an <a href="objs.html" class="hyper">objs library</a> in the mod that contains ready-made additional GUI objects<br/>
             there is also a <a href="styles.html" class="hyper">styles library</a> in mod that contains styles for objects that can be applied to any object and its drawer callback will be replaced with a style<br/>
         </p>
@@ -25,6 +26,8 @@
         <p class="text">methods:</p>
         <ul class="list">
             <li><span>gui.new(display):guiinstance - creates a new gui instance for a display</span></li>
+            <li><span>gui.calculateSizeByText(object):number|nil, number|nil - automatically calculates the size of the element based on the text. adds padding, which is 2 pixels by default (use setDefaultPadding to change).</span></li>
+            <li><span>gui.calculateSizeByImage(object):number|nil, number|nil - calculates the size of the element based on the size of the image</span></li>
         </ul>
 
         <br/>
@@ -45,11 +48,12 @@
         <br/>
         <p class="text">guiinstance methods:</p>
         <ul class="list">
-            <li><span>guiinstance:createScene(nil|color|function(guiscene), (optional, background touch detector) function(guiscene, click)):guiscene - creates a new scene on the current gui instance. pass the fill color or fill function. by default, the scene that was created first will be selected</span></li>
-            <li><span>guiinstance:tick() - call each tick (in callback_loop)</span></li>
+            <li><span>guiinstance:createScene(nil|color|function(guiscene), nil|backgroundTouchDetector(guiscene, click)):guiscene - creates a new scene on the current gui instance.<br/>
+            now, instead of backgroundTouchDetector, you can use guiscene:onBackgroundClick, which also provides the ability to process clicks within an objects</span></li>
+            <li><span>guiinstance:tick() - call each tick (in callback_loop / onTick)</span></li>
+            <li><span>guiinstance:needFlush():boolean - returns true if you need to call gui:draw() and display.flush()</span></li>
             <li><span>guiinstance:draw() - redraws the scene if necessary (it is better to do the check using needFlush anyway)</span></li>
             <li><span>guiinstance:drawForce() - forcibly redraws the scene. this makes sense if you need to redraw the background (for example, the camera is working on it)</span></li>
-            <li><span>guiinstance:needFlush():boolean - returns true if you need to call gui:draw() and display.flush()</span></li>
         </ul>
 
         <br/>
@@ -91,6 +95,7 @@
         <ul class="list">
             <li><span>guiscene:onUnselect() - called when this scene is no longer selected</span></li>
             <li><span>guiscene:onSelect() - called when the scene is selected</span></li>
+            <li><span>guiscene:onBackgroundClick(click:table, elementCapture:boolean) - it is called when clicking on the background. It is a more actual replacement for backgroundTouchDetector. you get all the clicks, and if you want to process only those that fall on the background (and not on any object), make the conditions that elementCapture is false</span></li>
         </ul>
 
         <br/>
@@ -114,12 +119,24 @@
         <br/>
         <p class="text">button callbacks (you can implement this in the object after creation):</p>
         <ul class="list">
-            <li><span>guiscene:onToggle(state:boolean) - it is designed to get the current state of toggle button, but it also works for non-toggle buttons</span></li>
+            <li><span>guiobject:onToggle(state:boolean) - it is designed to get the current state of toggle button, but it also works for non-toggle buttons</span></li>
         </ul>
 
         <br/>
         <p class="text">scene/window methods:</p>
         <ul class="list">
+            <li><span>guiscene:updateChildrenRule() - updates the placement of all children in this container according to the rule set via guiscene:setDefaultSet or via guiobject:set</span></li>
+            <li><span>guiscene:realUpdateChildrenRule() - performs the same action as guiscene:updateChildrenRule() but does it right now. It is not recommended for use as it does not make sense in most tasks.</span></li>
+            <li><span>guiscene:setDefaultSet(function(guiobject, previousElement|nil, container) end) - sets the default auto-placement function for all new objects in this container</span></li>
+            <li><span>guiscene:getChildrenCount():number - returns the number of objects per scene/window</span></li>
+            <li><span>guiscene:getContainerSize():number, number - returns the size of the container (the display resolution for the scene and the window size for the window)</span></li>
+            <li><span>guiscene:setDefaultOffset(offsetX (default: 1), offsetY|nil (default: 1)) - sets the indentation of objects from each other by default when placed relative to each other using setLeft, setDown, and so on<br/>
+            if you do not specify offsetY, it will have the same value as offsetX<br/>
+            also note that this parameter is inherited when creating child windows</span></li>
+            <li><span>guiscene:setDefaultPadding(paddingX (default: 2), paddingY|nil (default: 2)) - sets the default padding, which is used by some functions to automatically calculate the size.<br/>
+            if you do not specify paddingY, it will have the same value as paddingX<br/>
+            also note that this parameter is inherited when creating child windows</span></li>
+            <li><span>guiscene:isScene():boolean - returns true if it is a scene and false otherwise</span></li>
             <li><span>guiscene:isSelected():boolean - returns true if the current scene is selected. in cases with the window returns true if the scene where the window is located is selected</span></li>
             <li><span>guiscene:createButton(x, y, sizeX(pass nil so that the size is calculated automatically based on the length of the text), sizeY(pass nil so that the height is calculated automatically based on the height of the font), toggle:boolean, text:string, bg:color(default: while), fg:color(default: black), bg_press:color(default: fg), fg_press:color(default: bg)):guiobject - creates a button</span></li>
             <li><span>guiscene:createImage(x, y, img):guiobject - creates an image object from the <a href="image.html" class="hyper">image library</a></span></li>
@@ -127,8 +144,7 @@
             <li><span>guiscene:createLabel(x, y, sizeX, sizeY, text, bg, fg):guiobject - creates a label</span></li>
             <li><span>guiscene:createTextBox(x, y, sizeX, sizeY, text, bg(optional), fg, centerX, centerY, spacingY, autoNewline, tool):guiobject - creates a textbox(the layer above the graphic.textBox)</span></li>
             <li><span>guiscene:createCustom(x, y, sizeX, sizeY, objectClass:table, ...):guiobject - creates a custom object with your class and arguments</span></li>
-            <li><span>guiscene:createWindow(x, y, sizeX, sizeY, color):guiwindow - creates a window. you can create objects on it just like on a scene. by default, it does not move and does not have an upper panel</span></li>
-            <li><span>guiscene:createGrid(x, y, sizeX, sizeY, gridSizeX, gridSizeY, defaultObjectSizeXmul (default: 1), defaultObjectSizeYmul (default: 1)):guigrid - creates a new grid. the grid itself places the objects inside itself according to the grid. when creating an object, instead of its position, pass the index to the grid from 0 to the grid size along this axis - 1. if you do not specify the size of the object, it will be calculated automatically to fill the entire grid cell</span></li>
+            <li><span>guiscene:createWindow(x, y, sizeX, sizeY, nil|color|function(guiwindow)):guiwindow - creates a window. you can create objects on it just like on a scene. by default, it does not move and does not have an upper panel</span></li>
         </ul>
 
         <br/>
@@ -138,19 +154,9 @@
             <li><span>guiwindow:setAutoViewport(boolean) - if you call this with the true argument, then all objects inside the window cannot be rendered outside the window</span></li>
             <li><span>guiwindow:setColor(color|function(guiwindow)) - sets the background color of the window. it can be a drawer function</span></li>
             <li><span>guiwindow:upPanel(color, textcolor, title:string, collapsibility:boolean) - configures the top panel of the window</span></li>
-            <li><span>guiwindow:panelButton(sizeX:number, toggle:boolean, title, bg, fg, bg_press, fg_press) - adds a button to the top window panel. if you pass nil instead of sizeX, the button will be square</span></li>
-            <li><span>guiwindow:panelObject(contructorname:string, sizeX:number, ...) - it works the same way as panelButton, but it allows you to create any object: window:panelObject("createCustom", nil, class, ...)</span></li>
+            <li><span>guiwindow:panelButton(sizeX:number|nil, toggle:boolean, title, bg, fg, bg_press, fg_press) - adds a button to the top window panel. if you pass nil instead of sizeX, the button will be square</span></li>
+            <li><span>guiwindow:panelObject(contructorname:string, sizeX:number|nil, ...) - it works the same way as panelButton, but it allows you to create any object: window:panelObject("createCustom", nil, class, ...)</span></li>
             <li><span>guiwindow:minimize(state:boolean) - minimizes or expands the window</span></li>
-            <li><span>guiwindow:setLayerMode(mode:number) - sets the layer mode for the window (default: 0)</span></li>
-            <div class="cool-text" style="background-color: var(--color-note);">
-                layer mode options:<br>
-                <ul>
-                    <li>0. automatic transition to the top level during interaction (default)</li>
-                    <li>1. without auto-change</li>
-                    <li>2. always top layer</li>
-                    <li>3. always bottom layer</li>
-                </ul>
-            </div>
         </ul>
 
         <br/>
@@ -199,14 +205,6 @@
         </ul>
 
         <br/>
-        <p class="text">grid object methods:</p>
-        <ul class="list">
-            <li><span>guiobject:getGridObject(x:number, y:number) - return an object from the grid by its position. the grid is indexed from 0</span></li>
-            <li><span>guiobject:getGridSize():x, y - return the size of the grid</span></li>
-            <li><span>guiobject:getGridItemSize():x, y - returns the default size of the object in the grid</span></li>
-        </ul>
-
-        <br/>
         <p class="text">any object methods (these methods are relevant for any type of object, including custom and window):</p>
         <ul class="list">
             <li><span>guiobject:destroy() - deletes an object. after calling this method, do not use the handle of this object</span></li>
@@ -218,6 +216,35 @@
             <li><span>guiobject:setCustomStyle(function(gobj) ) - sets the function that will be used to draw the object instead of the standard one</span></li>
             <li><span>guiobject:setDisabled(disabled:boolean) - pass true so that the object stops being interactive, pass true so that the object becomes interactive again</span></li>
             <li><span>guiobject:setInvisible(invisible:boolean) - pass true so that the object is not drawn, pass false so that the object becomes visible again</span></li>
+            <li><span>guiobject:setFontParameters(font:table|nil, sizeX:number|nil, sizeY:number|nil, textSpacing:number|nil) - sets the font and its size for a specific object</span></li>
+            <li><span>guiobject:redraw() - redraw an object right now</span></li>
+            <li><span>guiobject:setBottomLayer() - moves the object to the lowest layer</span></li>
+            <li><span>guiobject:setTopLayer() - moves the object to the topmost layer</span></li>
+            <li><span>guiobject:getDisplaySize():number, number - returns the size of the block that the object occupies on the display</span></li>
+            <li><span>guiobject:isVisible():boolean - returns true if the "invisible" flag is not set for the object and the window on which it is located is not minimized (it is taken into account that windows can be nested and the object can be created on the window header)</span></li>
+            <li><span>guiobject:updateParent() - updates the parent object of this object</span></li>
+            <li><span>guiobject:getParent():guiobject/guiscene - returns the parent object (guiwindow/guiscene)</span></li>
+            <li><span>guiobject:getLayer():number - returns the layer where the object is located</span></li>
+            <li><span>guiobject:setLayer(number) - changes the layer on which the object is located</span></li>
+            <li><span>guiobject:setLayerMode(mode:number) - sets the layer mode for the object (default: 0 for window, 1 for other objects)</span></li>
+            <div class="cool-text" style="background-color: var(--color-note);">
+                layer mode options:<br>
+                <ul>
+                    <li>0. automatic transition to the top level during interaction (default)</li>
+                    <li>1. without auto-change</li>
+                    <li>2. always top layer</li>
+                    <li>3. always bottom layer</li>
+                </ul>
+            </div>
+            <li><span>guiobject:updateLayer() - moves an object to a layer according to the rule set via setLayerMode, this usually happens automatically, so you don't have to use this function</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">functions for specifying the position of objects:</p>
+        <ul class="list">
+            <li><span>guiobject:set(function(guiobject, previousElement|nil, container) end) - this function is used to specify the auto-positioning rules for an element</span></li>
+
+            <br/>
             <li><span>guiobject:setCenter(offsetX:number, offsetY:number, guiobject(optional, it will be used as a reference point)) - sets the object to the center of the scene (or other object), you can set the offset</span></li>
             <li><span>guiobject:setCenterX(offsetX:number, guiobject(optional, it will be used as a reference point)) - sets the object to the center of the scene (or other object) by x, you can set the offset</span></li>
             <li><span>guiobject:setCenterY(offsetY:number, guiobject(optional, it will be used as a reference point)) - sets the object to the center of the scene (or other object) by y, you can set the offset</span></li>
@@ -227,29 +254,48 @@
             <li><span>guiobject:setOffsetPosition(guiobject, offsetX:number, offsetY:number) - sets the position of one object relative to the position of another object</span></li>
             <li><span>guiobject:setOffsetPositionX(guiobject, offsetX:number) - sets the position of one object relative to the position of another object</span></li>
             <li><span>guiobject:setOffsetPositionY(guiobject, offsetY:number) - sets the position of one object relative to the position of another object</span></li>
-            <li><span>guiobject:setLeft(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object</span></li>
-            <li><span>guiobject:setRight(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object</span></li>
-            <li><span>guiobject:setUp(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object</span></li>
-            <li><span>guiobject:setDown(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object</span></li>
+            <li><span>guiobject:setSize(width:number, height:number) - sets the size of the object. if you omit one or both parameters, they will be calculated automatically based on the internal rules of the object and the settings of the scene/window</span></li>
+
+            <br/>
             <li><span>guiobject:setCenterLeft(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. centers on a different coordinate</span></li>
             <li><span>guiobject:setCenterRight(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. centers on a different coordinate</span></li>
             <li><span>guiobject:setCenterUp(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. centers on a different coordinate</span></li>
             <li><span>guiobject:setCenterDown(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. centers on a different coordinate</span></li>
-            <li><span>guiobject:setFontParameters(font:table|nil, sizeX:number|nil, sizeY:number|nil) - sets the font and its size for a specific object</span></li>
-            <li><span>guiobject:redraw() - redraw an object right now</span></li>
-            <li><span>guiobject:setBottomLayer() - moves the object to the lowest layer</span></li>
-            <li><span>guiobject:setTopLayer() - moves the object to the topmost layer</span></li>
-            <li><span>guiobject:getDisplaySize():number, number - returns the size of the block that the object occupies on the display</span></li>
-            <li><span>guiobject:isVisible():boolean - returns true if the "invisible" flag is not set for the object and the window on which it is located is not minimized (it is taken into account that windows can be nested and the object can be created on the window header)</span></li>
-            <li><span>guiobject:updateParent() - updates the parent object of this object</span></li>
+
+            <br/>
+            <li><span>guiobject:setLeft(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. the object will be shifted to a different coordinate in the direction of its decrease</span></li>
+            <li><span>guiobject:setRight(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. the object will be shifted to a different coordinate in the direction of its decrease</span></li>
+            <li><span>guiobject:setUp(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. the object will be shifted to a different coordinate in the direction of its decrease</span></li>
+            <li><span>guiobject:setDown(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. the object will be shifted to a different coordinate in the direction of its decrease</span></li>
+
+            <br/>
+            <li><span>guiobject:setShiftedLeft(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. the object will be shifted to a different coordinate in the direction of its increase</span></li>
+            <li><span>guiobject:setShiftedRight(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. the object will be shifted to a different coordinate in the direction of its increase</span></li>
+            <li><span>guiobject:setShiftedUp(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. the object will be shifted to a different coordinate in the direction of its increase</span></li>
+            <li><span>guiobject:setShiftedDown(guiobject, offset (default: 1)) - sets the position of one object relative to the position of another object. the object will be shifted to a different coordinate in the direction of its increase</span></li>
+
+            <br/>
+            <li><span>guiobject:setBorderLeft(offset (default: 1)) - presses your object against the border</span></li>
+            <li><span>guiobject:setBorderRight(offset (default: 1)) - presses your object against the border</span></li>
+            <li><span>guiobject:setBorderUp(offset (default: 1)) - presses your object against the border</span></li>
+            <li><span>guiobject:setBorderDown(offset (default: 1)) - presses your object against the border</span></li>
         </ul>
 
+        <br/>
+        <div class="cool-text" style="background-color: var(--color-note);">
+            you can place objects not by absolute positions, but relative to others using the functions listed above<br/>
+            you can also set a rule function (use: guiobject:set() or guiscene/guiwindow:setDefaultSet()) for your objects that will contain instructions for automatic placement and size setting<br/>
+            next, set a rule for the placement of elements inside this function<br/>
+        </div>
+
+        <br/>
         <div class="cool-text" style="background-color: var(--color-note);">
             if you are changing the position of an object in real time, you will need to call obj:updateParent() to update the scene or window where it is located<br>
             alternatively, you can first call obj:clear() to fill in the space behind the object, and after changing the position, call obj:update() to update only the object itself, but this method will not always work (for example, if the object is located on an object where the background is a image)<br>
             i recommend trying both of these methods and comparing the performance in your situation
         </div>
 
+        <br/>
         <div class="cool-text" style="background-color: var(--color-note);">
             by default, the gui library has enabled object intersection checking (if at least one window has been created) to redraw the objects that are above automatically<br>
             this allows you to change the contents of the objects below the windows without worrying that it will overlap the content above<br>
@@ -269,13 +315,13 @@
         <h2 class="text">custom object class example:</h2>
         <pre>
             <code class="language-lua" style="width: fit-content;">{
-    useWindow = false, --by default, false, if set to true, your element will be created as a window, which will allow you to create child objects on it
-    layerMode = 1, --layerMode for useWindow mode. by default 1 for custom objects, however, you can set 0 or any other value
+    useWindow = false, --by default, false, if set to true, your object will be created as a window, which will allow you to create child objects on it
+    layerMode = 1, --default layerMode. by default 1
     autoViewport = false, --the default is false, but you can set this to true to limit your object rendering to the border of your object
     handlerLocalPosition = false, --by default, this is false, but you can set this to true so that the values in the "handler" are local to the object
     handlerAllClicks = false, --by default, false. if set to true, your handler will receive all clicks in general, even if they are in no way related to your object
     handlerOutsideDrag = false, --by default, false. if set to true, you will receive drag events, including outside your object, if the first click was inside your object
-    --It makes sense to enable this flag even if you are using handlerAllClicks, as this will tell the gui library that your element remains "grappable" even when the user removes the cursor but does not release the button.
+    --It makes sense to enable this flag even if you are using handlerAllClicks, as this will tell the gui library that your object remains "grappable" even when the user removes the cursor but does not release the button.
     init = function(self, ...) --you can execute code when creating an object, and you can also receive arguments
         local args = {...}
         --carefully create parameters in yourself to avoid conflicts with the gui library itself.
@@ -300,6 +346,9 @@
     end,
     destroyHandler = function(self) --called when your object is deleted
         
+    end,
+    calculateSize = function(self) --you can define this function to automatically calculate the size of your object. you can write it yourself or use a ready-made function from gui library
+        return 16, 16
     end,
     methods = { --you can implement custom functions for your component here
 
@@ -418,41 +467,6 @@ function callback_loop()
         return
     end
     
-    gui:tick()
-    if gui:needFlush() then
-        gui:draw()
-        display.flush()
-    end
-end</code>
-        </pre>
-
-        <br/>
-        <h2 class="text">auto-placement of objects (grid):</h2>
-        <pre>
-            <code class="language-lua" style="width: fit-content;">local display = getComponent("display")
-display.reset()
-display.clearClicks()
-display.setClicksAllowed(true)
-local rx, ry = display.getWidth(), display.getHeight()
-
-local gui = require("gui").new(display)
-local scene = gui:createScene("0000ff")
-local grid = scene:createGrid(0, 0, nil, nil, 3, 3, 0.8, 0.8)
-
-local gridSizeX, gridSizeY = grid:getGridSize()
-for ix = 0, gridSizeX - 1 do
-    for iy = 0, gridSizeY - 1 do
-        grid:createButton(ix, iy, nil, nil, false, ix .. ":" .. iy)
-    end
-end
-
-function callback_loop()
-    if _endtick then
-        display.clear()
-        display.flush()
-        return
-    end
-
     gui:tick()
     if gui:needFlush() then
         gui:draw()
