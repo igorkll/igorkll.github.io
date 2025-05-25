@@ -1,6 +1,7 @@
 {
 	"effectSetList":
 	[
-		"$CONTENT_DATA/Effects/Database/EffectSets/canvas_effects.json"
+		"$CONTENT_DATA/Effects/Database/EffectSets/canvas_effects.json",
+        "$CONTENT_DATA/Effects/Database/EffectSets/customeffects.json"
 	]
 }
