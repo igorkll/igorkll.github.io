@@ -165,12 +165,25 @@ end
 local _orig_dofile = dofile
 local workingDirectory
 local frameworkLoadedParts = {}
+local changePrefixPath = "$CONTENT_3aeb81c2-71b9-45a1-9479-1f48f1e8ff21/"
+local changePrefixPath2 = "$CONTENT_" .. sm.json.open("$CONTENT_DATA/description.json").localId .. "/"
 local function dofile(path)
     if workingDirectory and path:sub(1, 1) ~= "$" then
         path = vfs_concat(workingDirectory, path)
     end
     print("scmframework> ", path)
     pcall(_orig_dofile, path)
+
+    if path:sub(1, #changePrefixPath) == changePrefixPath then
+        local oldPath = path
+        path = "$CONTENT_DATA/" .. path:sub(#changePrefixPath + 1, #path)
+        print("change path (1): ", oldPath, " > ", path)
+    elseif path:sub(1, #changePrefixPath2) == changePrefixPath2 then
+        local oldPath = path
+        path = "$CONTENT_DATA/" .. path:sub(#changePrefixPath2 + 1, #path)
+        print("change path (2): ", oldPath, " > ", path)
+    end
+
     if not frameworkLoadedParts[path] then
         frameworkLoadedParts[path] = true
         local old_workingDirectory = workingDirectory
@@ -188,7 +201,7 @@ __SCMFRAMEWORK_NOFONTS = true
 function scmframework_bfad31699b1d1bc64a58bc9aee79b817() --$CONTENT_DATA/Scripts/ai.lua
 if not better or not better.isAvailable() then return end
 
-local ai_prompt = better.filesystem.readFile("$CONTENT_3aeb81c2-71b9-45a1-9479-1f48f1e8ff21/ROM/chatGPTprompt.txt")
+local ai_prompt = better.filesystem.readFile(sc.modPrefix .. "/ROM/chatGPTprompt.txt")
 local baseCode = [[_enableCallbacks = true]]
 local allowedChars = {}
 
@@ -356,6 +369,45 @@ cameraControl.colorHighlight = sm.color.new("#27e30e")
 cameraControl.componentType = "cameraControl"
 cameraControl.nearbyMaxDistance = 16
 
+local function rotateVector3D(vector, radiansX, radiansY, radiansZ)
+    -- Матрица поворота вокруг оси X
+    local rotationX = {
+        {1, 0, 0},
+        {0, math.cos(radiansX), -math.sin(radiansX)},
+        {0, math.sin(radiansX), math.cos(radiansX)}
+    }
+
+    -- Матрица поворота вокруг оси Y
+    local rotationY = {
+        {math.cos(radiansY), 0, math.sin(radiansY)},
+        {0, 1, 0},
+        {-math.sin(radiansY), 0, math.cos(radiansY)}
+    }
+
+    -- Матрица поворота вокруг оси Z
+    local rotationZ = {
+        {math.cos(radiansZ), -math.sin(radiansZ), 0},
+        {math.sin(radiansZ), math.cos(radiansZ), 0},
+        {0, 0, 1}
+    }
+
+    -- Функция для умножения матрицы на вектор
+    local function multiplyMatrixVector(matrix, vector)
+        return sm.vec3.new(
+            matrix[1][1] * vector.x + matrix[1][2] * vector.y + matrix[1][3] * vector.z,
+            matrix[2][1] * vector.x + matrix[2][2] * vector.y + matrix[2][3] * vector.z,
+            matrix[3][1] * vector.x + matrix[3][2] * vector.y + matrix[3][3] * vector.z
+        )
+    end
+
+    -- Применяем повороты
+    local rotatedVector = multiplyMatrixVector(rotationX, vector)
+    rotatedVector = multiplyMatrixVector(rotationY, rotatedVector)
+    rotatedVector = multiplyMatrixVector(rotationZ, rotatedVector)
+
+    return rotatedVector
+end
+
 function cameraControl:server_onCreate()
     self.interactable.publicData = {
         sc_component = {
@@ -364,6 +416,17 @@ function cameraControl:server_onCreate()
                 getDirection = function(nearby)
                     return self:sv_getCameraInfoValue(nearby, "direction")
                 end,
+                --[[
+                getLocalDirection = function(nearby)
+                    local rotation = toEuler(self.shape.worldRotation)
+                    local newX = math.rad(90) - rotation.x
+                    print(rotation, math.deg(newX))
+
+                    local direction = self:sv_getCameraInfoValue(nearby, "direction")
+                    if not direction then return end
+                    return rotateVector3D(direction, -rotation.x, -rotation.y, -rotation.z)
+                end,
+                ]]
                 getPosition = function(nearby)
                     return self:sv_getCameraInfoValue(nearby, "position")
                 end,
@@ -56083,7 +56146,7 @@ function sc.mt_hook(mt)
     return empty_class()
 end
 
-sc.version = "5.2a"
+sc.version = "5.3a"
 sc.actualBetterAPI = 45
 sc.actualCoroutineBetterAPI = 45
 sc.computersCount = 0
@@ -56972,25 +57035,38 @@ end
 
 -------------------------------------------------------
 
-sc.modPrefix = "$CONTENT_3aeb81c2-71b9-45a1-9479-1f48f1e8ff21"
+sc.moduuid = sm.json.open("$CONTENT_DATA/description.json").localId --you need to read the file for scmframework to work with betterAPI
+sc.origModPrefix = "$CONTENT_3aeb81c2-71b9-45a1-9479-1f48f1e8ff21"
+sc.modPrefix = "$CONTENT_" .. sc.moduuid
 sc.reg_lib_folder(sc.modPrefix .. "/Scripts/internal_libs")
+
+function sc.changePrefixesInList(list)
+    if sc.modPrefix == sc.origModPrefix then return end
+    print("changing prefixes in list...", list, sc.origModPrefix, sc.modPrefix)
+    for key, item in pairs(list) do
+        if item:sub(1, #sc.origModPrefix) == sc.origModPrefix then
+            list[key] = sc.modPrefix .. item:sub(#sc.origModPrefix + 1, #item)
+        end
+    end
+    print("changed prefixes in list!", list)
+end
 
 -------------------------------------------------------
 
 if not __SCMFRAMEWORK then
     sm.sc = sc --для интеграций
     sm.sc_g = _G
-
-    if dlm and dlm.setupContentPath then
-        print("SComputers dlm.setupContentPath: ", pcall(dlm.setupContentPath, "SComputers [Fork]", sm.uuid.new("3aeb81c2-71b9-45a1-9479-1f48f1e8ff21"), 2949350596))
-    end
-    
-    if better then
-        print("SComputers better.autoRegistration: ", pcall(better.autoRegistration, "SComputers [Fork]"))
-    end
 else
     _G.computersAllow = true
     _G.updateToolSettings = true
+end
+
+if dlm and dlm.setupContentPath then
+    print("SComputers dlm.setupContentPath: ", pcall(dlm.setupContentPath, "SComputers [Fork]", sm.uuid.new(sc.moduuid), 2949350596))
+end
+
+if better then
+    print("SComputers better.autoRegistration: ", pcall(better.autoRegistration, "SComputers [Fork]"))
 end
 
 function sc.customVersion(char)
@@ -57605,6 +57681,15 @@ function AnyDisplay:cl_onClick(type, action, localPoint) -- type - 1:interact|2:
         defaultDisplayTouchDetect(self, ldetect, localPoint)
     end
     
+    local function release(player)
+        if self.lastPointX then
+            self.network:sendToServer("sv_recvPress", {self.lastPointX or -1, self.lastPointY or -1, "released", type, player.name})
+            self.lastPointX, self.lastPointY = nil, nil
+            self.dragging.interact = false
+            self.dragging.tinker = false
+        end
+    end
+
     if localPoint then
         localReg(detect, localPoint)
     elseif self.shape then
@@ -57614,16 +57699,20 @@ function AnyDisplay:cl_onClick(type, action, localPoint) -- type - 1:interact|2:
         if succ and shape and (shape.id == self.shape.id or shape.uuid == AnyDisplay.stretchable_core_uuid or shape.uuid == AnyDisplay.stretchable_part_uuid) then
             local shape = self.shape
             local localPoint = shape:transformPoint(res.pointWorld)
-            localReg(detect, localPoint, res)
+            if self:cl_touchCheck(nil, nil, nil, succ, res) then
+                localReg(detect, localPoint, res)
+            else
+                release(player)
+            end
         else
-            self.network:sendToServer("sv_recvPress", {self.lastPointX or -1, self.lastPointY or -1, action, type, player.name})
+            release(player)
         end
     elseif self.tablet_posX and self.tablet_posY then
         detect(self.tablet_posX, self.tablet_posY)
     end
 end
 
-function AnyDisplay:cl_touchCheck(type, action, localPoint)
+function AnyDisplay:cl_touchCheck(type, action, localPoint, _succ, _res)
     if self.data and self.data.noTouch then
         return false
     end
@@ -57649,7 +57738,12 @@ function AnyDisplay:cl_touchCheck(type, action, localPoint)
     if localPoint then
         return localReg(detect, localPoint)
     elseif self.shape then
-        local succ, res = sm.localPlayer.getRaycast((sc.restrictions and sc.restrictions.rend) or RENDER_DISTANCE)
+        local succ, res
+        if _succ then
+            succ, res = _succ, _res
+        else
+            succ, res = sm.localPlayer.getRaycast((sc.restrictions and sc.restrictions.rend) or RENDER_DISTANCE)
+        end
         local shape = res:getShape()
         if succ and shape and shape.id == self.shape.id then
             local shape = self.shape
@@ -74982,6 +75076,10 @@ function createSafeEnv(self, settings, fromProcessLibrary, isolation)
         print("envhook (" .. i .."): ", pcall(hook, self, env))
     end
 
+    if self.defaultData.localEnvHook then --can be set when using scmframework
+        self.defaultData.localEnvHook(self, env)
+    end
+
 	return env
 end
 
@@ -75028,6 +75126,10 @@ function createClientEnv(self)
 
 	for i, hook in ipairs(sc.cl_envhooks) do
         print("client envhook (" .. i .."): ", pcall(hook, self, env))
+    end
+
+    if self.defaultData.localEnvHook then --can be set when using scmframework
+        self.defaultData.localEnvHook(self, env)
     end
 
 	return env
@@ -75995,118 +76097,6 @@ local sum = wrap_func(function(num)
 end)(100)
 
 print(sum)
-
-end
-function scmframework_fbffb79c257746fa5616ef54d58ff237() --$CONTENT_DATA/Scripts/FiOne_lua/gen/gen_bin_search.lua
-local opcode_map = {}
-
-local OPCODE_RM = {
-	-- level 1
-	[18] = 22, -- JMP
-	[8] = 31, -- FORLOOP
-	[28] = 33, -- TFORLOOP
-	-- level 2
-	[3] = 0, -- MOVE
-	[13] = 1, -- LOADK
-	[23] = 2, -- LOADBOOL
-	[33] = 26, -- TEST
-	-- level 3
-	[1] = 12, -- ADD
-	[6] = 13, -- SUB
-	[10] = 14, -- MUL
-	[16] = 15, -- DIV
-	[20] = 16, -- MOD
-	[26] = 17, -- POW
-	[30] = 18, -- UNM
-	[36] = 19, -- NOT
-	-- level 4
-	[0] = 3, -- LOADNIL
-	[2] = 4, -- GETUPVAL
-	[4] = 5, -- GETGLOBAL
-	[7] = 6, -- GETTABLE
-	[9] = 7, -- SETGLOBAL
-	[12] = 8, -- SETUPVAL
-	[14] = 9, -- SETTABLE
-	[17] = 10, -- NEWTABLE
-	[19] = 20, -- LEN
-	[22] = 21, -- CONCAT
-	[24] = 23, -- EQ
-	[27] = 24, -- LT
-	[29] = 25, -- LE
-	[32] = 27, -- TESTSET
-	[34] = 32, -- FORPREP
-	[37] = 34, -- SETLIST
-	-- level 5
-	[5] = 11, -- SELF
-	[11] = 28, -- CALL
-	[15] = 29, -- TAILCALL
-	[21] = 30, -- RETURN
-	[25] = 35, -- CLOSE
-	[31] = 36, -- CLOSURE
-	[35] = 37, -- VARARG
-}
-
-do
-	local fp = io.open('gen_template.lua')
-	local preset = fp:read('a')
-
-	fp:close()
-
-	local list = {}
-	local index = 1
-
-	while index do
-		table.insert(list, index - 1)
-		index = string.find(preset, '--[[', index + 1, true)
-	end
-
-	table.insert(list, #preset)
-
-	for i = 1, #list - 1 do opcode_map[i - 1] = string.sub(preset, list[i], list[i + 1] - 1) end
-end
-
-local function midpoint(a, b) return a + (b - a) / 2 end
-
-local function fmt_insert(buf, fmt, ...) table.insert(buf, string.format(fmt, ...)) end
-
-local function gen_search_inner(buf, i, min, max)
-	local lower = math.floor(midpoint(i, min))
-	local higher = math.ceil(midpoint(i, max))
-	local len = #buf + 1
-
-	if lower ~= min then
-		fmt_insert(buf, 'if op < %d then ', i)
-		gen_search_inner(buf, lower, min, i)
-		table.insert(buf, 'else')
-	end
-
-	if higher ~= max then
-		fmt_insert(buf, 'if op > %d then ', i)
-		gen_search_inner(buf, higher, i, max)
-		table.insert(buf, 'else')
-	end
-
-	table.insert(buf, opcode_map[OPCODE_RM[i]])
-
-	if len ~= #buf then table.insert(buf, ' end ') end
-end
-
-local function gen_search(min, max)
-	local buf = {}
-	local pivot = math.floor(midpoint(min, max))
-
-	gen_search_inner(buf, pivot, min - 1, max + 1)
-
-	return table.concat(buf)
-end
-
-local fp = io.open('bin_tree.lua')
-
-fp:write(gen_search(0, 37))
-fp:close()
-
-end
-function scmframework_e1f94fead74e121d9f76be2b73ca9a28() --$CONTENT_DATA/Scripts/FiOne_lua/gen/gen_template.lua
 
 end
 function scmframework_7f1ef98cf5402622769a3d2412f02b60() --$CONTENT_DATA/Scripts/FiOne_lua/lib.lua
@@ -79811,6 +79801,7 @@ end
 
 function objinstance:setState(state)
     self.state = state
+    self.old_toggle_state = state
     self:update()
 end
 
@@ -80352,6 +80343,12 @@ function sceneinstance:_tick(clean)
         if self.needUpdateChildrenRule then
             self:realUpdateChildrenRule()
             self.needUpdateChildrenRule = nil
+        end
+        for _, window in ipairs(self.allWindows) do
+            if window.needUpdateChildrenRule then
+                window:realUpdateChildrenRule()
+                window.needUpdateChildrenRule = nil
+            end
         end
         
         return click
@@ -82726,6 +82723,121 @@ objs.context = {
         self.display.fillRect(self.x, self.y, self.sizeX, self.sizeY, self.contextSettings.background)
     end,
     
+}
+
+objs.tabbar = {
+    useWindow = true,
+    init = function(self, background, verticle, buttonSize, offset, bg, fg, bg_press, fg_press)
+        self.bg, self.fg, self.bg_press, self.fg_press = bg, fg, bg_press, fg_press
+        self.list = {}
+        self.buttons = {}
+        self.verticle = verticle
+        self.buttonSize = buttonSize
+        self.offset = offset or 0
+
+        if background then
+            self:setColor(background)
+        end
+
+        if verticle then
+            self:setDefaultSet(function(guiobject, previousElement)
+                if previousElement then
+                    guiobject:setDown(previousElement, self.offset)
+                else
+                    guiobject:setPosition(0, math.floor(self.offset / 2))
+                end
+            end)
+        else
+            self:setDefaultSet(function(guiobject, previousElement)
+                if previousElement then
+                    guiobject:setRight(previousElement, self.offset)
+                else
+                    guiobject:setPosition(math.floor(self.offset / 2), 0)
+                end
+            end)
+        end
+        
+        for _, item in ipairs(self.list) do
+            self:addButton(item[1], item[2])
+        end
+    end,
+    methods = {
+        setSelected = function(self, selected)
+            checkArg(1, selected, "number")
+            self.selected = selected
+            for _, button in ipairs(self.buttons) do
+                button:setState(false)
+            end
+            for _, item in ipairs(self.list) do
+                item:setDisabled(true)
+                item:setInvisible(true)
+            end
+            self.buttons[selected]:setState(true)
+            if self.list[selected] then
+                self.list[selected]:setDisabled(false)
+                self.list[selected]:setInvisible(false)
+            end
+        end,
+        getSelected = function(self)
+            return self.selected
+        end,
+        addTab = function(self, title, object)
+            table.insert(self.list, object)
+            object:setDisabled(true)
+            object:setInvisible(true)
+
+            local button
+            if self.verticle then
+                button = self:createButton(nil, nil, nil, nil, true, title, self.bg, self.fg, self.bg_press, self.fg_press)
+                
+                local _autofunc = button.autofunc
+                function button.autofunc(rself, previousElement, container)
+                    _autofunc(rself, previousElement, container)
+                    rself:setSize(self.sizeX, self.buttonSize or mathRound((self.sizeY / #self.list) - self.offset))
+                end
+            else
+                button = self:createButton(nil, nil, nil, nil, true, title, self.bg, self.fg, self.bg_press, self.fg_press)
+
+                local _autofunc = button.autofunc
+                function button.autofunc(rself, previousElement, container)
+                    _autofunc(rself, previousElement, container)
+                    rself:setSize(self.buttonSize or mathRound((self.sizeX / #self.list) - self.offset), self.sizeY)
+                end
+            end
+
+            table.insert(self.buttons, button)
+            local index = #self.buttons
+
+            function button.onToggle(state)
+                if state then
+                    self:setSelected(index)
+                else
+                    button:setState(true)
+                end
+            end
+
+            if not self.selected then
+                self:setSelected(index)
+            end
+        end,
+        createOtherspaceWindow = function(self)
+            local parent = self:getParent()
+            local sizeX, sizeY = parent:getContainerSize()
+            if self.verticle then
+                if self.sourceX == 0 then
+                    return parent:createWindow(self.sizeX, 0, sizeX - self.sizeX, sizeY)
+                else
+                    return parent:createWindow(0, 0, sizeX, sizeY - self.sizeX)
+                end
+            else
+                if self.sourceY == 0 then
+                    return parent:createWindow(0, self.sizeY, sizeX, sizeY - self.sizeY)
+                else
+                    return parent:createWindow(0, 0, sizeX, sizeY - self.sizeX)
+                end
+            end
+        end
+    }
 }
 
 return objs
@@ -97534,10 +97646,8 @@ function romdisk:client_onDestroy()
 end
 end
 function scmframework_8207867720b8e889f4d178d7ef3bcc21() --$CONTENT_DATA/Scripts/scmframeworkAPI.lua
-dofile("$CONTENT_DATA/Scripts/ScriptableComputer.lua")
-dofile("$CONTENT_DATA/Scripts/Displays/AnyDisplay.lua")
-
 scmframework = {
+    version = "1.0",
     scomputers = scomputers,
     dofile = scmframework_dofile
 }
@@ -97587,6 +97697,30 @@ local hookGuiCreators = {
 
 ----------------------------------------------
 
+local isRealObjectExists_tag = {}
+
+local function loadRealObject(fakeObject)
+    local ok, result = pcall(function ()
+        if fakeObject.isRealObjectExists == isRealObjectExists_tag then
+            return fakeObject.realObject
+        end
+    end)
+    if ok and result then
+        return result
+    end
+    return fakeObject
+end
+
+local function getBundle(virtualShape)
+    if sm.isServerMode() then
+        return virtualShape.sv_bundle or error("failed to get bundle server reference")
+    else
+        return virtualShape.cl_bundle or error("failed to get bundle client reference")
+    end
+end
+
+----------------------------------------------
+
 local virtualShapeClass = {}
 
 function virtualShapeClass:interact(character, state)
@@ -97615,24 +97749,84 @@ function virtualShapeClass:canTinker(character)
     return not not self.self.client_onTinker
 end
 
+function virtualShapeClass:createVirtualLink(child)
+    local bundle = getBundle(self)
+    if not bundle.virtualLinks_childen[self] then bundle.virtualLinks_childen[self] = {} end
+    if not bundle.virtualLinks_parents[child] then bundle.virtualLinks_parents[child] = {} end
+    table.insert(bundle.virtualLinks_childen[self], child.interactable)
+    table.insert(bundle.virtualLinks_parents[child], self.interactable)
+end
+
+function virtualShapeClass:setOpenedOutput(openedOutput)
+    self.openedOutput = not not openedOutput
+end
+
+function virtualShapeClass:setOpenedInput(openedInput)
+    self.openedInput = not not openedInput
+end
+
+----------------------------------------------
+
+local virtualComputer = {}
+
+function virtualComputer:getEnv()
+    return self.self.env
+end
+
+function virtualComputer:reboot()
+    self.self.reboot_flag = true
+end
+
+function virtualComputer:setActive(active)
+    self.self.external_active = not not active
+end
+
+function virtualComputer:isActive()
+    return self.self.isActive
+end
+
+----------------------------------------------
+
+local function mt_hook(mt)
+	local empty_class = class(mt)
+    empty_class.__index = mt.__index
+    return empty_class()
+end
+
 local function createVirtualNetwork(virtualShape)
     virtualShape.self.network = {}
 
+    virtualShape.self.network.realObject = virtualShape.realSelf.network
+    virtualShape.self.network.isRealObjectExists = isRealObjectExists_tag
+
     function virtualShape.self.network:sendToServer(method, arg)
-        table.insert(virtualShape.bundle.sendBuffer, {target="server",arg={method, arg, virtualShape.index}})
+        if sm.isServerMode() then
+            error("Sandbox violation (virtualShape): calling client function from server callback.", 2)
+        end
+        table.insert(getBundle(virtualShape).sendBuffer, {target="server",arg={method, arg, virtualShape.index}})
     end
 
     function virtualShape.self.network:sendToClient(player, method, arg)
-        table.insert(virtualShape.bundle.sendBuffer, {player=player,target="client",arg={method, arg, virtualShape.index}})
+        if not sm.isServerMode() then
+            error("Sandbox violation (virtualShape): calling server function from client callback.", 2)
+        end
+        table.insert(getBundle(virtualShape).sendBuffer, {player=player,target="client",arg={method, arg, virtualShape.index}})
     end
 
     function virtualShape.self.network:sendToClients(method, arg)
-        table.insert(virtualShape.bundle.sendBuffer, {target="clients",arg={method, arg, virtualShape.index}})
+        if not sm.isServerMode() then
+            error("Sandbox violation (virtualShape): calling server function from client callback.", 2)
+        end
+        table.insert(getBundle(virtualShape).sendBuffer, {target="clients",arg={method, arg, virtualShape.index}})
     end
 end
 
 local function createVirtualStorage(virtualShape)
     virtualShape.self.storage = {}
+
+    virtualShape.self.storage.realObject = virtualShape.realSelf.storage
+    virtualShape.self.storage.isRealObjectExists = isRealObjectExists_tag
+
     local realStorageData = virtualShape.realSelf.storage:load()
     if type(realStorageData) ~= "table" then realStorageData = {} end
     realStorageData.virtualStorage = realStorageData.virtualStorage or {}
@@ -97647,14 +97841,148 @@ local function createVirtualStorage(virtualShape)
     end
 end
 
-local function createVirtualInteractable(virtualShape)
-    
+local function hookValue(tbl, key)
+    local val = tbl[key]
+    if type(val) == "function" then
+        return function(_, ...)
+            return val(tbl, ...)
+        end
+    end
+    return val
 end
 
-local function mt_hook(mt)
-	local empty_class = class(mt)
-    empty_class.__index = mt.__index
-    return empty_class()
+local function createVirtualShape(virtualShape)
+    local realSelf = virtualShape.realSelf
+
+    virtualShape.shape = mt_hook({
+        __index = function(_, key)
+            if key == "interactable" then
+                return virtualShape.interactable
+            end
+            return hookValue(realSelf.shape, key)
+        end
+    })
+
+    virtualShape.shape.realObject = realSelf.shape
+    virtualShape.shape.isRealObjectExists = isRealObjectExists_tag
+
+    virtualShape.self.shape = virtualShape.shape
+end
+
+local function copyTable(tbl, newtbl)
+    for _, v in ipairs(newtbl or {}) do
+        table.insert(tbl, v)
+    end
+end
+
+local function copyTableKV(tbl, newtbl)
+    for k, v in pairs(newtbl or {}) do
+       tbl[k] = v
+    end
+end
+
+local function createVirtualInteractable(virtualShape)
+    local realSelf = virtualShape.realSelf
+
+    virtualShape.interactable = mt_hook({
+        __index = function(_, key)
+            if key == "shape" then
+                return virtualShape.shape
+            elseif key == "body" then
+                return realSelf.shape.body
+            end
+            return hookValue(realSelf.interactable, key)
+        end
+    })
+
+    virtualShape.interactable.id = math.random(0, 9999999)
+    virtualShape.interactable.active = false
+    virtualShape.interactable.power = 0
+    virtualShape.interactable.type = "scripted"
+    virtualShape.interactable.publicData = {}
+
+    virtualShape.interactable.realObject = realSelf.interactable
+    virtualShape.interactable.isRealObjectExists = isRealObjectExists_tag
+
+    function virtualShape.interactable:getShape()
+        return virtualShape.shape
+    end
+
+    function virtualShape.interactable:getBody()
+        return virtualShape.shape.body
+    end
+
+    function virtualShape.interactable:getType()
+        return virtualShape.interactable.type
+    end
+
+    function virtualShape.interactable:getId()
+        return virtualShape.interactable.id
+    end
+
+    function virtualShape.interactable:isActive()
+        return virtualShape.interactable.active
+    end
+
+    function virtualShape.interactable:setActive(active)
+        checkArg(1, active, "boolean")
+        virtualShape.interactable.active = active
+    end
+
+    function virtualShape.interactable:setPower(power)
+        checkArg(1, power, "number")
+        virtualShape.interactable.power = power
+    end
+
+    function virtualShape.interactable:getPower()
+        return virtualShape.interactable.power
+    end
+
+    function virtualShape.interactable:setPublicData(publicData)
+        virtualShape.interactable.publicData = publicData
+    end
+
+    function virtualShape.interactable:getPublicData(publicData)
+        return virtualShape.interactable.publicData
+    end
+
+    function virtualShape.interactable:getChildren()
+        local tbl = {}
+        copyTable(tbl, getBundle(virtualShape).virtualLinks_childen[virtualShape])
+        if virtualShape.openedOutput then
+            copyTable(tbl, realSelf.interactable:getChildren())
+        end
+        return tbl
+    end
+
+    function virtualShape.interactable:getParents()
+        local tbl = {}
+        copyTable(tbl, getBundle(virtualShape).virtualLinks_parents[virtualShape])
+        if virtualShape.openedInput then
+            copyTable(tbl, realSelf.interactable:getParents())
+        end
+        return tbl
+    end
+
+    local poseWeight = {}
+    function virtualShape.interactable:setPoseWeight(index, value)
+        poseWeight[index] = value
+    end
+
+    function virtualShape.interactable:getPoseWeight(index)
+        return poseWeight[index] or 0
+    end
+
+    local uvFrameIndex = 0
+    function virtualShape.interactable:setUvFrameIndex(index)
+        uvFrameIndex = index
+    end
+
+    function virtualShape.interactable:getUvFrameIndex()
+        return uvFrameIndex
+    end
+    
+    virtualShape.self.interactable = virtualShape.interactable
 end
 
 local function createFakeGui(virtualShape, gui)
@@ -97668,13 +97996,13 @@ local function createFakeGui(virtualShape, gui)
 
     for _, callbackSetter in ipairs(hookCallbackSetters) do
         fake[callbackSetter] = function(_, widgetName, callback)
-            virtualShape.bundle.guiCallbacks[widgetName] = {virtualShape, callback}
+            getBundle(virtualShape).guiCallbacks[widgetName] = {virtualShape, callback}
             return gui[callbackSetter](gui, widgetName, "cl_guiCallback")
         end
     end
 
     fake.setOnCloseCallback = function(_, callback)
-        virtualShape.bundle.guiCloseCallbacks[virtualShape] = callback
+        getBundle(virtualShape).guiCloseCallbacks[virtualShape] = callback
         return gui:setOnCloseCallback("cl_guiCloseCallback")
     end
 
@@ -97698,16 +98026,63 @@ local function loadFakeGui(virtualShape)
     return virtualShape.fake_gui
 end
 
+local sm_interactable_getChildren = sm.interactable.getChildren
+local sm_interactable_getParents = sm.interactable.getParents
+
+local function fake_interactable_getChildren(interactable)
+    return interactable:getChildren()
+end
+
+local function fake_interactable_getParents(interactable)
+    return interactable:getParents()
+end
+
+local sm_effect_createEffect = sm.effect.createEffect
+
+local function fake_effect_createEffect(name, target, boneName)
+    return sm_effect_createEffect(name, loadRealObject(target), boneName)
+end
+
+local sm_exists = sm.exists
+
+local function fake_exists(obj)
+    return sm_exists(loadRealObject(obj))
+end
+
+local _type = type
+
+local function new_type(val)
+    return _type(loadRealObject(val))
+end
+
+local function pushBaseEnvHacks()
+    sm.interactable.getChildren = fake_interactable_getChildren
+    sm.interactable.getParents = fake_interactable_getParents
+    sm.effect.createEffect = fake_effect_createEffect
+    sm.exists = fake_exists
+    type = new_type
+end
+
+local function popBaseEnvHacks()
+    sm.interactable.getChildren = sm_interactable_getChildren
+    sm.interactable.getParents = sm_interactable_getParents
+    sm.effect.createEffect = sm_effect_createEffect
+    sm.exists = sm_exists
+    type = _type
+end
+
 local function pushEnvHacks(virtualShape)
     if not sm.isServerMode() then
         sm.gui = loadFakeGui(virtualShape)
     end
+    pushBaseEnvHacks()
 end
 
 local function popEnvHacks(virtualShape)
     if not sm.isServerMode() then
         sm.gui = sm_gui
     end
+    popBaseEnvHacks()
 end
 
 local function createVirtualShapeBundle(realSelf, clientMode)
@@ -97716,7 +98091,9 @@ local function createVirtualShapeBundle(realSelf, clientMode)
         sendBuffer = {},
         virtualShapes = {},
         guiCallbacks = {},
-        guiCloseCallbacks = {}
+        guiCloseCallbacks = {},
+        virtualLinks_childen = {},
+        virtualLinks_parents = {}
     }
 
     local function runMethodWithoutPrefix(virtualShape, method, ...)
@@ -97738,35 +98115,54 @@ local function createVirtualShapeBundle(realSelf, clientMode)
         end
     end
 
+    local function addBundleToShape(virtualShape, bundle)
+        if sm.isServerMode() then
+            virtualShape.sv_bundle = bundle
+        else
+            virtualShape.cl_bundle = bundle
+        end
+    end
+
     function bundle.addShape(klass, scriptedData, defaultStorage)
-        local virtualSelf = klass()
-        virtualSelf.data = scriptedData
-        virtualSelf.interactable = realSelf.interactable
-        virtualSelf.shape = realSelf.shape
+        local index = #bundle.virtualShapes + 1
+        if realSelf.clientServerVirtualShapeLink[index] then
+            local virtualShape = realSelf.clientServerVirtualShapeLink[index]
+            addBundleToShape(virtualShape, bundle)
+            table.insert(bundle.virtualShapes, virtualShape)
+            runMethod(virtualShape, "onCreate")
+            return virtualShape
+        else
+            local virtualSelf = klass()
+            virtualSelf.data = scriptedData
 
-        local virtualShape = {
-            class = klass,
-            data = scriptedData,
-            defaultStorage = defaultStorage,
-            self = virtualSelf,
-            index = #bundle.virtualShapes + 1,
-            bundle = bundle,
-            realSelf = realSelf
-        }
+            local virtualShape = {
+                class = klass,
+                data = scriptedData,
+                defaultStorage = defaultStorage,
+                self = virtualSelf,
+                index = index,
+                realSelf = realSelf,
+                openedInput = false,
+                openedOutput = false
+            }
 
-        for k, v in pairs(virtualShapeClass) do
-            virtualShape[k] = v
-        end
-
-        createVirtualNetwork(virtualShape)
-        if not clientMode then
+            addBundleToShape(virtualShape, bundle)
+    
+            for k, v in pairs(virtualShapeClass) do
+                virtualShape[k] = v
+            end
+    
+            createVirtualShape(virtualShape)
+            createVirtualInteractable(virtualShape)
+            createVirtualNetwork(virtualShape)
             createVirtualStorage(virtualShape)
+    
+            table.insert(bundle.virtualShapes, virtualShape)
+            runMethod(virtualShape, "onCreate")
+    
+            realSelf.clientServerVirtualShapeLink[index] = virtualShape
+            return virtualShape
         end
-
-        table.insert(bundle.virtualShapes, virtualShape)
-        runMethod(virtualShape, "onCreate")
-
-        return virtualShape
     end
 
     function bundle.networkCallback(package, player)
@@ -97802,19 +98198,10 @@ end
 
 ----------------------------------------------
 
-scmframework.defaultSettings = sc.defaultRestrictions
-scmframework.unrestrictedSettings = sc.unrestrictedRestrictions
-
-function scmframework.setSComputersSettings(settings)
-    sc.setRestrictions(settings)
-    sc.saveRestrictions()
-end
-
-----------------------------------------------
-
 scmframework.scmframeworkClass = class()
 
 function scmframework.scmframeworkClass:server_onCreate()
+    self.clientServerVirtualShapeLink = self.clientServerVirtualShapeLink or {}
     self.sv_virtualShapeBundle = createVirtualShapeBundle(self, false)
 
     if self.scmframework_init then
@@ -97823,6 +98210,7 @@ function scmframework.scmframeworkClass:server_onCreate()
 end
 
 function scmframework.scmframeworkClass:client_onCreate()
+    self.clientServerVirtualShapeLink = self.clientServerVirtualShapeLink or {}
     self.cl_virtualShapeBundle = createVirtualShapeBundle(self, true)
 
     if self.scmframework_init then
@@ -97888,14 +98276,16 @@ function scmframework.scmframeworkClass:addVirtualShape(...)
     end
 end
 
-function scmframework.scmframeworkClass:addVirtualComputer(defaultScript, defaultData, alwaysOn, unsafe)
+function scmframework.scmframeworkClass:addVirtualComputer(defaultScript, defaultData, alwaysOn, unsafe, localEnvHook)
     checkArg(1, defaultScript, "string", "nil")
     checkArg(2, defaultData, "string", "nil")
     checkArg(3, alwaysOn, "boolean", "nil")
     checkArg(4, unsafe, "boolean", "nil")
+    checkArg(5, localEnvHook, "function", "nil")
 
-    return self:addVirtualShape(ScriptableComputer, {
-        unsafe = unsafe
+    local virtualShape = self:addVirtualShape(ScriptableComputer, {
+        unsafe = unsafe,
+        localEnvHook = localEnvHook
     }, {
         alwaysOn = alwaysOn,
 
@@ -97905,20 +98295,65 @@ function scmframework.scmframeworkClass:addVirtualComputer(defaultScript, defaul
         userdata = base64.encode(defaultData or ""),
         userdata_bs64 = true
     })
+    copyTableKV(virtualShape, virtualComputer)
+    return virtualShape
 end
 
-function scmframework.scmframeworkClass:addVirtualDisplay(width, height, sizeX, sizeY)
+function scmframework.scmframeworkClass:addVirtualDisplay(width, height, sizeX, sizeY, zpos)
     checkArg(1, width, "number")
     checkArg(2, height, "number")
     checkArg(3, sizeX, "number")
     checkArg(4, sizeY, "number")
+    checkArg(5, zpos, "number", "nil")
 
     return self:addVirtualShape(AnyDisplay, {
         x = width,
         y = height,
         sizeX = sizeX,
-        sizeY = sizeY
+        sizeY = sizeY,
+        zpos = zpos or 0
     })
+end
+
+function scmframework.scmframeworkClass:addVirtualClassicDisplay(width, height)
+    checkArg(1, width, "number")
+    checkArg(2, height, "number")
+
+    local boundingBox = self.shape:getBoundingBox()
+    return self:addVirtualShape(AnyDisplay, {
+        x = width,
+        y = height,
+        v = 32 * boundingBox.z * 4,
+        div = true
+    })
+end
+
+function scmframework.scmframeworkClass:addVirtualSynthesizer()
+    return self:addVirtualShape(synthesizer)
+end
+
+function scmframework.scmframeworkClass:addVirtualGps()
+    return self:addVirtualShape(gps)
+end
+
+----------------------------------------------
+
+pushBaseEnvHacks()
+dofile("$CONTENT_DATA/Scripts/Config.lua")
+dofile("$CONTENT_DATA/Scripts/ScriptableComputer.lua")
+dofile("$CONTENT_DATA/Scripts/synthesizer.lua")
+dofile("$CONTENT_DATA/Scripts/gps.lua")
+dofile("$CONTENT_DATA/Scripts/Displays/AnyDisplay.lua")
+popBaseEnvHacks()
+
+----------------------------------------------
+
+scmframework.defaultSettings = sc.defaultRestrictions
+scmframework.unrestrictedSettings = sc.unrestrictedRestrictions
+
+function scmframework.setSComputersSettings(settings)
+    sc.setRestrictions(settings)
+    sc.saveRestrictions()
 end
 end
 function scmframework_04297dec39508b9ad8f64159c4e7a84d() --$CONTENT_DATA/Scripts/scomputersAPI.lua
@@ -98309,6 +98744,7 @@ function ScriptableComputer:server_onCreate(constData)
     self.usedRam = 0
 
     ------cdata
+    self.defaultData = self.data or {}
     if constData then
         self.cdata = constData
     else
@@ -98577,8 +99013,8 @@ function ScriptableComputer:server_onFixedUpdate()
         end
     end
 
-    local activeNow = not not (self.storageData.alwaysOn or self.storageData.active_button)
-    if self.interactable then
+    local activeNow = not not (self.storageData.alwaysOn or self.storageData.active_button or self.external_active)
+    if self.interactable and not activeNow then
         for k, inter in pairs(self.interactable:getParents(sm.interactable.connectionType.logic)) do
             if inter:isActive() then
                 activeNow = true
@@ -99295,6 +99731,8 @@ end
 ----------------------- CLIENT -----------------------
 
 function ScriptableComputer:client_onCreate()
+    self.defaultData = self.data or {}
+    
     loadArchitecture(self, "cl_architecture")
     if self.cl_architecture then
         self.cl_examples = loadExamples(self.cl_architecture.examplesPath, self.cl_architecture.name)
@@ -101052,6 +101490,7 @@ local _, defaultSamplesList = pcall(sm.json.open, "$CONTENT_DATA/ROM/defaultSamp
 if type(defaultSamplesList) ~= "table" then
     defaultSamplesList = {}
 end
+sc.changePrefixesInList(defaultSamplesList)
 
 local maxBeeps = 32
 local maxLoops = 32
@@ -104181,7 +104620,6 @@ function wasd:cl_setActive(active)
 end
 end
 
-dofile("$CONTENT_DATA/Scripts/Config.lua")
 dofile("$CONTENT_DATA/Scripts/scmframeworkAPI.lua")
 end
 --scmframework is a SComputers-based framework for creating scripts for mods

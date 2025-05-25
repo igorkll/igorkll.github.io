@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SComputers-app-v22';
+const CACHE_NAME = 'SComputers-app-v23';
 
 const urlsToCache = [
     'addons/brainf_ck_language.jpg',
@@ -95,7 +95,6 @@ const urlsToCache = [
     'cameraControl.html',
     'scriptableOS_indev.html',
     'scmframework.html',
-    'scmframework_indev.html',
     'indev.html'
 ];
 

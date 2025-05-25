@@ -23,6 +23,15 @@
         <ul class="list">
             <li><span>objs.camera(camera, func, ...) - allows you to display the contents of the camera in the GUI</span></li>
             <li><span>objs.bufferedCamera(camera, func, ...) - allows you to display the contents of the camera in the GUI. works via with a frame buffer</span></li>
+            <li><span>objs.tabbar(background, verticle, buttonSize, offset, bg, fg, bg_press, fg_press) - creates a tabbar</span></li>
+        </ul>
+
+        <p class="text">tabbar:</p>
+        <ul class="list">
+            <li><span>tabbar:setSelected(index)</span></li>
+            <li><span>tabbar:getSelected():index</span></li>
+            <li><span>tabbar:addTab(title:string, tab:guiobject)</span></li>
+            <li><span>tabbar:createOtherspaceWindow():window - creates a window for all the remaining available space on this object that is not occupied by the tabbar</span></li>
         </ul>
 
         <pre>

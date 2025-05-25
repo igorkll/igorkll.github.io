@@ -290,12 +290,25 @@ end
 local _orig_dofile = dofile
 local workingDirectory
 local frameworkLoadedParts = {}
+local changePrefixPath = "$CONTENT_3aeb81c2-71b9-45a1-9479-1f48f1e8ff21/"
+local changePrefixPath2 = "$CONTENT_" .. sm.json.open("$CONTENT_DATA/description.json").localId .. "/"
 local function dofile(path)
     if workingDirectory and path:sub(1, 1) ~= "$" then
         path = vfs_concat(workingDirectory, path)
     end
     print("scmframework> ", path)
     pcall(_orig_dofile, path)
+
+    if path:sub(1, #changePrefixPath) == changePrefixPath then
+        local oldPath = path
+        path = "$CONTENT_DATA/" .. path:sub(#changePrefixPath + 1, #path)
+        print("change path (1): ", oldPath, " > ", path)
+    elseif path:sub(1, #changePrefixPath2) == changePrefixPath2 then
+        local oldPath = path
+        path = "$CONTENT_DATA/" .. path:sub(#changePrefixPath2 + 1, #path)
+        print("change path (2): ", oldPath, " > ", path)
+    end
+
     if not frameworkLoadedParts[path] then
         frameworkLoadedParts[path] = true
         local old_workingDirectory = workingDirectory
@@ -310,8 +323,7 @@ local function dofile(path)
 end
 scmframework_dofile = dofile]]
 
-local frameworkEnd = [[dofile("$CONTENT_DATA/Scripts/Config.lua")
-dofile("$CONTENT_DATA/Scripts/scmframeworkAPI.lua")
+local frameworkEnd = [[dofile("$CONTENT_DATA/Scripts/scmframeworkAPI.lua")
 end]]
 
 local function build_framework(name, list, ignorelist, addCode)
@@ -340,8 +352,11 @@ local function build_framework(name, list, ignorelist, addCode)
             local content = readFile(script.fullpath)
             local hash = scmframework_filepathHash.sumhexa(script.gamepath)
             table.insert(scmframework, "function scmframework_" .. hash .. "() --" .. script.gamepath .. "\n")
-            if load(content, "syntaxtest", "t", {}) then
+            local ok, err = load(content, "syntaxtest", "t", {})
+            if ok then
                 table.insert(scmframework, content)
+            else
+                print("failed to load script (" .. script.gamepath .. "): ", err)
             end
             table.insert(scmframework, "\nend\n")
         end
