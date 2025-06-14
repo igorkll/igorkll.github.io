@@ -17,10 +17,10 @@
                 <center>
                     <h1>scmframework</h1>
                     <h2>SComputers Mod Framework</h2>
-                    <button class="cool-button red" onclick="downloadFile('https://igorkll.github.io/SComputers/scmframework/scmframework.lua', 'scmframework.lua');">download scmframework (1.0)</button>
-                    <button class="cool-button yellow" onclick="downloadFile('https://igorkll.github.io/SComputers/scmframework/build_scmframework.lua', 'build_scmframework.lua');">download scmframework build script (1.0)</button>
+                    <button class="cool-button red" onclick="downloadFile('https://igorkll.github.io/SComputers/scmframework/scmframework.lua', 'scmframework.lua');">download scmframework (1.1)</button>
+                    <button class="cool-button yellow" onclick="downloadFile('https://igorkll.github.io/SComputers/scmframework/build_scmframework.lua', 'build_scmframework.lua');">download scmframework build script (1.1)</button>
                     <br/>
-                    <button class="cool-button blue" onclick="downloadFile('https://igorkll.github.io/SComputers/scmframework/scmframework_additional_files.zip', 'scmframework_additional_files.zip');">download scmframework additional files (1.0)</button>
+                    <button class="cool-button blue" onclick="downloadFile('https://igorkll.github.io/SComputers/scmframework/scmframework_additional_files.zip', 'scmframework_additional_files.zip');">download scmframework additional files</button>
                     <button class="cool-button blue" onclick="downloadFile('https://igorkll.github.io/SComputers/scmframework/scomputers_displays_models.zip', 'scomputers_displays_models.zip');">download SComputers display models</button>
                 </center>
             </div>
@@ -44,7 +44,7 @@
             <br/>
             <div class="cool-text">
                 <center>
-                    <h2>scmframework api</h2>
+                    <h3>scmframework api</h3>
                 </center>
                 <ul class="list">
                     <li><span>scmframework.scomputers - <a class="hyper" href="./making_addons.html">SComputers API</a> for creating addons, it is not available here through sm.scomputers</span></li>
@@ -59,7 +59,7 @@
             <br/>
             <div class="cool-text">
                 <center>
-                    <h2>scmframeworkClass callbacks</h2>
+                    <h3>scmframeworkClass callbacks</h3>
                 </center>
                 <ul class="list">
                     <li><span>scmframeworkClass.scmframework_init - it is called on the server and on the client when creating the block. from here, you need to set the configuration, create the necessary virtual blocks and the connections between them.</span></li>
@@ -69,7 +69,7 @@
             <br/>
             <div class="cool-text">
                 <center>
-                    <h2>scmframeworkClass methods</h2>
+                    <h3>scmframeworkClass methods</h3>
                 </center>
                 <ul class="list">
                     <li><span>scmframeworkClass:addVirtualShape(class, scriptedData:table|nil, defaultStorage:table|nil):virtualShape - creates a virtual shape</span></li>
@@ -87,7 +87,7 @@
             <br/>
             <div class="cool-text">
                 <center>
-                    <h2>virtualShape methods</h2>
+                    <h3>virtualShape methods</h3>
                 </center>
                 <ul class="list">
                     <li><span>virtualShape:interact(character, state) - simulates pressing the E button on shape</span></li>
@@ -103,7 +103,7 @@
             <br/>
             <div class="cool-text">
                 <center>
-                    <h2>virtual computer methods</h2>
+                    <h3>virtual computer methods</h3>
                 </center>
                 <ul class="list">
                     <li><span>virtualShape:getEnv():table - returns the ENV table. use this to read the table only, use localEnvHook for writing, as the table can be recreated at any time (for example, during reboot)</span></li>

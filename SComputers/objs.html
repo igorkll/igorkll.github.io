@@ -24,6 +24,7 @@
             <li><span>objs.camera(camera, func, ...) - allows you to display the contents of the camera in the GUI</span></li>
             <li><span>objs.bufferedCamera(camera, func, ...) - allows you to display the contents of the camera in the GUI. works via with a frame buffer</span></li>
             <li><span>objs.tabbar(background, verticle, buttonSize, offset, bg, fg, bg_press, fg_press) - creates a tabbar</span></li>
+            <li><span>objs.seekbar(verticle, thickness (default: size / 5), lineColor (default: 0x686868), circleColor (default: 0x00ff00), value (default: 0.5), minValue (default: 0), maxValue (default: 1)) - creates a seekbar</span></li>
         </ul>
 
         <p class="text">tabbar:</p>
@@ -32,6 +33,12 @@
             <li><span>tabbar:getSelected():index</span></li>
             <li><span>tabbar:addTab(title:string, tab:guiobject)</span></li>
             <li><span>tabbar:createOtherspaceWindow():window - creates a window for all the remaining available space on this object that is not occupied by the tabbar</span></li>
+        </ul>
+        
+        <p class="text">seekbar:</p>
+        <ul class="list">
+            <li><span>seekbar:setValue(value)</span></li>
+            <li><span>seekbar:getValue():value</span></li>
         </ul>
 
         <pre>
@@ -77,6 +84,49 @@ end
 for i = 0, 3 do
     addWindow(i, i % 2, math.floor(i / 2))
 end
+
+function callback_loop()
+    if _endtick then
+        display.clear()
+        display.flush()
+        return
+    end
+
+    gui:tick()
+    if gui:needFlush() then
+        gui:draw()
+        display.flush()
+    end
+end</code>
+        </pre>
+
+        <pre>
+            <code class="language-lua" style="width: fit-content;">--the example was created for a 128x128 screen
+local objs = require("objs")
+
+local display = getComponent("display")
+display.reset()
+display.clearClicks()
+display.setClicksAllowed(true)
+local rx, ry = display.getWidth(), display.getHeight()
+
+local gui = require("gui").new(display)
+local scene = gui:createScene("333333")
+
+local offset = 4
+local thickness = 16
+
+local seekbar1 = scene:createCustom(offset, offset, rx - (offset * 2), thickness, objs.seekbar, false)
+local seekbar2 = scene:createCustom(offset, (offset * 2) + thickness, thickness, ry - thickness - (offset * 3), objs.seekbar, true)
+
+local function onValueChanged(self, value)
+    print("value changed: ", self.seekbarNumber, value)
+end
+
+seekbar1.onValueChanged = onValueChanged
+seekbar2.onValueChanged = onValueChanged
+seekbar1.seekbarNumber = 1
+seekbar2.seekbarNumber = 2
 
 function callback_loop()
     if _endtick then

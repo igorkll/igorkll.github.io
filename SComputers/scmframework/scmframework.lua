@@ -35347,7 +35347,10 @@ local canvasAPI = {
         copyPX = 13,
         copyNY = 14,
         copyPY = 15,
-        setI = 16
+        setI = 16,
+
+        ellipse = 17,
+        ellipseF = 18
     },
     material = {
         glass = sm.uuid.new("a683f897-5b8a-4c96-9c46-7b9fbc76d186"),
@@ -35363,7 +35366,7 @@ canvasAPI.multi_layer[tostring(canvasAPI.material.classic)] = true
 canvasAPI.multi_layer[tostring(canvasAPI.material.plastic)] = true
 canvasAPI.multi_layer[tostring(canvasAPI.material.smoothed)] = true
 canvasAPI.multi_layer[tostring(canvasAPI.material.glowing)] = true
-canvasAPI.version = 57
+canvasAPI.version = 58
 
 canvasAPI.materialList = {
     [0] = canvasAPI.material.glass,
@@ -35774,7 +35777,10 @@ local dataSizes = {
     2,
     2,
     2,
-    3
+    3,
+
+    7,
+    7
 }
 
 local userCalls = {}
@@ -35787,7 +35793,7 @@ function canvasAPI.createDrawer(sizeX, sizeY, callback, callbackBefore, directAr
     local rSizeX, rSizeY = sizeX, sizeY
     local maxX, maxY = sizeX - 1, sizeY - 1
     local newBuffer, newBufferBase = {}, 0
-    local realBuffer, realBufferBase = {}, 0
+    local realBuffer = {}
     local maxBuffer = maxX + (maxY * sizeX)
     local currentFont = font.optimized
     local fontWidth, fontHeight = defaultFont.width, defaultFont.height
@@ -35898,7 +35904,7 @@ function canvasAPI.createDrawer(sizeX, sizeY, callback, callbackBefore, directAr
         rSizeX, rSizeY = _sizeX, _sizeY
         obj.drawer_setRotation(rotation)
         newBuffer, newBufferBase = {}, 0
-        realBuffer, realBufferBase = {}, 0
+        realBuffer = {}
         maxBuffer = maxX + (maxY * sizeX)
         maxLineSize = sizeX + sizeY
         bigSide = math_max(sizeX, sizeY)
@@ -35929,8 +35935,12 @@ function canvasAPI.createDrawer(sizeX, sizeY, callback, callbackBefore, directAr
     ------------------------------------------
     
     local function rasterize_fill(x, y, sx, sy, col)
-        local x, y, x2, y2 = simpleRemathRect(x, y, sx, sy, maxX, maxY)
+        local x, y, x2, y2, w, h = simpleRemathRect(x, y, sx, sy, maxX, maxY)
         if not x then return end
+
+        if direct_fill then
+            direct_fill(directArg, x, y, w, h, col)
+        end
 
         local ix, iy = x, y
         for _ = 1, ((x2 - x) + 1) * ((y2 - y) + 1) do
@@ -35977,6 +35987,39 @@ function canvasAPI.createDrawer(sizeX, sizeY, callback, callbackBefore, directAr
             end
         end
         ]]
+    end
+
+    local function rasterize_rect(x, y, sx, sy, col, lineWidth)
+        local x, y, x2, y2, w, h = simpleRemathRect(x, y, sx, sy, maxX, maxY)
+        if not x then return end
+        if lineWidth == 1 then
+            for ix = x, x2 do
+                setDot(ix, y, col)
+                setDot(ix, y2, col)
+            end
+
+            for iy = y + 1, y2 - 1 do
+                setDot(x, iy, col)
+                setDot(x2, iy, col)
+            end
+        else
+            local _y, _y2, _x, _x2
+            for ioff = 0, math_min(lineWidth, math_max(w, h) / 2) - 1 do
+                _y = y + ioff
+                _y2 = y2 - ioff
+                for ix = x + ioff, x2 - ioff do
+                    setDot(ix, _y, col)
+                    setDot(ix, _y2, col)
+                end
+
+                _x = x + ioff
+                _x2 = x2 - ioff
+                for iy = y + 1 + ioff, y2 - (1 + ioff) do
+                    setDot(_x, iy, col)
+                    setDot(_x2, iy, col)
+                end
+            end
+        end
     end
 
     local function rasterize_circleF(px, py, r, col)
@@ -36084,50 +36127,229 @@ function canvasAPI.createDrawer(sizeX, sizeY, callback, callbackBefore, directAr
         end
     end
 
-    ------------------------------------------
+    local function rasterize_hline(x, y, len, color)
+        rasterize_fill(x, y, len, 1, color)
+    end
 
-    local function render_fill(stack, offset)
-        local col = stack[offset+4]
-        if direct_fill then
-            direct_fill(directArg, stack[offset], stack[offset+1], stack[offset+2], stack[offset+3], col)
-        else
-            rasterize_fill(stack[offset], stack[offset+1], stack[offset+2], stack[offset+3], col)
+    local function rasterize_vline(x, y, len, color)
+        rasterize_fill(x, y, 1, len, color)
+    end
+
+    local function rasterize_filledRoundedCorners(centerX, centerY, radius, upper, delta, color)
+        local f = 1 - radius
+        local ddF_x = 1
+        local ddF_y = -radius - radius
+        local y = 0
+        local lineLength
+
+        while y < radius do
+            if f >= 0 then
+                lineLength = y + y + delta
+
+                if lineLength > 0 then
+                    rasterize_hline(centerX - y, upper and (centerY - radius) or (centerY + radius), lineLength, color)
+                end
+
+                radius = radius - 1
+                ddF_y = ddF_y + 2
+                f = f + ddF_y
+            end
+
+            y = y + 1
+            ddF_x = ddF_x + 2
+            f = f + ddF_x
+            lineLength = radius + radius + delta
+
+            if lineLength > 0 then
+                rasterize_hline(centerX - radius, upper and (centerY - y) or (centerY + y), lineLength, color)
+            end
         end
     end
 
-    local function render_rect(stack, offset)
+    local function rasterize_roundedCorners(centerX, centerY, radius, corner, color)
+        local f = 1 - radius
+        local ddF_x = 1
+        local ddF_y = -2 * radius
+        local xe = 0
+        local xs = 0
+        local len = 0
+
+        while true do
+            while f < 0 do
+                xe = xe + 1
+                f = f + ddF_x
+                ddF_x = ddF_x + 2
+            end
+            f = f + ddF_y
+            ddF_y = ddF_y + 2
+
+            if xe - xs == 1 then
+                if bit.band(corner, 0x1) ~= 0 then -- left top
+                    checkSetDot(centerX - xe, centerY - radius, color)
+                    checkSetDot(centerX - radius, centerY - xe, color)
+                end
+
+                if bit.band(corner, 0x2) ~= 0 then -- right top
+                    checkSetDot(centerX + radius, centerY - xe, color)
+                    checkSetDot(centerX + xs + 1, centerY - radius, color)
+                end
+
+                if bit.band(corner, 0x4) ~= 0 then -- right bottom
+                    checkSetDot(centerX + xs + 1, centerY + radius, color)
+                    checkSetDot(centerX + radius, centerY + xs + 1, color)
+                end
+
+                if bit.band(corner, 0x8) ~= 0 then -- left bottom
+                    checkSetDot(centerX - radius, centerY + xs + 1, color)
+                    checkSetDot(centerX - xe, centerY + radius, color)
+                end
+            else
+                len = xe - xs
+                xs = xs + 1
+
+                if bit.band(corner, 0x1) ~= 0 then -- left top
+                    rasterize_hline(centerX - xe, centerY - radius, len, color)
+                    rasterize_vline(centerX - radius, centerY - xe, len, color)
+                end
+
+                if bit.band(corner, 0x2) ~= 0 then -- right top
+                    rasterize_vline(centerX + radius, centerY - xe, len, color)
+                    rasterize_hline(centerX + xs, centerY - radius, len, color)
+                end
+
+                if bit.band(corner, 0x4) ~= 0 then -- right bottom
+                    rasterize_hline(centerX + xs, centerY + radius, len, color)
+                    rasterize_vline(centerX + radius, centerY + xs, len, color)
+                end
+
+                if bit.band(corner, 0x8) ~= 0 then -- left bottom
+                    rasterize_vline(centerX - radius, centerY + xs, len, color)
+                    rasterize_hline(centerX - xe, centerY + radius, len, color)
+                end
+            end
+            xs = xe
+
+            if xe >= radius then break end
+            radius = radius - 1
+        end
+    end
+
+    ------------------------------------------
+
+    local function render_fill(stack, offset)
+        rasterize_fill(stack[offset], stack[offset+1], stack[offset+2], stack[offset+3], stack[offset+4])
+    end
+
+    local function render_drawEllipse(stack, offset)
         local x, y, x2, y2, w, h = remathRect(offset, stack, maxX, maxY)
         if not x then return end
-        local col = stack[offset+4]
-        local lineWidth = stack[offset+5]
-        if lineWidth == 1 then
-            for ix = x, x2 do
-                setDot(ix, y, col)
-                setDot(ix, y2, col)
-            end
+        local cornerRadius = stack[offset+4]
+        local col = stack[offset+5]
 
-            for iy = y + 1, y2 - 1 do
-                setDot(x, iy, col)
-                setDot(x2, iy, col)
-            end
-        else
-            local _y, _y2, _x, _x2
-            for ioff = 0, math_min(lineWidth, math_max(w, h) / 2) - 1 do
-                _y = y + ioff
-                _y2 = y2 - ioff
-                for ix = x + ioff, x2 - ioff do
-                    setDot(ix, _y, col)
-                    setDot(ix, _y2, col)
-                end
+        local maxCornerRadius = math.min(w / 2, h / 2)
+        if cornerRadius > maxCornerRadius then cornerRadius = maxCornerRadius end
 
-                _x = x + ioff
-                _x2 = x2 - ioff
-                for iy = y + 1 + ioff, y2 - (1 + ioff) do
-                    setDot(_x, iy, col)
-                    setDot(_x2, iy, col)
-                end
-            end
+        if cornerRadius <= 0 then
+            rasterize_rect(x, y, w, h, col, 1)
+            return
         end
+
+        rasterize_hline(
+            x + cornerRadius, y,
+            w - cornerRadius - cornerRadius,
+            col
+        )
+
+        rasterize_hline(
+            x + cornerRadius, y + h - 1,
+            w - cornerRadius - cornerRadius,
+            col
+        )
+
+        rasterize_vline(
+            x , y + cornerRadius,
+            h - cornerRadius - cornerRadius,
+            col
+        )
+
+        rasterize_vline(
+            x + w - 1, y + cornerRadius,
+            h - cornerRadius - cornerRadius,
+            col
+        )
+
+        rasterize_roundedCorners(
+            x + cornerRadius, y + cornerRadius,
+            cornerRadius,
+            1,
+            col
+        )
+
+        rasterize_roundedCorners(
+            x + w - cornerRadius - 1, y + cornerRadius,
+            cornerRadius,
+            2,
+            col
+        )
+
+        rasterize_roundedCorners(
+            x + w - cornerRadius - 1, y + h - cornerRadius - 1,
+            cornerRadius,
+            4,
+            col
+        )
+
+        rasterize_roundedCorners(
+            x + cornerRadius, y + h - cornerRadius - 1,
+            cornerRadius,
+            8,
+            col
+        )
+    end
+
+    local function render_fillEllipse(stack, offset)
+        local x, y, x2, y2, w, h = remathRect(offset, stack, maxX, maxY)
+        if not x then return end
+        local cornerRadius = stack[offset+4]
+        local col = stack[offset+5]
+
+        local maxCornerRadius = math.min(w / 2, h / 2)
+        if cornerRadius > maxCornerRadius then cornerRadius = maxCornerRadius end
+
+        if cornerRadius <= 0 then
+            rasterize_fill(x, y, w, h, col, 1)
+            return
+        end
+
+        rasterize_fill(
+            x,
+            y + cornerRadius,
+            w,
+            h - cornerRadius - cornerRadius,
+            col
+        )
+
+        rasterize_filledRoundedCorners(
+            x + cornerRadius,
+            y + cornerRadius,
+            cornerRadius,
+            true,
+            w - cornerRadius - cornerRadius,
+            col
+        )
+
+        rasterize_filledRoundedCorners(
+            x + cornerRadius,
+            y + h - cornerRadius - 1,
+            cornerRadius,
+            false,
+            w - cornerRadius - cornerRadius,
+            col
+        )
+    end
+
+    local function render_rect(stack, offset)
+        rasterize_rect(stack[offset], stack[offset+1], stack[offset+2], stack[offset+3], stack[offset+4], stack[offset+5])
     end
 
     local function render_text(stack, offset)
@@ -36497,6 +36719,12 @@ function canvasAPI.createDrawer(sizeX, sizeY, callback, callbackBefore, directAr
                 lastPixelX, lastPixelY, lastPixelColor = idx % rSizeX, math_floor(idx / rSizeX), stack[offset+1]
                 setDot(lastPixelX, lastPixelY, lastPixelColor)
                 updated = true
+            elseif actionNum == 17 then
+                render_drawEllipse(stack, offset)
+                updated = true
+            elseif actionNum == 18 then
+                render_fillEllipse(stack, offset)
+                updated = true
             elseif userCalls[actionNum] then
                 if userCalls[actionNum](newBuffer, rotation, rSizeX, rSizeY, sizeX, sizeY, stack, offset, drawerData, bufferRangeUpdate, setDot, checkSetDot, rasterize_fill) then
                     updated = true
@@ -36515,8 +36743,8 @@ function canvasAPI.createDrawer(sizeX, sizeY, callback, callbackBefore, directAr
 
     function obj.flush(force)
         if not obj.wait and (updated or force) then
-            if callbackBefore and callbackBefore(newBufferBase, clearOnly, maxBuffer, force, newBuffer, realBuffer, nil, nil, changes, changesIndex, changesCount, _changes, clearBackplate, realBufferBase) then
-                realBuffer = {}
+            if callbackBefore then
+                callbackBefore(newBufferBase, clearOnly, maxBuffer, force, newBuffer, realBuffer, nil, nil, changes, changesIndex, changesCount, _changes, clearBackplate)
             end
 
             if callback then
@@ -36569,8 +36797,6 @@ function canvasAPI.createDrawer(sizeX, sizeY, callback, callbackBefore, directAr
                 changesIndex = {}
                 changesCount = 0
             end
-
-            realBufferBase = newBufferBase
         end
     end
 
@@ -37650,7 +37876,7 @@ function canvasAPI.createCanvas(parent, sizeX, sizeY, pixelSize, offset, rotatio
     local _oldVirtualBackplateColor
     local drawer
     local lastDrawWithClear = true
-    drawer = canvasAPI.createDrawer(sizeX, sizeY, nil, function (base, clearOnly, maxBuffer, force, newBuffer, realBuffer, _, _, changes, changesIndex, changesCount, _changes, clearBackplate, realBufferBase)
+    drawer = canvasAPI.createDrawer(sizeX, sizeY, nil, function (base, clearOnly, maxBuffer, force, newBuffer, realBuffer, _, _, changes, changesIndex, changesCount, _changes, clearBackplate)
         lastNewBuffer, lastBase = newBuffer, base
         lastDrawWithClear = clearBackplate
 
@@ -37802,7 +38028,7 @@ function canvasAPI.createCanvas(parent, sizeX, sizeY, pixelSize, offset, rotatio
                 local eindex = getEIndex(rindex)
                 --local isBackgroundColor = color == oldBackplateColor
                 --if color == oldBackplateColor or not colorEquals(effectDatas[eindex], color) then
-                if (realBuffer[index] or realBufferBase) ~= color then
+                if realBuffer[index] ~= color then
                     --local px = math_floor(index / sizeY)
                     --local py = index % sizeY
                     --local aSizeX, aSizeY = effectDatas[eindex+3] > 1, effectDatas[eindex+4] > 1
@@ -39149,6 +39375,48 @@ function canvasAPI.createScriptableApi(width, height, dataTunnel, flushCallback,
                 pixelsCacheExists = false
             end
         end,
+        drawEllipse = function(x, y, sizeX, sizeY, cornerRadius, color)
+            stack[stackIndex] = 17
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(x)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(y)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(sizeX)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(sizeY)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(cornerRadius)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = formatColorToSmallNumber(color, whiteSmallNumber)
+            stackIndex = stackIndex + 1
+            
+            if pixelsCacheExists then
+                pixelsCache = {}
+                pixelsCacheExists = false
+            end
+        end,
+        fillEllipse = function(x, y, sizeX, sizeY, cornerRadius, color)
+            stack[stackIndex] = 18
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(x)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(y)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(sizeX)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(sizeY)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = round(cornerRadius)
+            stackIndex = stackIndex + 1
+            stack[stackIndex] = formatColorToSmallNumber(color, whiteSmallNumber)
+            stackIndex = stackIndex + 1
+            
+            if pixelsCacheExists then
+                pixelsCache = {}
+                pixelsCacheExists = false
+            end
+        end,
         drawRect = function(x, y, sizeX, sizeY, color, lineWidth)
             lineWidth = round(lineWidth or 1)
             if lineWidth < 1 then
@@ -39289,8 +39557,6 @@ function canvasAPI.createScriptableApi(width, height, dataTunnel, flushCallback,
             end
         end,
         drawCircle = function (x, y, r, color)
-            if r > 1024 then r = 1024 end
-
             stack[stackIndex] = 6
             stackIndex = stackIndex + 1
             stack[stackIndex] = round(x)
@@ -39308,8 +39574,6 @@ function canvasAPI.createScriptableApi(width, height, dataTunnel, flushCallback,
             end
         end,
         fillCircle = function (x, y, r, color)
-            if r > 1024 then r = 1024 end
-            
             stack[stackIndex] = 7
             stackIndex = stackIndex + 1
             stack[stackIndex] = round(x)
@@ -39327,8 +39591,6 @@ function canvasAPI.createScriptableApi(width, height, dataTunnel, flushCallback,
             end
         end,
         drawCircleEvenly = function (x, y, r, color)
-            if r > 1024 then r = 1024 end
-
             stack[stackIndex] = 8
             stackIndex = stackIndex + 1
             stack[stackIndex] = round(x)
@@ -39346,7 +39608,6 @@ function canvasAPI.createScriptableApi(width, height, dataTunnel, flushCallback,
             end
         end,
         drawCircleVeryEvenly = function (x, y, r, color, stroke)
-            if r > 1024 then r = 1024 end
             if not stroke or stroke < 1 then stroke = 1 end
 
             stack[stackIndex] = 9
@@ -56146,7 +56407,7 @@ function sc.mt_hook(mt)
     return empty_class()
 end
 
-sc.version = "5.3a"
+sc.version = "5.4a"
 sc.actualBetterAPI = 45
 sc.actualCoroutineBetterAPI = 45
 sc.computersCount = 0
@@ -56169,6 +56430,26 @@ sc.componentsBackend = sc.mt_hook({__mode = "v"}) --sc.componentsBackend[table] 
 function sc.shutdown()
 end
 
+local function yield(computer)
+    if computer and computer.env then
+        computer.env[computer.yieldName](computer.yieldArg)
+    elseif sc.lastComputer and sc.lastComputer.env then
+        sc.lastComputer.env[sc.lastComputer.yieldName](sc.lastComputer.yieldArg)
+    end
+end
+
+--[[
+local count = 0
+local function smartYield(computer)
+    if count >= 256 then
+        yield(computer)
+        count = 0
+    else
+        count = count + 1
+    end
+end
+]]
+
 function sc.yield(computer) --для библиотек
     --[[
     if computer then
@@ -56184,21 +56465,12 @@ function sc.yield(computer) --для библиотек
     end
     ]]
 
-    if computer then
-        computer.env[computer.yieldName](computer.yieldArg)
-    elseif sc.lastComputer then
-        sc.lastComputer.env[sc.lastComputer.yieldName](sc.lastComputer.yieldArg)
-    end
+    yield(computer)
 end
 
-local count = 0
+
 function sc.smartYield(computer) --для библиотек
-    if count >= 128 then
-        sc.yield(computer)
-        count = 0
-    else
-        count = count + 1
-    end
+    yield(computer)
 end
 
 function sc.resetLagCounter(computer)
@@ -78927,12 +79199,21 @@ function sc_reglib_graphic()
     local graphic_lib = {}
 
     function graphic_lib.textBox(display, x, y, width, height, text, color, centerX, centerY, spacingY, autoNewline, tool, myGuiColorPrefixSupport)
-        local oldViewport = {display.getViewport()}
-        display.setInlineViewport(x, y, width, height)
+        centerX = not not centerX
+        centerY = not not centerY
         tool = tool or (display.getUtf8Support() and utf8 or string)
-        if autoNewline == nil then
-            autoNewline = true
+        if autoNewline == nil then autoNewline = true end
+
+        local _x, _y, _width, _height = display.getViewport()
+        display.setInlineViewport(x, y, width, height)
+        if not autoNewline and not text:find("%\n") then
+            if centerX then x = x + (width / 2) end
+            if centerY then y = y + (height / 2) end
+            display.drawCenteredText(x, y, text, color, centerX, centerY)
+            display.setViewport(_x, _y, _width, _height)
+            return
         end
+        
         local lines = {}
         local customColors = {}
         local fontX, fontY = display.getFontWidth(), display.getFontHeight() + (spacingY or 1)
@@ -79008,7 +79289,7 @@ function sc_reglib_graphic()
             end
             display.drawText(lx, ly, line, customColors[i] or color)
         end
-        display.setViewport(unpack(oldViewport))
+        display.setViewport(_x, _y, _width, _height)
     end
 
     return graphic_lib
@@ -79199,13 +79480,13 @@ end
 function objinstance:setCenter(offsetX, offsetY, gobj)
     if gobj then
         self:setPosition(
-            gobj.sourceX + (((gobj.sizeX or 0) / 2) - ((self.sizeX or 0) / 2)) + (offsetX or 0),
-            gobj.sourceY + (((gobj.sizeY or 0) / 2) - ((self.sizeY or 0) / 2)) + (offsetY or 0)
+            gobj.sourceX + ((getObjectWidth(gobj) / 2) - (getObjectWidth(self) / 2)) + (offsetX or 0),
+            gobj.sourceY + ((getObjectHeight(gobj) / 2) - (getObjectHeight(self) / 2)) + (offsetY or 0)
         )
     else
         self:setPosition(
-            (((self.sceneinstance.sizeX or 0) / 2) - ((self.sizeX or 0) / 2)) + (offsetX or 0),
-            (((self.sceneinstance.sizeY or 0) / 2) - ((self.sizeY or 0) / 2)) + (offsetY or 0)
+            ((getObjectWidth(self.sceneinstance) / 2) - (getObjectWidth(self) / 2)) + (offsetX or 0),
+            ((getObjectHeight(self.sceneinstance) / 2) - (getObjectHeight(self) / 2)) + (offsetY or 0)
         )
     end
 end
@@ -79213,11 +79494,11 @@ end
 function objinstance:setCenterX(offsetX, gobj)
     if gobj then
         self:setPositionX(
-            gobj.sourceX + (((gobj.sizeX or 0) / 2) - ((self.sizeX or 0) / 2)) + (offsetX or 0)
+            gobj.sourceX + ((getObjectWidth(gobj) / 2) - (getObjectWidth(self) / 2)) + (offsetX or 0)
         )
     else
         self:setPositionX(
-            (((self.sceneinstance.sizeX or 0) / 2) - ((self.sizeX or 0) / 2)) + (offsetX or 0)
+            ((getObjectWidth(self.sceneinstance) / 2) - (getObjectWidth(self) / 2)) + (offsetX or 0)
         )
     end
 end
@@ -79225,11 +79506,11 @@ end
 function objinstance:setCenterY(offsetY, gobj)
     if gobj then
         self:setPositionY(
-            gobj.sourceY + (((gobj.sizeY or 0) / 2) - ((self.sizeY or 0) / 2)) + (offsetY or 0)
+            gobj.sourceY + ((getObjectHeight(gobj) / 2) - (getObjectHeight(self) / 2)) + (offsetY or 0)
         )
     else
         self:setPositionY(
-            (((self.sceneinstance.sizeY or 0) / 2) - ((self.sizeY or 0) / 2)) + (offsetY or 0)
+            ((getObjectHeight(self.sceneinstance) / 2) - (getObjectHeight(self) / 2)) + (offsetY or 0)
         )
     end
 end
@@ -79600,10 +79881,19 @@ function objinstance:destroy()
     return false
 end
 
+function objinstance:_getBackColor()
+    if self.sceneinstance.color and type(self.sceneinstance.color) ~= "function" then
+        return self.sceneinstance.color
+    end
+    if self.sceneinstance then
+        return self.sceneinstance:_getBackColor()
+    end
+end
+
 function objinstance:clear(color, minWidth, minHeight)
     if not self.sceneinstance:isSelected() then return end
-    if not color and self.sceneinstance.color and type(self.sceneinstance.color) ~= "function" then
-        color = self.sceneinstance.color
+    if not color then
+        color = self:_getBackColor()
     end
     color = formatColor(color, true)
 
@@ -79786,6 +80076,41 @@ function objinstance:setPbgColor(color)
     end
 end
 
+function objinstance:setIbgColor(color)
+    if self.bg_interaction ~= color then
+        self.bg_interaction = formatColor(color)
+        self:update()
+    end
+end
+
+function objinstance:setIfgColor(color)
+    if self.fg_interaction ~= color then
+        self.fg_interaction = formatColor(color)
+        self:update()
+    end
+end
+
+function objinstance:setStColor(color)
+    if self.stroke_color ~= color then
+        self.stroke_color = formatColor(color)
+        self:update()
+    end
+end
+
+function objinstance:setPstColor(color)
+    if self.stroke_press ~= color then
+        self.stroke_press = formatColor(color)
+        self:update()
+    end
+end
+
+function objinstance:setIstColor(color)
+    if self.stroke_interaction ~= color then
+        self.stroke_interaction = formatColor(color)
+        self:update()
+    end
+end
+
 -------- image
 
 function objinstance:updateImage(img)
@@ -79936,6 +80261,23 @@ function objinstance:_tick(click)
         return
     end
 
+    local selected = false
+
+    if click == true then
+        self.interactionCurrently = false
+    elseif click then
+        selected = click and click[1] >= self.x and click[2] >= self.y and click[1] < (self.x + self.sizeX) and click[2] < (self.y + self.sizeY)
+        local state = click[3] ~= "released"
+        if not state or selected then
+            self.interactionCurrently = state
+        end
+    end
+
+    if self.interactionCurrently ~= self._interactionCurrently then
+        self:update()
+        self._interactionCurrently = self.interactionCurrently
+    end
+
     if self.customHandler then
         if click == true and self.state then
             self:customHandler(-1, -1, "released", -1, "unknown", false) --release the pressed items when switching the scene
@@ -79958,7 +80300,6 @@ function objinstance:_tick(click)
 
     local tx, ty = click[1], click[2]
     local lx, ly = tx - self.x, ty - self.y
-    local selected = click[1] >= self.x and click[2] >= self.y and click[1] < (self.x + self.sizeX) and click[2] < (self.y + self.sizeY)
     local clktype = click[3]
     local btntype = click[4]
     local nickname = click[5]
@@ -80163,12 +80504,24 @@ function objinstance:_draw(force, twoStep)
         if self.state then
             bg, fg = self.bg_press, self.fg_press
         end
+        if self.interactionCurrently then
+            bg, fg = self.bg_interaction or bg, self.fg_interaction or fg
+        end
+
+        local strokeColor = self.state and self.stroke_press or self.stroke_color
+        if self.interactionCurrently and self.stroke_interaction then
+            strokeColor = self.stroke_interaction
+        end
         self.display.fillRect(self.x, self.y, self.sizeX, self.sizeY, bg or self.sceneinstance.color or 0)
+        if strokeColor then
+            self.display.drawRect(self.x, self.y, self.sizeX, self.sizeY, strokeColor)
+        end
+        
         local graphic = sc.lib_require("graphic")
         if self.textBox then
             graphic.textBox(self.display, self.x + 1, self.y + 1, self.sizeX - 1, self.sizeY, self.text, fg, self.centerX, self.centerY, self.spacingY, self.autoNewline, self.tool)
         else
-            graphic.textBox(self.display, self.x, self.y, self.sizeX, self.sizeY, self.text, fg, true, true)
+            graphic.textBox(self.display, self.x, self.y, self.sizeX, self.sizeY, self.text, fg, true, true, nil, false)
         end
     elseif self.isText then
         self.display.drawText(self.x, self.y, self.text, self.fg)
@@ -80419,6 +80772,7 @@ local function initObject(self, obj, noCalcSize)
     obj.getLastNickname = objinstance.getLastNickname
     obj.update = objinstance.update
     obj.clear = objinstance.clear
+    obj._getBackColor = objinstance._getBackColor
     obj.setCustomStyle = objinstance.setCustomStyle
     obj.setInvisible = objinstance.setInvisible
     obj.setDisabled = objinstance.setDisabled
@@ -80722,6 +81076,11 @@ function sceneinstance:createButton(x, y, sizeX, sizeY, toggle, text, bg, fg, bg
         setFgColor = objinstance.setFgColor,
         setPbgColor = objinstance.setPbgColor,
         setPfgColor = objinstance.setPfgColor,
+        setIbgColor = objinstance.setIbgColor,
+        setIfgColor = objinstance.setIfgColor,
+        setStColor = objinstance.setStColor,
+        setIstColor = objinstance.setIstColor,
+        setPstColor = objinstance.setPstColor,
 
         old_toggle_state = false,
         state = false,
@@ -80768,6 +81127,10 @@ function sceneinstance:createLabel(x, y, sizeX, sizeY, text, bg, fg)
         setText = objinstance.setText,
         setBgColor = objinstance.setBgColor,
         setFgColor = objinstance.setFgColor,
+        setIbgColor = objinstance.setIbgColor,
+        setIfgColor = objinstance.setIfgColor,
+        setStColor = objinstance.setStColor,
+        setIstColor = objinstance.setIstColor,
 
         label = true
     }
@@ -80802,6 +81165,10 @@ function sceneinstance:createTextBox(x, y, sizeX, sizeY, text, bg, fg, centerX, 
         setText = objinstance.setText,
         setBgColor = objinstance.setBgColor,
         setFgColor = objinstance.setFgColor,
+        setIbgColor = objinstance.setIbgColor,
+        setIfgColor = objinstance.setIfgColor,
+        setStColor = objinstance.setStColor,
+        setIstColor = objinstance.setIstColor,
 
         textBox = true,
         disable = true
@@ -80823,6 +81190,7 @@ function sceneinstance:createText(x, y, text, fg)
 
         setText = objinstance.setText,
         setFgColor = objinstance.setFgColor,
+        setIfgColor = objinstance.setIfgColor,
 
         isText = true,
         disable = true
@@ -82823,19 +83191,101 @@ objs.tabbar = {
         createOtherspaceWindow = function(self)
             local parent = self:getParent()
             local sizeX, sizeY = parent:getContainerSize()
+            local window
             if self.verticle then
                 if self.sourceX == 0 then
-                    return parent:createWindow(self.sizeX, 0, sizeX - self.sizeX, sizeY)
+                    window = parent:createWindow(self.sizeX, 0, sizeX - self.sizeX, sizeY)
                 else
-                    return parent:createWindow(0, 0, sizeX, sizeY - self.sizeX)
+                    window = parent:createWindow(0, 0, sizeX, sizeY - self.sizeX)
                 end
             else
                 if self.sourceY == 0 then
-                    return parent:createWindow(0, self.sizeY, sizeX, sizeY - self.sizeY)
+                    window = parent:createWindow(0, self.sizeY, sizeX, sizeY - self.sizeY)
                 else
-                    return parent:createWindow(0, 0, sizeX, sizeY - self.sizeX)
+                    window = parent:createWindow(0, 0, sizeX, sizeY - self.sizeX)
                 end
             end
+            if parent.color and type(parent.color) ~= "function" then
+                window.color = parent.color
+            end
+            return window
+        end
+    }
+}
+
+objs.seekbar = {
+    handlerLocalPosition = true,
+    handlerOutsideDrag = true,
+    init = function(self, verticle, thickness, lineColor, circleColor, value, minValue, maxValue)
+        self.verticle = verticle
+        if self.verticle then
+            self.thickness = thickness or mathRound(self.sizeX / 5)
+        else
+            self.thickness = thickness or mathRound(self.sizeY / 5)
+        end
+        self.lineColor = lineColor or 0x686868
+        self.circleColor = circleColor or 0x00ff00
+        self.value = value or 0.5
+        self.minValue = minValue or 0
+        self.maxValue = maxValue or 1
+        self:_posFromValue()
+    end,
+    drawer = function(self)
+        if self.verticle then
+            self.display.fillRect(self.x + (self.sizeX / 2) - (self.thickness / 2), self.y, self.thickness, self.sizeY, self.lineColor)
+        else
+            self.display.fillRect(self.x, self.y + (self.sizeY / 2) - (self.thickness / 2), self.sizeX, self.thickness, self.lineColor)
+        end
+        local px, py = self.x, self.y
+        local radius
+        local side = self.verticle and self.sizeY or self.sizeX
+        if self.verticle then
+            radius = self.sizeX
+            px = px + mathRound(self.sizeX / 2)
+        else
+            radius = self.sizeY
+            py = py + mathRound(self.sizeY / 2)
+        end
+        local offset = constrain(self.pos, (radius / 2), side - (radius / 2))
+        if self.verticle then
+            py = py + offset
+        else
+            px = px + offset
+        end
+        radius = radius / 2
+        self.display.fillCircle(px, py, radius, self.circleColor)
+    end,
+    handler = function(self, x, y, clickType, button, nickname, inZone, elementCapture)
+        if clickType == "pressed" or clickType == "drag" then
+            if self.verticle then
+                self.pos = y
+            else
+                self.pos = x
+            end
+            self:_valueFromPos()
+            self:clear()
+            self:update()
+            if self.onValueChanged then
+                self:onValueChanged(self.value)
+            end
+        end
+    end,
+    methods = {
+        _posFromValue = function(self)
+            self.pos = mapClip(self.value, self.minValue, self.maxValue, 0, self.verticle and self.sizeY or self.sizeX)
+        end,
+        _valueFromPos = function(self)
+            self.value = mapClip(self.pos, 0, self.verticle and self.sizeY or self.sizeX, self.minValue, self.maxValue)
+        end,
+        setValue = function(self, value)
+            checkArg(1, value, "number")
+            self.value = value
+            self:_posFromValue()
+            self:clear()
+            self:update()
+        end,
+        getValue = function(self)
+            return self.value
         end
     }
 }
@@ -83199,6 +83649,33 @@ function styles:switch()
     else
         self.display.fillCircle(self.x + (self.sizeX - 1 - addX), py, sy, color2)
         self.display.fillCircle(self.x + addX, py, sy, color1)
+    end
+end
+
+function styles:rounded()
+    local bg, fg = self.bg, self.fg
+    if self.state then
+        bg, fg = self.bg_press, self.fg_press
+    end
+    if self.interactionCurrently then
+        bg, fg = self.bg_interaction or bg, self.fg_interaction or fg
+    end
+
+    local cornerRadius = self.cornerRadius or (math.min(self.sizeX, self.sizeY) * 0.3)
+    local strokeColor = self.state and self.stroke_press or self.stroke_color
+    if self.interactionCurrently and self.stroke_interaction then
+        strokeColor = self.stroke_interaction
+    end
+    self.display.fillEllipse(self.x, self.y, self.sizeX, self.sizeY, cornerRadius, bg or self.sceneinstance.color or 0)
+    if strokeColor then
+        self.display.drawEllipse(self.x, self.y, self.sizeX, self.sizeY, cornerRadius, strokeColor)
+    end
+
+    local graphic = sc.lib_require("graphic")
+    if self.textBox then
+        graphic.textBox(self.display, self.x + 1, self.y + 1, self.sizeX - 1, self.sizeY, self.text, fg, self.centerX, self.centerY, self.spacingY, self.autoNewline, self.tool)
+    else
+        graphic.textBox(self.display, self.x, self.y, self.sizeX, self.sizeY, self.text, fg, true, true)
     end
 end
 
@@ -84979,7 +85456,7 @@ local pcall, xpcall, unpack, error, pairs, type = pcall, xpcall, unpack, error, 
 function addServiceCode(self, code, env, serviceTable)
 	local computer = self
 	local yieldName = self.yieldName
-	local yieldArg = "null"
+	--local yieldArg = "null"
 
 	local yield
 	if sm.isServerMode() then
@@ -85022,7 +85499,7 @@ function addServiceCode(self, code, env, serviceTable)
 
 	if serviceTable then
 		serviceTable.yield = local_yield
-		serviceTable.yieldArg = yieldArg
+		--serviceTable.yieldArg = yieldArg
 	end
 
 	--------------------------------
@@ -85032,10 +85509,10 @@ function addServiceCode(self, code, env, serviceTable)
 		{ "if([ %(])(.-)([ %)])then([ \n])", "if%1%2%3then%4__internal_yield() " },
 		{ "elseif([ %(])(.-)([ %)])then([ \n])", "elseif%1%2%3then%4__internal_yield() " },
 		{ "([ \n])else([ \n])", "%1else%2__internal_yield() " },--]]
-		{"([%);\n ])do([ \n%(])", "%1do%2 " .. yieldName .. "('" .. yieldArg .. "') "},
-		{"([%);\n ])repeat([ \n%(])", "%1repeat%2 " .. yieldName .. "('" .. yieldArg .. "') "},
-		{"([%);\n ])goto([ \n%(])", " " .. yieldName .. "('" .. yieldArg .. "') %1goto%2"},
-		{"([%);\n ])until([ \n%(])", " " .. yieldName .. "('" .. yieldArg .. "') %until%2"},
+		{"([%);\n ])do([ \n%(])", "%1do%2 " .. yieldName .. "() "},
+		{"([%);\n ])repeat([ \n%(])", "%1repeat%2 " .. yieldName .. "() "},
+		{"([%);\n ])goto([ \n%(])", " " .. yieldName .. "() %1goto%2"},
+		{"([%);\n ])until([ \n%(])", " " .. yieldName .. "() %until%2"},
 		--{"([%);\n ])?)([ \n%(])", "%1?)%2__internal_yield() "} --пожалуй лишнее
 	}
 
@@ -85120,7 +85597,7 @@ function addServiceCode(self, code, env, serviceTable)
 	end
 	local code, err = process(table.concat(newCode))
 	if code then
-		return yieldName .. "('" .. yieldArg .. "') do " .. code .. " \n end " .. yieldName .. "('" .. yieldArg .. "') ", env
+		return yieldName .. "() do " .. code .. " \n end " .. yieldName .. "() ", env
 	else
 		return nil, err or "unknown error"
 	end
@@ -86206,11 +86683,15 @@ function splitByMaxSizeWithTool(tool, str, max)
     end
 
     local strs = {}
-    while tool.len(str) > 0 do
-        sc.yield()
+    while true do
+        local strlen = tool.len(str)
+        if strlen == 0 then
+            break
+        end
         
+        sc.yield()
         table.insert(strs, tool.sub(str, 1, max))
-        str = tool.sub(str, tool.len(strs[#strs]) + 1, #str)
+        str = tool.sub(str, tool.len(strs[#strs]) + 1, strlen)
     end
     return strs
 end
@@ -86267,6 +86748,12 @@ function strSplit(tool, str, seps, noYield)
     if type(seps) ~= "table" then
         seps = {seps}
     end
+    
+    local seplens = {}
+    for i, sep in ipairs(seps) do
+        --seps[i] = tostring(sep)
+        seplens[i] = tool.len(sep)
+    end
 
     local parts = {{}}
     local index = 1
@@ -86276,26 +86763,27 @@ function strSplit(tool, str, seps, noYield)
 			sc.yield()
 		end
 
-        for _ = 0, strlen * 2 do
+        while true do
             if not noYield then
                 sc.yield()
             end
 
-            local isBreak
+            local finded = false
             for i, sep in ipairs(seps) do
                 if not noYield then
-    				sc.yield()
+                    sc.yield()
                 end
-				
-                sep = tostring(sep)
-                if sep ~= "" and tool.sub(str, index, index + (tool.len(sep) - 1)) == sep then
+                
+                if sep ~= "" and tool.sub(str, index, index + (seplens[i] - 1)) == sep then
                     table.insert(parts, {})
-                    index = index + tool.len(sep)
-                    isBreak = true
+                    index = index + seplens[i]
+                    finded = true
                     break
                 end
             end
-            if not isBreak then break end
+            if not finded then
+                break
+            end
         end
 
         table.insert(parts[#parts], tool.sub(str, index, index))
@@ -97647,7 +98135,7 @@ end
 end
 function scmframework_8207867720b8e889f4d178d7ef3bcc21() --$CONTENT_DATA/Scripts/scmframeworkAPI.lua
 scmframework = {
-    version = "1.0",
+    version = "1.1",
     scomputers = scomputers,
     dofile = scmframework_dofile
 }
@@ -98591,29 +99079,36 @@ function ScriptableComputer:sv_init_yield()
     self.sv_startTickTime = os_clock()
 end
 
+local sv_yield_counter = 0
 function ScriptableComputer:sv_yield()
-    local maxcputime = self:cl_getMaxCpuTime()
-    if self.wait and maxcputime < ScriptableComputer.onStartCpuTime then
-        maxcputime = ScriptableComputer.onStartCpuTime
-    end
-    local execTime = os_clock() - self.sv_startTickTime
-    if execTime > maxcputime then
-        if self.longExecution >= 2 then
-            if self.sv_patience <= 0 then
-                self.crashstate.hasException = true
-                self.crashstate.exceptionMsg = ScriptableComputer.oftenLongOperationMsg
-                self.storageData.noSoftwareReboot = true
-                self:sv_formatException()
-                error(ScriptableComputer.oftenLongOperationMsg, 3)
-            else
-                self.sv_startTickTime = os_clock() --if an error occurs in the application program of the operating system, the OS should be able to handle the error
-                self.sv_patience = self.sv_patience - 1
-                error(ScriptableComputer.longOperationMsg, 3)
-            end
-        else
-            self.longExecution = self.longExecution + 1 --sometimes it is allowed to do "long execution" in order to have time to load the program resources
-            self.sv_startTickTime = os_clock()
+    if sv_yield_counter >= 256 then
+        sv_yield_counter = 0
+        
+        local maxcputime = self:cl_getMaxCpuTime()
+        if self.wait and maxcputime < ScriptableComputer.onStartCpuTime then
+            maxcputime = ScriptableComputer.onStartCpuTime
         end
+        local execTime = os_clock() - self.sv_startTickTime
+        if execTime > maxcputime then
+            if self.longExecution >= 2 then
+                if self.sv_patience <= 0 then
+                    self.crashstate.hasException = true
+                    self.crashstate.exceptionMsg = ScriptableComputer.oftenLongOperationMsg
+                    self.storageData.noSoftwareReboot = true
+                    self:sv_formatException()
+                    error(ScriptableComputer.oftenLongOperationMsg, 3)
+                else
+                    self.sv_startTickTime = os_clock() --if an error occurs in the application program of the operating system, the OS should be able to handle the error
+                    self.sv_patience = self.sv_patience - 1
+                    error(ScriptableComputer.longOperationMsg, 3)
+                end
+            else
+                self.longExecution = self.longExecution + 1 --sometimes it is allowed to do "long execution" in order to have time to load the program resources
+                self.sv_startTickTime = os_clock()
+            end
+        end
+    else
+        sv_yield_counter = sv_yield_counter + 1
     end
 end
 
@@ -102551,6 +103046,7 @@ terminal.connectionOutput = sm.interactable.connectionType.none
 terminal.colorNormal = sm.color.new(0x7F7F7Fff)
 terminal.colorHighlight = sm.color.new(0xFFFFFFff)
 terminal.componentType = "terminal" --absences can cause problems
+terminal.outputLimit = 1024 * 64
 
 function terminal:server_onCreate()
     self.syntax = false
@@ -102712,7 +103208,7 @@ function terminal:cl_log(log)
         end
         self.log = self.log .. text
     end
-    self.log = self.log:sub(math.max(1, #self.log - (1024 * 4)), #self.log)
+    self.log = self.log:sub(math.max(1, #self.log - terminal.outputLimit), #self.log)
     self.gui:setText("log", self.log)
 end
 

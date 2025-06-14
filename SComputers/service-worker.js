@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SComputers-app-v24';
+const CACHE_NAME = 'SComputers-app-v25';
 
 const urlsToCache = [
     'addons/brainf_ck_language.jpg',
@@ -13,6 +13,7 @@ const urlsToCache = [
     'addons/world_disks.jpg',
     'addons/mt_fast_logic.jpg',
     'icons/discord.png',
+    'icons/boosty.png',
     'icons/discord_raw.png',
     'icons/discord_server.pdn',
     'icons/discord_server.png',
@@ -22,6 +23,7 @@ const urlsToCache = [
     'icons/steam.png',
     'scmframework/build_scmframework.lua',
     'scmframework/scmframework.lua',
+    'canvasAPI/canvasAPI.zip',
     'service-worker.js',
     'style.css',
     'style2.css',
@@ -51,6 +53,7 @@ const urlsToCache = [
     'controllers.html',
     'disk.html',
     'display.html',
+    'canvasAPI.html',
     'enlua.html',
     'env.html',
     'favicon.ico',
