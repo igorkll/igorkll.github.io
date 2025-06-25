@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SComputers-app-v25';
+const CACHE_NAME = 'SComputers-app-v26';
 
 const urlsToCache = [
     'addons/brainf_ck_language.jpg',
@@ -12,6 +12,7 @@ const urlsToCache = [
     'addons/stretchable_display.jpg',
     'addons/world_disks.jpg',
     'addons/mt_fast_logic.jpg',
+    'addons/nes.jpg',
     'icons/discord.png',
     'icons/boosty.png',
     'icons/discord_raw.png',
