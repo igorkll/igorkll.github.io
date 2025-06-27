@@ -84,6 +84,17 @@ li {
     margin-right: 5px;
 }
 
+.icon {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 40px;
+    height: 40px;
+}
+
 .image-button img {
     width: 60px;
     height: auto;
@@ -113,6 +124,15 @@ li {
     font-size: 16px;
     margin: 20px 20px;
     border-radius: 10px;
+    position: relative;
+}
+
+.langs-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    display: flex;
 }
 
 .cool-block {
