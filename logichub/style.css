@@ -95,6 +95,17 @@ li {
     height: 40px;
 }
 
+.iconL {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 100px;
+    height: 100px;
+}
+
 .image-button img {
     width: 60px;
     height: auto;
@@ -128,6 +139,14 @@ li {
 }
 
 .langs-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 20px;
+    display: flex;
+}
+
+.icons-container {
     position: absolute;
     top: 0;
     left: 0;
