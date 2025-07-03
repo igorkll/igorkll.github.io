@@ -16,6 +16,22 @@ function googleTranslateElementInit() {
     }, 'google_translate_element');
 }
 
+function downloadRelease(repository) {
+    fetch(`https://api.github.com/repos/igorkll/${repository}/releases/latest`)
+        .then(response => response.json())
+        .then(data => {
+            const asset = data.assets[0];
+            if (asset) {
+                window.location.href = asset.browser_download_url;
+            } else {
+                alert('There are no files available for download.');
+            }
+        })
+        .catch(error => {
+            alert('Couldn\'t get information about the release.');
+        });
+}
+
 setTimeout(() => {
     setInterval(() => {
         var element = document.getElementById('google_translate_element');
