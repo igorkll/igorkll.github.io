@@ -1,35 +1,7 @@
-const CACHE_NAME = 'logichub-app-v7';
-
-const urlsToCache = [
-    'service-worker.js',
-    'style.css',
-    'favicon.ico',
-    'favicon.jpg',
-    'index.html',
-    'main.js',
-    'manifest.json',
-    'bananapen.png',
-    'images/SComputers.png',
-    'images/smserver.png',
-    'images/temporarily_unavailable.png',
-    'images/betterAPI.jpg',
-    'images/NES_Emulator.jpg',
-    'icons/discord.png',
-    'icons/discord_raw.png',
-    'icons/discord_server.pdn',
-    'icons/discord_server.png',
-    'icons/discord_server_raw.png',
-    'icons/github.png',
-    'icons/steam.png'
-];
+const CACHE_NAME = 'logichub-app-v8';
 
 self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(urlsToCache);
-            })
-    );
+    event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
@@ -53,7 +25,15 @@ self.addEventListener('fetch', (event) => {
                 if (response) {
                     return response;
                 }
-                return fetch(event.request);
+                return fetch(event.request).then((networkResponse) => {
+                    return caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, networkResponse.clone());
+                        return networkResponse;
+                    });
+                });
+            })
+            .catch(() => {
+                console.error('Error fetching:', event.request);
             })
     );
 });
