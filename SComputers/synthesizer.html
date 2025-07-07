@@ -123,6 +123,19 @@
             <li><span>wave_triangle</span></li>
         </ul>
 
+        <br/>
+        <p class="text">methods for unrestricted speaker from the power toys addon:</p>
+        <ul class="list">
+            <li><span>synthesizer.setSampleDistance(number) - sets the distance at which all samples will be heard. It can be set as math.huge so that the sound is broadcast to the heads of all players in the world (default: 25)</span></li>
+            <li><span>synthesizer.getSampleDistance():number</span></li>
+            <br/>
+            <li><span>synthesizer.setSpatialEnabled(boolean) - enables or disables spatial sound (default: true)</span></li>
+            <li><span>synthesizer.getSpatialEnabled():boolean</span></li>
+            <br/>
+            <li><span>synthesizer.setLocalSound(boolean) - sets the position of ordinary sounds (not samples) to the player's position, thus it is an analog of synthesizer.setSampleDistance(math.huge) for sounds that are not samples (default: false)</span></li>
+            <li><span>synthesizer.getLocalSound():boolean</span></li>
+        </ul>
+
         <pre>
             <code class="language-lua" style="width: fit-content;">--the sample api requires a betterAPI to work!
 --https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610

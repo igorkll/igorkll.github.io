@@ -119,12 +119,13 @@ function loadWindow() {
         <div class="gcse-search"></div>
         <div id="google_translate_element" style="margin-left: 15px !important; margin-right: 20px !important;"></div>
         <div style="margin-left: auto; display: flex;">
-            <div class="image-button" style="margin-right: 10px;" onclick="window.open('https://discord.com/users/804098593002618881', '_blank');"><img src="icons/discord.png"/></div>
-            <div class="image-button" style="margin-right: 10px;" onclick="window.open('https://discord.gg/uJrsmUjaMG', '_blank');"><img src="icons/discord_server.png"/></div>
-            <div class="image-button" style="margin-right: 10px;" onclick="window.open('https://steamcommunity.com/profiles/76561198977226540/', '_blank');"><img src="icons/steam.png"/></div>
-            <div class="image-button" style="margin-right: 10px;" onclick="window.open('https://github.com/igorkll', '_blank');"><img src="icons/github.png"/></div>
-            <div class="image-button" style="margin-right: 10px;" onclick="window.open('https://boosty.to/bananapen', '_blank');"><img src="icons/boosty.png"/></div>
-            <div class="image-button" style="margin-right: 10px;" onclick="window.open('https://igorkll.github.io/logichub', '_blank');"><img src="icons/logichub.png"/></div>
+            <div class="image-button" style="margin-right: 5px;" onclick="window.open('https://www.youtube.com/@ololololo-l5z', '_blank');"><img src="icons/youtube.png"/></div>
+            <div class="image-button" style="margin-right: 5px;" onclick="window.open('https://discord.com/users/804098593002618881', '_blank');"><img src="icons/discord.png"/></div>
+            <div class="image-button" style="margin-right: 5px;" onclick="window.open('https://discord.gg/uJrsmUjaMG', '_blank');"><img src="icons/discord_server.png"/></div>
+            <div class="image-button" style="margin-right: 5px;" onclick="window.open('https://steamcommunity.com/profiles/76561198977226540/', '_blank');"><img src="icons/steam.png"/></div>
+            <div class="image-button" style="margin-right: 5px;" onclick="window.open('https://github.com/igorkll', '_blank');"><img src="icons/github.png"/></div>
+            <div class="image-button" style="margin-right: 5px;" onclick="window.open('https://boosty.to/bananapen', '_blank');"><img src="icons/boosty.png"/></div>
+            <div class="image-button" style="margin-right: 5px;" onclick="window.open('https://igorkll.github.io/logichub', '_blank');"><img src="icons/logichub.png"/></div>
         </div>
     </div>
     `;

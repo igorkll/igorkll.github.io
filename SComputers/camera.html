@@ -22,7 +22,6 @@
             to connect the camera via the antenna, use <a href="cameraTunnel.html" class="hyper">cameraTunnel component</a>
         </p>
 
-        <p class="text">methods:</p>
         <ul class="list">
             <p class="text">advanced render settings (default / false):</p>
             <p class="text">
@@ -106,13 +105,16 @@
                 </pre>
             </p>
 
-            <br/>
+        <br/>
+        <p class="text">methods:</p>
+        <ul>
             <li><span>camera.fork(cloneSettings:boolean):camera - creates a clone of the camera with a separate counter and viewport for use from two locations. you can pass true to clone settings (fov, step, rotation, etc.)</span></li>
             <li><span>camera.drawAdvanced(display, settings:table|boolean|nil) - it gives the best picture for the camera at the moment. supports the sun, the change of day and night, shadows, lamp lighting, the color of the earth</span></li>
             <li><span>camera.drawColorWithDepth(display, noCollideColor, terrainColor, unitsColor) - a fairly simple display mode</span></li>
             <li><span>camera.drawColor(display, noCollideColor, terrainColor, unitsColor) - the fastest display mode. it gives a picture of not the best quality</span></li>
             <li><span>camera.drawDepth(display, baseColor, noCollideColor, unitsColor) - It doesn't give a very pretty picture</span></li>
             <li><span>camera.drawCustom(display, drawer, ...) - allows you to make your own display mode. it is suitable for creating various kinds of thermal imagers, etc. however, this mode is very laggy (especially in multiplayer)</span></li>
+            <li><span>camera.deepDrawCustom(display, drawer, maxIntersections, ...) - it works the same way as camera.drawCustom, but it sees through objects, giving out all intersections (unrestricted camera only)</span></li>
             <li><span>camera.setStep(number) - sets the number of pixels that the camera will render per tick (maximum 4096)</span></li>
             <li><span>camera.getStep():number - returns the number of pixels that the camera will render in tick</span></li>
             <li><span>camera.setDistance(number) - sets the drawing distance for the camera in meters (maximum 2048)</span></li>
@@ -125,7 +127,26 @@
             <li><span>camera.getNextPixel():number - returns the current value of the counter</span></li>
             <li><span>camera.setNextPixel(number) - sets the value of the pixel counter</span></li>
             <li><span>camera.resetCounter() - resets the camera pixel counter (starts rendering the screen first)</span></li>
-            <li><span>camera.rawRay(xAngle:number, yAngle:number, distance:number):table - ray shoots from the camera and gives out a table {color = smcolor, distance = distance, fraction = (distance / maxdist), uuid = uuid, type = character/shape/harvestable/lift/joint/terrain/asset/limiter, normalWorld=some of the information from raycast}. maxdist is the maximum distance for raycast in meters. please note that the angle can be set from -82.5 to 82.5 degrees, it is transmitted in radians. limiter is the wall of the world. please note that not all types of objects have the "uuid" field. please note that getting the uuid of a block only works if it is no further than 4 meters (16 blocks) from the camera(this is done to maintain a balance)</span></li>
+            <li><span>camera.rawRay(xAngle:number, yAngle:number, distance:number):table - ray shoots from the camera and gives out a table<br/>
+                <pre><code class="language-lua" style="width: fit-content;">{
+    color = smcolor,
+    distance = distance,
+    fraction = (distance / maxdist),
+    deepDistance = (deep methods only) works almost the same as "distance", but the values are the values of the entire ray, not just this intersection segment. exists only at the last intersection,
+    deepFraction = (deep methods only) works almost the same as "fraction", but the values are the values of the entire ray, not just this intersection segment. exists only at the last intersection,
+    uuid = uuid,
+    type = character/shape/harvestable/lift/joint/terrain/asset/limiter,
+    normalWorld = some of the information from raycast,
+    raydata = (unrestricted camera only and unsafe mode only or if connected to an unsafe computer from SComputers integrable) raw raycast result, allows you to get a raw handle of an object and do anything with it
+}</code></pre>
+            maxdist is the maximum distance for raycast in meters.<br/>
+            please note that the angle can be set from -82.5 to 82.5 degrees,<br/>
+            it is transmitted in radians.<br/>
+            limiter is the wall of the world.<br/>
+            please note that not all types of objects have the "uuid" field.<br/>
+            please note that getting the uuid of a block only works if it is no further than 4 meters (16 blocks) from the camera(this is done to maintain a balance) (this restriction does not apply to the unrestricted camera from power toys)<br/>
+            </span></li>
+            <li><span>camera.deepRawRay(x, y, maxdist, maxIntersections):intersections - it works the same way as camera.rawRay, but it sees through objects, giving out all intersections (unrestricted camera only)</span></li>
             <li><span>camera.setViewport(x, y, sizeX, sizeY) - you can specify the frame inside which the camera will display the image on the display. to reset you need call without arguments</span></li>
             <li><span>camera.getViewport():x, y, sizeX, sizeY - returns what was set using setViewport</span></li>
             <li><span>camera.resetDetectableObjects() - selects all the objects that the camera will see</span></li>
@@ -148,7 +169,68 @@
             <li><span>camera.drawOverlay(display, mainDrawFunction:function, args:table, overlayDrawer:function, overlayArgs:table) - combines any rendering mode with drawCustom</span></li>
 			<li><span>camera.setDownScale(downscale:number) - reduces the resolution of the camera rendering by the specified number of times (default: 1)</span></li>
 			<li><span>camera.getDownScale():number - returns the value set using setDownScale (default: 1)</span></li>
+            <li><span>camera.setUseMaskForRawRay(state) - determines whether the "camera.setDetectableObjects" setting will be used for the "camera.rawRay" and "camera.deepRawRay" methods (default: false)</span></li>
+            <li><span>camera.getUseMaskForRawRay():state</span></li>
+            <li><span>camera.setCustomWorldPosition(vec3|nil) - set a custom world position that will be used instead of the real one on the camera until you set it to nil (default: nil) (unrestricted camera only)</span></li>
+            <li><span>camera.setCustomWorldRotation(quat|nil) - set a custom world rotation that will be used instead of the real one on the camera until you set it to nil (default: nil) (unrestricted camera only)</span></li>
+            <li><span>camera.setCustomLocalPosition(vec3|nil) - sets the offset of the camera's peephole (takes into account camera rotation) (default: nil) (unrestricted camera only)</span></li>
+            <li><span>camera.setCustomLocalAfterPosition(vec3|nil) - sets the offset of the camera's peephole (ignores camera rotation) (default: nil) (unrestricted camera only)</span></li>
         </ul>
+
+        <br/>
+        <p class="text">unrestricted camera features (available in powertoys):</p>
+        <ul>
+            <li><span>there is no angle limit</span></li>
+            <li><span>there is no limit on the distance to receive the UUID of the block</span></li>
+            <li><span>direct access to raycast result (unsafe mode only or if connected to an unsafe computer from SComputers integrable)</span></li>
+            <li><span>the ability to use "xray" (deep) methods that check multiple intersections</span></li>
+            <li><span>using a fake position/rotation</span></li>
+        </ul>
+
+        <br/>
+        <p class="text">
+            xray camera
+            <pre>
+                <code class="language-lua" style="width: fit-content;">--this code only works on unrestricted camera from power toys
+
+local display = getComponent("display")
+display.reset()
+display.clear()
+display.setSkipAtNotSight(true) --in order for the picture not to be updated for those who do not look at the screen
+
+local camera = getComponents("camera")[1]
+local fov = math.rad(60)
+camera.setNonSquareFov(fov * (display.getWidth() / display.getHeight()), fov)
+camera.setStep(512)
+
+function callback_loop()
+    if _endtick then
+        display.clear()
+        display.forceFlush()
+        return
+    end
+
+    if display.getAudience() > 0 then
+        camera.deepDrawCustom(display, function (x, y, intersections)
+            local color = sm.color.new(0, 0, 0)
+            local shapeIntersectionsCount = 0
+            for i, intersection in ipairs(intersections) do
+                if intersection.type == "shape" then
+                    shapeIntersectionsCount = shapeIntersectionsCount + 1
+                end
+            end
+            for i, intersection in ipairs(intersections) do
+                if intersection.type == "shape" then
+                    color = color + (intersection.color * (i / shapeIntersectionsCount) * 0.2)
+                end
+            end
+            return color
+        end, 4)
+        display.flush()
+    end
+end</code>
+        </pre>
+        </p>
 
         <br/>
         <p class="text">
