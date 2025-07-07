@@ -19,6 +19,7 @@
             <h2 style="margin: 5px;">extended lua api for scrap mechanic</h2>
             <div id="google_translate_element" style="position: absolute;top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
             <div style="margin-left: auto; display: flex;">
+                <div class="image-button" onclick="window.open('https://www.youtube.com/@ololololo-l5z', '_blank');"><img src="icons/youtube.png"/></div>
                 <div class="image-button" onclick="window.open('https://discord.com/users/804098593002618881', '_blank');"><img src="icons/discord.png"/></div>
                 <div class="image-button" onclick="window.open('https://discord.gg/uJrsmUjaMG', '_blank');"><img src="icons/discord_server.png"/></div>
                 <div class="image-button" onclick="window.open('https://steamcommunity.com/profiles/76561198977226540/', '_blank');"><img src="icons/steam.png"/></div>
@@ -287,6 +288,7 @@ better.loadfile("$CONTENT_" .. selfuuid .. "/Scripts/test.lua", nil, _G)</code><
                         <ul>
                             <li>better.version - the number with the betterAPI version</li>
                             <li>better.isAvailable():boolean - returns true if your mod has the right to use betterAPI</li>
+                            <li>better.isAvailable(api:string):boolean - checks if your mod has access to a specific part of the betterAPI</li>
                             <li>better.registration(uuid, steamid, foldername):uuid, steamid, foldername - registers your mod in the better api for paths to work</li>
                             <li>better.registration(foldername:string|nil):uuid, steamid, foldername - this method registers the mod automatically (reads the parameters itself) you only need to specify the name of the folder with your mod. also, the parameters that this function reads, it returns in the form of strings. if the name of your mod and its directory match, then you can omit the foldername parameter</li>
                             <li>better.registrationBlueprint(uuid, steamid) - registers your blueprint in betterAPI so that you can read files from it using filesystem</li>
@@ -449,6 +451,27 @@ better.loadfile("$CONTENT_" .. selfuuid .. "/Scripts/test.lua", nil, _G)</code><
                             <li>better.algorithm.sha256_file_binary(path:string):string - return the file's checksum. to use it, you need to have access to the "filesystem" API</li>
                         </ul>
                     </div>
+
+                    <h2>array api</h2>
+                    <div class="cool-text">
+                        creates an array of the specified length with the specified data type
+                        <br/>
+                        it does not contain additional checks, so be careful when using
+                        <ul>
+                            <li>better.array.create_uint8(length):array</li>
+                            <li>better.array.create_uint16(length):array</li>
+                            <li>better.array.create_uint32(length):array</li>
+                            <li>better.array.create_uint64(length):array</li>
+                            <br/>
+                            <li>better.array.create_int8(length):array</li>
+                            <li>better.array.create_int16(length):array</li>
+                            <li>better.array.create_int32(length):array</li>
+                            <li>better.array.create_int64(length):array</li>
+                            <br/>
+                            <li>better.array.create_double(length):array</li>
+                            <li>better.array.create_float(length):array</li>
+                        </ul>
+                    </div>
                 </center>
             </div>
 
@@ -457,6 +480,7 @@ better.loadfile("$CONTENT_" .. selfuuid .. "/Scripts/test.lua", nil, _G)</code><
                     <h1>internal api (available only for betterAPI extensions)</h1>
                     <div class="cool-text">
                         <ul>
+                            <li>bext.checkArg(argnum, arg, ...) - checks the correctness of the arguments</li>
                             <li>bext.loadDLL(path) - injects a DLL into the game process</li>
                             <li>bext.modCheck(...) - this method should be called at the beginning of each function that the extension exports to betterAPI and makes available to mods. as arguments, pass all the additional API permissions that the mod must have in order to use this feature. for example: bext.modCheck("audio", "http"). if you place this at the beginning of your function, the mod will need to have access to both audio and http in order to invoke your function</li>
                             <li>bext.modCheckEx(mods:table, ...) - this function is similar to bext.modCheck. except that it accepts a table with additional mods that should have access to your function. the structure of the table is identical to the one presented in the "modsWhitelist.json" file in betterAPI. please note that the mods table can only contain tables, each of which is a list of description requirements.json in a defiant mod. the mod must satisfy at least one of these tables, all keys in these tables will be compared with the same ones in the description.json and if at least one does not match, then it is assumed that the description.json does not meet the requirements of this table and the check proceeds to the next one. exceptions the "apis" key is an array with a list of APIs available for this mod. if there is no api key, then all "apis" are available to the mod.. note that since the check is implemented in this way, it means that if there is an empty table in the mods table, the function will become available to all mods, as any description.json is able to meet completely missing requirements</li>
