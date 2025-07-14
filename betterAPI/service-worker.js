@@ -1,32 +1,7 @@
-const CACHE_NAME = 'betterAPI-app-v2';
-
-const urlsToCache = [
-    'service-worker.js',
-    'style.css',
-    'favicon.ico',
-    'favicon.jpg',
-    'index.html',
-    'main.js',
-    'highlight.css',
-    'highlight.js',
-    'manifest.json',
-    'images/betterAPI.jpg',
-    'icons/discord.png',
-    'icons/discord_raw.png',
-    'icons/discord_server.pdn',
-    'icons/discord_server.png',
-    'icons/discord_server_raw.png',
-    'icons/github.png',
-    'icons/steam.png'
-];
+const CACHE_NAME = 'betterAPI-app-v3';
 
 self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(urlsToCache);
-            })
-    );
+    event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
@@ -50,7 +25,15 @@ self.addEventListener('fetch', (event) => {
                 if (response) {
                     return response;
                 }
-                return fetch(event.request);
+                return fetch(event.request).then((networkResponse) => {
+                    return caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, networkResponse.clone());
+                        return networkResponse;
+                    });
+                });
+            })
+            .catch(() => {
+                console.error('Error fetching:', event.request);
             })
     );
 });

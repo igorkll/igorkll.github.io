@@ -66,7 +66,7 @@
                         vulnerability is considered to be any opportunity to execute arbitrary code, as well as to use the filesystem outside the "BetterFS" directory and game mods.</br>
                         my plans are to implement a framework for creating screens and integrate with the browser and "Visual Studio Code".</br>
                         betterAPI is also able to speed up the execution of lua code in the game, as it uses a newer version of luajit.</br>
-                        betterAPI itself was written using languages such as: lua, C++, C# and python</br>
+                        betterAPI itself was written using languages such as: lua, C++, C, C# and python</br>
                     </div>
                 </center>
             </div>
@@ -139,6 +139,10 @@
                         please note that all extensions only work when entering the world and are unloaded when exiting it!</br>
                         the folder with your extension is automatically added to package.path and package.cpath so that you can upload your lua and dll files using require.</br>
                         make sure that the name of your files is unique to avoid conflicts with other extensions!</br>
+                        if you want to extend the functionality of threads, then you should use the "threadExtension.lua" file in the directory with your extension.</br>
+                        other files of your extension will not be automatically loaded in the thread.</br>
+                        please note that not all functions of the "bext" api are available to you in threads.</br>
+                        to debug betterAPI thread extensions, use "print" and read the "Scrap Mechanic/Release/BetterTemp/threadLog.log" file.</br>
                     </div>
                 </center>
             </div>
@@ -250,6 +254,7 @@ better.loadfile("$CONTENT_" .. selfuuid .. "/Scripts/test.lua", nil, _G)</code><
                     <div class="cool-text">
                         <ul>
                             <li>_G - link to your environment</li>
+                            <li>print - the logs from the thread goes only to "Scrap Mechanic/Release/BetterTemp/threadLog.log" and this file exists for one game session</li>
                             <li>type</li>
                             <li>assert</li>
                             <li>error</li>
@@ -332,6 +337,7 @@ better.loadfile("$CONTENT_" .. selfuuid .. "/Scripts/test.lua", nil, _G)</code><
                             <li>better.filesystem.rename(fromPath, toPath):boolean - renames a folder or file</li>
                             <li>better.filesystem.remove(path):boolean - deletes a folder or file</li>
                             <li>better.filesystem.copy(fromPath, toPath):boolean - copy a folder or file</li>
+                            <li>better.filesystem.size(path):number - returns the file size in bytes. measures only the size of files (not directories)</li>
                         </ul>
                     </div>
 
@@ -475,18 +481,41 @@ better.loadfile("$CONTENT_" .. selfuuid .. "/Scripts/test.lua", nil, _G)</code><
                 </center>
             </div>
 
+            <!--
+            <div class="cool-frame" style="width: 70%; max-width: 1200px;">
+                <center>
+                    <h1>extensions</h1>
+
+                    <h2>BetterNetwork</h2>
+                    <div class="cool-text">
+                        <ul>
+                            <li>better.network.newConnection(url:string, port:number|nil (default: 80)):connection - creates a new connection</li>
+                            <li>better.network.closeConnection(connection) - closes the connection</li>
+                            <br/>
+                            <li>better.network.newRequest(connection, requestType:string ("GET", "POST", etc), requestPath:string|nil (default: "/")):request - creates a new request</li>
+                            <li>better.network.sendRequest(request, headers:string|nil, args:string|table|nil):boolean - sends a request</li>
+                            <li>better.network.getResult(request):string|nil, errstring - returns the result of the request</li>
+                            <li>better.network.closeRequest(request) - closes the request</li>
+                            <br/>
+                        </ul>
+                    </div>
+                </center>
+            </div>
+            -->
+
             <div class="cool-frame" style="width: 70%; max-width: 1200px;">
                 <center>
                     <h1>internal api (available only for betterAPI extensions)</h1>
                     <div class="cool-text">
                         <ul>
-                            <li>bext.checkArg(argnum, arg, ...) - checks the correctness of the arguments</li>
-                            <li>bext.loadDLL(path) - injects a DLL into the game process</li>
-                            <li>bext.modCheck(...) - this method should be called at the beginning of each function that the extension exports to betterAPI and makes available to mods. as arguments, pass all the additional API permissions that the mod must have in order to use this feature. for example: bext.modCheck("audio", "http"). if you place this at the beginning of your function, the mod will need to have access to both audio and http in order to invoke your function</li>
-                            <li>bext.modCheckEx(mods:table, ...) - this function is similar to bext.modCheck. except that it accepts a table with additional mods that should have access to your function. the structure of the table is identical to the one presented in the "modsWhitelist.json" file in betterAPI. please note that the mods table can only contain tables, each of which is a list of description requirements.json in a defiant mod. the mod must satisfy at least one of these tables, all keys in these tables will be compared with the same ones in the description.json and if at least one does not match, then it is assumed that the description.json does not meet the requirements of this table and the check proceeds to the next one. exceptions the "apis" key is an array with a list of APIs available for this mod. if there is no api key, then all "apis" are available to the mod.. note that since the check is implemented in this way, it means that if there is an empty table in the mods table, the function will become available to all mods, as any description.json is able to meet completely missing requirements</li>
-                            <li>bext.modCheckCEx(mods:table, ...) - the name is short for "custom extended" and works the same way as bext.modCheckEx, but your feature will only be available to mods from your list, and will not be available to mods from the standard list</li>
-                            <li>bext.registerHandler_exit(function) - registers a callback function for an exit event from the world</li>
+                            <li>bext.checkArg(argnum, arg, ...) - checks the correctness of the arguments (available from threads)</li>
+                            <li>bext.loadDLL(path) - injects a DLL into the game process (available from threads)</li>
+                            <li>bext.modCheck(...) - this method should be called at the beginning of each function that the extension exports to betterAPI and makes available to mods. as arguments, pass all the additional API permissions that the mod must have in order to use this feature. for example: bext.modCheck("audio", "http"). if you place this at the beginning of your function, the mod will need to have access to both audio and http in order to invoke your function (available from threads)</li>
+                            <li>bext.modCheckEx(mods:table, ...) - this function is similar to bext.modCheck. except that it accepts a table with additional mods that should have access to your function. the structure of the table is identical to the one presented in the "modsWhitelist.json" file in betterAPI. please note that the mods table can only contain tables, each of which is a list of description requirements.json in a defiant mod. the mod must satisfy at least one of these tables, all keys in these tables will be compared with the same ones in the description.json and if at least one does not match, then it is assumed that the description.json does not meet the requirements of this table and the check proceeds to the next one. exceptions the "apis" key is an array with a list of APIs available for this mod. if there is no api key, then all "apis" are available to the mod.. note that since the check is implemented in this way, it means that if there is an empty table in the mods table, the function will become available to all mods, as any description.json is able to meet completely missing requirements (available from threads)</li>
+                            <li>bext.modCheckCEx(mods:table, ...) - the name is short for "custom extended" and works the same way as bext.modCheckEx, but your feature will only be available to mods from your list, and will not be available to mods from the standard list (available from threads)</li>
+                            <li>bext.registerHandler_exit(function) - registers a callback function for an exit event from the world (available from threads) (from the thread is called at the end of the stream)</li>
                             <li>bext.registerHandler_tick(function) - registers the callback function for betterAPI tick events</li>
+                            <li>bext.isThread - this value is set to true if your extension is loaded from the stream. note that in order for the extension to work in a thread, you must create a "threadExtension.lua" file as an entry point</li>
                         </ul>
                     </div>
                 </center>
