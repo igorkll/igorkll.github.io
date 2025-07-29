@@ -1,4 +1,4 @@
-const CACHE_NAME = 'logichub-app-v8';
+const CACHE_NAME = 'logichub-app-v9';
 
 self.addEventListener('install', (event) => {
     event.waitUntil(self.skipWaiting());
