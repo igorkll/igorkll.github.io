@@ -1,0 +1,60 @@
+.titlebar {
+    position: relative;
+    width: 100%;
+    height: var(--titlebar-height);
+
+    background-color: rgba(113, 196, 164, 0.453);
+    backdrop-filter: blur(16px);
+}
+
+.titlebar-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+    padding: var(--title-padding);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    pointer-events: none;
+}
+
+.titlebar-start {
+    justify-content: start;
+}
+
+.titlebar-center {
+    justify-content: center;
+}
+
+.titlebar-end {
+    justify-content: end;
+}
+
+.barimage {
+    margin: var(--title-padding);
+    aspect-ratio: 1 / 1;
+    align-self: stretch;
+}
+
+.recover-events {
+    pointer-events: auto;
+}
+
+.barimage img {
+    height: 100%;
+    object-fit: fill;
+}
+
+.bartext {
+    margin: var(--title-padding);
+
+    font-size: 50px;
+    text-align: center;
+    white-space: nowrap;
+
+    color: white;
+}

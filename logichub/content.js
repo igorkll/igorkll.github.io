@@ -1,0 +1,230 @@
+{
+let cards = document.getElementById('cards');
+
+function addCard(title, description, logo, previews, buttons, langs, anchor) {
+    let cardBody = document.createElement('div');
+    cardBody.id = anchor;
+    cardBody.classList.add('content-part');
+    cardBody.classList.add('box-shadow');
+    cards.appendChild(cardBody);
+
+    if (title) {
+        let cardTitle = document.createElement('div');
+        cardTitle.classList.add('content-title');
+        cardTitle.classList.add('text-shadow');
+        cardTitle.innerHTML = title
+        cardBody.appendChild(cardTitle);
+    }
+
+    if (previews) {
+        let previewScroll = document.createElement('div');
+        previewScroll.classList.add('content-preview-scroll');
+        cardBody.appendChild(previewScroll);
+
+        for (let preview of previews) {
+            let cardPreview = document.createElement('img');
+            cardPreview.classList.add('content-preview');
+            cardPreview.classList.add('box-shadow');
+            cardPreview.src = preview;
+            previewScroll.appendChild(cardPreview);
+        }
+    }
+    
+    if (description) {
+        let cardDescription = document.createElement('div');
+        cardDescription.classList.add('content-description');
+        cardDescription.classList.add('text-shadow');
+        cardDescription.classList.add('box-shadow');
+        cardDescription.innerHTML = description.replace(/\n/g, '<br>');
+        cardBody.appendChild(cardDescription);
+    }
+
+    if (buttons) {
+        let cardButtons = document.createElement('div');
+        cardButtons.classList.add('content-horisontal');
+        cardBody.appendChild(cardButtons);
+
+        for (let buttoninfo of buttons) {
+            let cardButton = document.createElement('div');
+            cardButton.classList.add('button');
+            cardButton.classList.add('box-shadow');
+            cardButton.innerHTML = buttoninfo[0];
+            cardButtons.appendChild(cardButton);
+
+            cardButton.addEventListener('click', () => {
+                let actiontype;
+                if (buttoninfo.length >= 3) actiontype = buttoninfo[2];
+
+                if (actiontype === 'dlgithub') {
+                    downloadRelease(buttoninfo[1]);
+                } else {
+                    window.open(buttoninfo[1], '_blank');
+                }
+            });
+        }
+    }
+
+    let cardTitlebar = document.createElement('div');
+    cardTitlebar.classList.add('content-titlebar');
+    cardBody.appendChild(cardTitlebar);
+
+    if (logo) {
+        let cardLogo = document.createElement('img');
+        cardLogo.classList.add('content-logo');
+        cardLogo.src = logo;
+        cardTitlebar.appendChild(cardLogo);
+    }
+
+    if (langs) {
+        let cardLangs = document.createElement('div');
+        cardLangs.classList.add('content-langs');
+        cardTitlebar.appendChild(cardLangs);
+
+        for (let lang of langs) {
+            let cardLogo = document.createElement('img');
+            cardLogo.classList.add('content-logo');
+            cardLogo.src = 'langs/' + lang + '.png';
+            cardLangs.appendChild(cardLogo);
+        }
+    }
+}
+
+addCard('Logic', 
+`Hello! I am logic and BananaPen.
+I love playing ScrapMechanic and programming.
+This page is something like a collection of my projects that are ready for publication.
+You will also find my contacts here so that you can contact me.`,
+null, null, 
+null, ['c', 'cs', 'js', 'lua', 'python']);
+
+addCard('WinBox Maker', 
+`a tool for creating minimal embed versions of windows
+takes on the task of modifying the windows image to remove excess and embed software there
+the program is perfect for windows builds designed for ATM terminals and other devices that unauthorized people have access to and should not be allowed to leave the specified sandbox
+the program needs to be run with administrator rights because it mounts images
+the program is primarily aimed at creating Windows images for operation in kiosk mode, that is, the user will have access to only one of your programs that you add to the image and nothing more
+however, the program can be used in other usage scenarios (for example, creating a TV set-top box or a Windows-based slot machine)
+please note that the program requires the "dism" utility. usually it is built into Windows
+the program is recommended to be used with the original English image of "Windows 10 Enterprise"
+please note that winbox maker does not provide Windows images, it only provides a tool for reassembling Windows for use in kiosk mode`,
+'logos/winbox.png', [
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview.png',
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview2.png',
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview3.png',
+], 
+[
+    ['Project page', 'https://github.com/igorkll/WinBox-Maker'],
+    ['Download', 'WinBox-Maker', 'dlgithub']
+], ['cs'], 'winbox');
+
+addCard('SComputers', 
+`SComputers is the best mod adding computers to Scrap Mechanic at the moment!
+this mod originates from the ScriptableComputer mod, which is no longer supported by the developer
+in fact, SComputers is an improved version of ScriptableComputer that has retained full compatibility with the original
+the author of the original ScriptableComputer(TheFattestCat) doesn't mind that I'm doing a fork. and i got permission to create a fork`,
+'logos/SComputers.png', ['images/SComputers.png'], 
+[
+    ['Project Page', 'https://igorkll.github.io/SComputers/'],
+    ['Documentation', 'https://igorkll.github.io/SComputers/api.html'],
+    ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2949350596']
+], ['lua']);
+
+addCard('betterAPI', 
+`this API adds additional methods to the game.
+however, it does not provide full access to the lua API.
+this mod expands the capabilities of the game API by adding additional features for use by other mods.
+betterAPI has a built-in package manager with extensions. to open it, write to the chat /better
+
+manual installation:
+1. close scrap mechanic
+2. subscribe to the mod
+3. open folder: Steam\\steamapps\\workshop\\content\\387990\\3177944610\\content
+4. copy all files
+5. open folder: Steam\\steamapps\\common\\Scrap Mechanic\\Release
+6. insert all the files with the replacement`,
+'logos/betterAPI.png', ['images/betterAPI.jpg'], 
+[
+    ['Project Page', 'https://igorkll.github.io/betterAPI/'],
+    ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610']
+], ['lua', 'python', 'cpp', 'cs', 'c'], 'betterAPI');
+
+addCard('NES Emulator', 
+`this mod allows you to emulate your favorite games from the NES platform right inside Scrap Mechanic!
+this is a real emulator running inside the game, you can even connect a second controller and play with your friends!
+just connect the console to the display and the joysticks to the console. insert the cartridge and play the NES right inside Scrap Mechanic!
+the list of games will be updated, as well as in the future there will be support for add-ons for additional cartridges
+audio emulation is not supported at the moment, but it will be supported in the future.
+unfortunately, due to the restricted API of the game, when pressing several buttons in the joystick GUI, bugs sometimes occur and other buttons are released. if you install betterAPI, the button processing works fine, otherwise it is better to connect the controller with the seat.
+you can connect the joystick to the seat to control the game from it. to import other control buttons, use the "Control Import" unit and connect it to the joystick.
+
+controls:
+wasd - crosshair
+enter - start
+i - select
+o - B
+p - A
+
+unfortunately, the mod causes the STRONGEST LAGS!!! without betterAPI, the game runs at about 4-7 FPS and the console is slow. with betterAPI starting from version 40 (I added multithreading), the game outputs 70-120 FPS and the console runs at normal speed
+i wish the developers of ScrapMechanic health and patience, and FINALLY MAKE A MULTITHREADED API FOR LUA!!
+the emulator always works on the server side so that the game is synchronous for all players, so it is better that the host has a powerful processor. for the mod to work well, you need a single stream (high frequency)`,
+null, ['images/NES_Emulator.jpg'], 
+[
+    ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3353025650']
+], ['lua']);
+
+addCard('Scrap Mechanic Server', 
+`This is a survival server with mods
+Here you can play with other people
+You can build houses, create your own settlement, farm, or become a programmer and write code for SComputers!
+The server has protection against crashes and dupes`,
+'logos/smserver.png', ['images/smserver.png'], 
+[
+    ['Project page', 'https://igorkll.github.io/smserver/'],
+    ['Steam page', 'https://steamcommunity.com/profiles/76561199809172866/']
+], ['lua', 'cs', 'python']);
+
+addCard('Robotization', 
+`this mod allows you to create autopiloted cars/aircraft.
+this mod can be guided in different ways and on different objects: tags, players, units, creations, etc.
+it can be guided to a specific position specified by numerical logic.
+a block with a specific uuid (guidance on the uuid has not yet been done).
+
+this mod is designed to work in conjunction with "The modpack" or another mod that allows you to work with numbers.
+crafting recipes will be added soon.
+if a bug is found, I strongly ask you to write in the comments (and it will be fixed soon).
+
+returns to the past at the time of 0.3.5))`,
+null, ['images/robotization.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2936300656']
+], ['lua']);
+
+addCard('Pocket Universe', 
+`this mod allows you to create a separate small world in one block!
+they can be used to make a magic circuit in one block!
+please note that it is highly discouraged to use bearings inside the pocket universe, and IN ANY CASE, it is impossible to use loose parts!`,
+null, ['images/pocket_universe.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3088831605']
+], ['lua']);
+
+addCard('Wired & Wireless Cameras', 
+`Adds cameras to the game with the ability to set a password and connect to them via a monitor.
+you can even control the creation through the camera!
+there are no visual distortions when the camera is moving.
+the cameras can be connected directly or wirelessly.`,
+null, ['images/wired_wireless_cameras.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3034272798']
+], ['lua']);
+
+addCard('esp32 opencomputers', 
+`<h1 style="font-size: 32px; font-weight: bold; margin: 11px 0;">ESP32 - opencomputers emulator</h1><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">emulates opencomputers on esp32</li><li style="margin: 8px 0;">the original opencomputers font</li><li style="margin: 8px 0;">sound is supported</li><li style="margin: 8px 0;">support screen backlight control via screen.turnOff / screen.turnOn</li><li style="margin: 8px 0;">screen.getAspectRatio returns the actual aspect ratio of the display</li><li style="margin: 8px 0;">all work with esp-idf is done in the "hal.h" and "hal.c" files so that the code can be easily adapted to different platforms and peripherals</li><li style="margin: 8px 0;">supports unicode</li><li style="margin: 8px 0;">to simulate the right mouse button, use a long press at one point of the screen</li><li style="margin: 8px 0;">computer case LEDs are supported</li><li style="margin: 8px 0;">a large number of settings in config.h</li><li style="margin: 8px 0;">hardware on/off/reboot buttons are supported</li><li style="margin: 8px 0;">self-locking power is supported</li><li style="margin: 8px 0;">the UUIDs of all components are randomly generated when the device is turned on for the first time</li><li style="margin: 8px 0;">screen precise mode is supported</li><li style="margin: 8px 0;">an SD card is supported (it is defined as a floppy disk)</li><li style="margin: 8px 0;">disk_drive.eject() unmounts the sd card. after that, it can be extracted without the risk of damaging the filesystem</li><li style="margin: 8px 0;">you can assign a separate LED to the memory card, which will blink when it is accessed</li></ul>`,
+null, [
+    'images/temporarily_unavailable.png',
+], 
+[
+    ['Project page', 'https://github.com/igorkll/esp32_opencomputers'],
+    ['Download', 'esp32_opencomputers', 'dlgithub']
+], ['c', 'lua']);
+}

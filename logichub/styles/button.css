@@ -1,0 +1,21 @@
+.button {
+    background-color: rgba(0, 191, 249, 0.552);
+    
+    font-size: 30px;
+    text-align: center;
+    color: white;
+
+    border-radius: 30px;
+
+    margin: var(--content-padding);
+    padding: var(--content-padding);
+
+    transition: background-color 250ms ease, transform 150ms ease;
+}
+
+.button:hover {
+    background-color: rgba(103, 215, 250, 0.825);
+    box-shadow: 0px 0px 30px 10px rgba(103, 215, 250, 0.825);
+    transform: translateY(-2px) scale(1.01);
+    cursor: pointer;
+}
