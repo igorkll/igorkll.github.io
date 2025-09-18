@@ -11,6 +11,7 @@ const states = {
 };
 
 let categoriesList = [];
+let anchors = {};
 let seletedCategory;
 
 function selectCategory(categoryName) {
@@ -76,6 +77,10 @@ function addCard(title, description, logo, previews, buttons, langs, anchor, sta
         categoryRoot.appendChild(cardBody);
     } else {
         cards.appendChild(cardBody);
+    }
+
+    if (anchor != null && category != null) {
+        anchors[anchor] = category;
     }
 
     if (title) {
@@ -250,6 +255,8 @@ You will also find my contacts here so that you can contact me.`,
 null, null, 
 null, ['c', 'cs', 'js', 'lua', 'python']);
 cards.insertBefore(logicCard, cards.firstChild)
+
+// ---------------------------------------------------------------
 
 addCard('LGC Boombox', 
 `WORK IN PROCESS! wait for the release
@@ -487,4 +494,16 @@ null, [
 [
     ['Project page', 'https://github.com/igorkll/liked']
 ], ['lua'], null, states.REJECTED, 'Other');
+
+// ---------------------------------------------------------------
+
+let anchor = location.hash.substring(1);
+
+if (anchor) {
+    let category = anchors[anchor];
+    if (category != null) {
+        selectCategory(category);
+    }
+}
+
 }
