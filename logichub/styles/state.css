@@ -1,0 +1,15 @@
+.state {
+    background-color: rgba(88, 86, 86, 0.4);
+    
+    font-size: 25px;
+    text-shadow: 0px 0px 10px rgb(0, 0, 0);
+    text-align: center;
+    color: white;
+
+    border-radius: 15px;
+
+    margin: var(--content-padding);
+    padding: var(--content-padding);
+
+    transition: background-color 250ms ease, transform 150ms ease;
+}

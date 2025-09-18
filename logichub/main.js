@@ -21,6 +21,29 @@ function downloadRelease(repository) {
         });
 }
 
+function placeSvg(url, container, color) {
+    fetch(url).then(response => response.text()).then(svgText => {
+        container.innerHTML = svgText;
+
+        const svg = container.querySelector('svg');
+        if (svg) {
+            svg.removeAttribute('width');
+            svg.removeAttribute('height');
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+            svg.style.display = 'block';
+            svg.style.fill = color;
+            svg.style.filter = 'drop-shadow(0px 0px 5px rgb(0, 0, 0))';
+        }
+    })
+    .catch(err => console.error('SVG error:', err));
+}
+
+function getExtension(path) {
+    const parts = path.split(".");
+    return parts[parts.length - 1];
+}
+
 setTimeout(() => {
     setInterval(() => {
         let element = document.getElementById('google_translate_element');

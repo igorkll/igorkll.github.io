@@ -1,7 +1,15 @@
 {
 let cards = document.getElementById('cards');
 
-function addCard(title, description, logo, previews, buttons, langs, anchor) {
+const states = {
+    WIP: 0,
+    SUSPENDED: 1,
+    SUPPORTED: 2,
+    COMPLETED: 3,
+    REJECTED: 4,
+};
+
+function addCard(title, description, logo, previews, buttons, langs, anchor, state) {
     let cardBody = document.createElement('div');
     cardBody.id = anchor;
     cardBody.classList.add('content-part');
@@ -17,16 +25,33 @@ function addCard(title, description, logo, previews, buttons, langs, anchor) {
     }
 
     if (previews) {
-        let previewScroll = document.createElement('div');
-        previewScroll.classList.add('content-preview-scroll');
-        cardBody.appendChild(previewScroll);
-
-        for (let preview of previews) {
+        if (previews.length == 1) {
             let cardPreview = document.createElement('img');
             cardPreview.classList.add('content-preview');
             cardPreview.classList.add('box-shadow');
-            cardPreview.src = preview;
-            previewScroll.appendChild(cardPreview);
+            cardPreview.src = previews[0];
+            cardBody.appendChild(cardPreview);
+        } else {
+            let previewScroll = document.createElement('div');
+            previewScroll.classList.add('content-preview-scroll');
+            cardBody.appendChild(previewScroll);
+
+            for (let preview of previews) {
+                if (getExtension(preview) == 'mp4') {
+                    let cardPreview = document.createElement('video');
+                    cardPreview.classList.add('content-preview');
+                    cardPreview.classList.add('box-shadow');
+                    cardPreview.src = preview;
+                    cardPreview.controls = true;
+                    previewScroll.appendChild(cardPreview);
+                } else {
+                    let cardPreview = document.createElement('img');
+                    cardPreview.classList.add('content-preview');
+                    cardPreview.classList.add('box-shadow');
+                    cardPreview.src = preview;
+                    previewScroll.appendChild(cardPreview);
+                }
+            }
         }
     }
     
@@ -39,10 +64,15 @@ function addCard(title, description, logo, previews, buttons, langs, anchor) {
         cardBody.appendChild(cardDescription);
     }
 
+    let cardCombiner = document.createElement('div');
+    cardCombiner.classList.add('content-combiner');
+    cardBody.appendChild(cardCombiner);
+
     if (buttons) {
         let cardButtons = document.createElement('div');
         cardButtons.classList.add('content-horisontal');
-        cardBody.appendChild(cardButtons);
+        cardButtons.classList.add('combiner-overlay');
+        cardCombiner.appendChild(cardButtons);
 
         for (let buttoninfo of buttons) {
             let cardButton = document.createElement('div');
@@ -62,6 +92,65 @@ function addCard(title, description, logo, previews, buttons, langs, anchor) {
                 }
             });
         }
+    }
+
+    let cardStart = document.createElement('div');
+    cardStart.classList.add('content-horisontal-start');
+    cardCombiner.appendChild(cardStart);
+
+    let stateText;
+    let stateColor;
+    let stateIcon;
+    switch (state) {
+        case states.WIP:
+            stateText = "Work in process";
+            stateColor = '#f9c701ff';
+            stateIcon = 'svg/wip.svg';
+            break;
+
+        case states.SUSPENDED:
+            stateText = "Suspended";
+            stateColor = '#f96001ff';
+            stateIcon = 'svg/suspended.svg';
+            break;
+
+        case states.COMPLETED:
+            stateText = "Completed";
+            stateColor = '#01f901ff';
+            stateIcon = 'svg/completed.svg';
+            break;
+
+        case states.SUPPORTED:
+            stateText = "Supported";
+            stateColor = '#01f9e0ff';
+            stateIcon = 'svg/supported.svg';
+            break;
+
+        case states.REJECTED:
+            stateText = "Rejected";
+            stateColor = '#f8130bff';
+            stateIcon = 'svg/rejected.svg';
+            break;
+    }
+
+    if (stateText != null) {
+        let stateObj = document.createElement('div');
+        stateObj.classList.add('state');
+        stateObj.classList.add('box-shadow');
+        stateObj.classList.add('content-horisontal');
+        stateObj.style.gap = 'var(--content-padding)'
+        cardStart.appendChild(stateObj);
+
+        let stateIconObj = document.createElement('div');
+        stateIconObj.style.width = '40px';
+        stateObj.appendChild(stateIconObj);
+
+        let stateTextObj = document.createElement('div');
+        stateTextObj.innerHTML = stateText;
+        stateTextObj.style.color = stateColor;
+        stateObj.appendChild(stateTextObj);
+
+        placeSvg(stateIcon, stateIconObj, stateColor);
     }
 
     let cardTitlebar = document.createElement('div');
@@ -97,6 +186,20 @@ You will also find my contacts here so that you can contact me.`,
 null, null, 
 null, ['c', 'cs', 'js', 'lua', 'python']);
 
+addCard('LGC Boombox', 
+`WORK IN PROCESS! wait for the release
+this speaker has a touchscreen display and runs on a redesigned Windows 10
+i used winbox maker (my program) to create a custom Windows build: <a href="https://github.com/igorkll/WinBox-Maker/releases">https://github.com/igorkll/WinBox-Maker/releases</a>
+WARNING! download the release (wait for the release), not the master branch. I'm doing a project in this branch, and there will probably be an unstable version, possibly completely broken
+don't expect outstanding sound quality from this speaker. Also, an old motherboard from a tonk thin client will drain the battery quickly. my speaker runs for ~2 hours on a single charge`,
+null, [
+    'https://raw.githubusercontent.com/igorkll/LGC-Boombox/refs/heads/main/preview.jpg',
+    'https://raw.githubusercontent.com/igorkll/LGC-Boombox/refs/heads/main/preview.mp4'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/LGC-Boombox']
+], ['js', 'cs'], null, states.WIP);
+
 addCard('WinBox Maker', 
 `a tool for creating minimal embed versions of windows
 takes on the task of modifying the windows image to remove excess and embed software there
@@ -115,7 +218,7 @@ please note that winbox maker does not provide Windows images, it only provides 
 [
     ['Project page', 'https://github.com/igorkll/WinBox-Maker'],
     ['Download', 'WinBox-Maker', 'dlgithub']
-], ['cs'], 'winbox');
+], ['cs'], 'winbox', states.SUPPORTED);
 
 addCard('SComputers', 
 `SComputers is the best mod adding computers to Scrap Mechanic at the moment!
@@ -125,9 +228,9 @@ the author of the original ScriptableComputer(TheFattestCat) doesn't mind that I
 'logos/SComputers.png', ['images/SComputers.png'], 
 [
     ['Project Page', 'https://igorkll.github.io/SComputers/'],
-    ['Documentation', 'https://igorkll.github.io/SComputers/api.html'],
-    ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2949350596']
-], ['lua']);
+    ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2949350596'],
+    ['Repository', 'https://github.com/igorkll/SComputers']
+], ['lua'], null, states.SUPPORTED);
 
 addCard('betterAPI', 
 `this API adds additional methods to the game.
@@ -146,7 +249,7 @@ manual installation:
 [
     ['Project Page', 'https://igorkll.github.io/betterAPI/'],
     ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610']
-], ['lua', 'python', 'cpp', 'cs', 'c'], 'betterAPI');
+], ['lua', 'python', 'cpp', 'cs', 'c'], 'betterAPI', states.SUPPORTED);
 
 addCard('NES Emulator', 
 `this mod allows you to emulate your favorite games from the NES platform right inside Scrap Mechanic!
@@ -170,7 +273,7 @@ the emulator always works on the server side so that the game is synchronous for
 null, ['images/NES_Emulator.jpg'], 
 [
     ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3353025650']
-], ['lua']);
+], ['lua'], null, states.COMPLETED);
 
 addCard('Scrap Mechanic Server', 
 `This is a survival server with mods
@@ -181,7 +284,7 @@ The server has protection against crashes and dupes`,
 [
     ['Project page', 'https://igorkll.github.io/smserver/'],
     ['Steam page', 'https://steamcommunity.com/profiles/76561199809172866/']
-], ['lua', 'cs', 'python']);
+], ['lua', 'cs', 'python'], null, states.SUSPENDED);
 
 addCard('Robotization', 
 `this mod allows you to create autopiloted cars/aircraft.
@@ -197,7 +300,7 @@ returns to the past at the time of 0.3.5))`,
 null, ['images/robotization.jpg'], 
 [
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2936300656']
-], ['lua']);
+], ['lua'], null, states.COMPLETED);
 
 addCard('Pocket Universe', 
 `this mod allows you to create a separate small world in one block!
@@ -206,7 +309,7 @@ please note that it is highly discouraged to use bearings inside the pocket univ
 null, ['images/pocket_universe.jpg'], 
 [
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3088831605']
-], ['lua']);
+], ['lua'], null, states.COMPLETED);
 
 addCard('Wired & Wireless Cameras', 
 `Adds cameras to the game with the ability to set a password and connect to them via a monitor.
@@ -216,7 +319,7 @@ the cameras can be connected directly or wirelessly.`,
 null, ['images/wired_wireless_cameras.jpg'], 
 [
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3034272798']
-], ['lua']);
+], ['lua'], null, states.COMPLETED);
 
 addCard('esp32 opencomputers', 
 `<h1 style="font-size: 32px; font-weight: bold; margin: 11px 0;">ESP32 - opencomputers emulator</h1><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">emulates opencomputers on esp32</li><li style="margin: 8px 0;">the original opencomputers font</li><li style="margin: 8px 0;">sound is supported</li><li style="margin: 8px 0;">support screen backlight control via screen.turnOff / screen.turnOn</li><li style="margin: 8px 0;">screen.getAspectRatio returns the actual aspect ratio of the display</li><li style="margin: 8px 0;">all work with esp-idf is done in the "hal.h" and "hal.c" files so that the code can be easily adapted to different platforms and peripherals</li><li style="margin: 8px 0;">supports unicode</li><li style="margin: 8px 0;">to simulate the right mouse button, use a long press at one point of the screen</li><li style="margin: 8px 0;">computer case LEDs are supported</li><li style="margin: 8px 0;">a large number of settings in config.h</li><li style="margin: 8px 0;">hardware on/off/reboot buttons are supported</li><li style="margin: 8px 0;">self-locking power is supported</li><li style="margin: 8px 0;">the UUIDs of all components are randomly generated when the device is turned on for the first time</li><li style="margin: 8px 0;">screen precise mode is supported</li><li style="margin: 8px 0;">an SD card is supported (it is defined as a floppy disk)</li><li style="margin: 8px 0;">disk_drive.eject() unmounts the sd card. after that, it can be extracted without the risk of damaging the filesystem</li><li style="margin: 8px 0;">you can assign a separate LED to the memory card, which will blink when it is accessed</li></ul>`,
@@ -226,5 +329,14 @@ null, [
 [
     ['Project page', 'https://github.com/igorkll/esp32_opencomputers'],
     ['Download', 'esp32_opencomputers', 'dlgithub']
-], ['c', 'lua']);
+], ['c', 'lua'], null, states.SUSPENDED);
+
+addCard('os in opencomputers - liked', 
+`<h1 style="font-size: 32px; font-weight: bold; margin: 11px 0;">liked &amp; likeOS</h1><p style="margin: 16px 0; line-height: 1.6; color: #ffffff;">liked is a system based on likeOS.<br>designed for computers from the OpenComputers mod for Minecraft.<br>the installer can be run from any other OS or from the eeprom firmware.</p><h3 style="font-size: 19px; font-weight: bold; margin: 14px 0;">minimum system requirements:</h3><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">video card - tier2</li><li style="margin: 8px 0;">monitor - tier2</li><li style="margin: 8px 0;">RAM - 768KB</li><li style="margin: 8px 0;">processor - tier1</li><li style="margin: 8px 0;">hdd - tier2</li></ul><h3 style="font-size: 19px; font-weight: bold; margin: 14px 0;">recommended system requirements:</h3><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">video card - tier3</li><li style="margin: 8px 0;">monitor - tier3</li><li style="margin: 8px 0;">RAM - 1536KB</li><li style="margin: 8px 0;">processor - tier2</li><li style="margin: 8px 0;">hdd - tier2</li></ul><p style="margin: 16px 0; line-height: 1.6; color: #ffffff;">if openOS is installed on the device, then during installation, liked will offer to save your OS.<br>after which it can be launched with a single click on the liked desktop.</p><h2 style="font-size: 24px; font-weight: bold; margin: 12px 0;">installer link</h2><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">installer: <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua</a></li><li style="margin: 8px 0;">computercraft version(not supported yet): <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua</a></li></ul><h2 style="font-size: 24px; font-weight: bold; margin: 12px 0;">installation commands:</h2><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">openOS : wget <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua</a> /tmp/like; /tmp/like</li><li style="margin: 8px 0;">craftOS: wget run <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua</a></li></ul>`,
+null, [
+    'images/temporarily_unavailable.png',
+], 
+[
+    ['Project page', 'https://github.com/igorkll/liked']
+], ['lua'], null, states.REJECTED);
 }

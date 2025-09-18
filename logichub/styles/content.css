@@ -42,6 +42,9 @@
 }
 
 .content-preview-scroll {
+    margin: var(--content-padding);
+    padding: var(--content-padding);
+
     display: flex;
     overflow-x: auto;
     overflow-y: hidden;
@@ -68,14 +71,14 @@
 
 .content-preview {
     margin: var(--content-padding);
-
+    
     width: calc(100% - (var(--content-padding) * 2));
-    object-fit: contain;
+    object-fit: cover;
 
     border-radius: 15px;
 
     flex-shrink: 0;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
 }
 
 .content-description {
@@ -90,10 +93,29 @@
     color: white;
 }
 
+.content-combiner {
+    position: relative;
+
+    width: 100%;
+}
+
 .content-horisontal {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
+}
+
+.combiner-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.content-horisontal-start {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
     align-items: center;
 }
 

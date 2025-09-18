@@ -24,6 +24,11 @@ body {
     background-color: black;
 }
 
+a {
+    color: #03d6d2;
+    text-decoration: none;
+}
+
 .overlay {
     position: fixed;
     top: 0;
