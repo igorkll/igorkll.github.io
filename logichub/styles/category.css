@@ -1,0 +1,48 @@
+.category-selector {
+    margin-bottom: var(--content-margin);
+
+    height: 100px;
+    width: 100%;
+    max-width: 1000px;
+
+    backdrop-filter: blur(16px);
+
+    border-radius: 30px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.category-selector-button {
+    background-color: rgba(255, 255, 255, 0.4);
+
+    flex: 1;
+    align-self: stretch;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 30px;
+    text-shadow: 0px 0px 5px rgb(0, 0, 0);
+    text-align: center;
+    color: white;
+
+    padding: 15px;
+    box-sizing: border-box;
+
+    border: 2px solid rgba(173, 173, 173, 0.4);
+    transition: background-color 0.2s ease;
+}
+
+.category-selector-button:hover {
+    background-color: rgba(113, 231, 233, 0.4);
+}
+
+.category-selector-button-active {
+    background-color: rgba(189, 189, 189, 0.4);
+}

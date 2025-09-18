@@ -1,5 +1,6 @@
 {
 let cards = document.getElementById('cards');
+let categories = document.getElementById('categories');
 
 const states = {
     WIP: 0,
@@ -9,12 +10,73 @@ const states = {
     REJECTED: 4,
 };
 
-function addCard(title, description, logo, previews, buttons, langs, anchor, state) {
+let categoriesList = [];
+let seletedCategory;
+
+function selectCategory(categoryName) {
+    for (let key in categoriesList) {
+        let categoryObj = categoriesList[key];
+        categoryObj[0].style.display = 'none';
+        categoryObj[1].classList.remove("category-selector-button-active");
+    }
+
+    let categoryObj = categoriesList[categoryName];
+    categoryObj[0].style.display = 'flex';
+    categoryObj[1].classList.add("category-selector-button-active");
+    seletedCategory = categoryObj[0];
+}
+
+function addCategory(categoryName) {
+    let categoryButton = document.createElement('div');
+    categoryButton.classList.add('category-selector-button');
+
+    if (categoryName != null) {
+        categoryButton.innerHTML = categoryName;
+    }
+
+    categoryButton.addEventListener('click', () => {
+        selectCategory(categoryName);
+    })
+
+    categories.appendChild(categoryButton);
+
+    // --------------------------------
+
+    let categoryRoot = document.createElement('div');
+    categoryRoot.classList.add('content-box');
+    cards.appendChild(categoryRoot);
+    
+    categoriesList[categoryName] = [categoryRoot, categoryButton];
+    
+    categoryRoot.style.display = 'none';
+    cards.appendChild(categoryRoot);
+
+    // --------------------------------
+
+    if (seletedCategory == null) {
+        selectCategory(categoryName);
+    }
+}
+
+function getCategoryRoot(categoryName) {
+    if (categoriesList[categoryName] == null) {
+        addCategory(categoryName);
+    }
+
+    return categoriesList[categoryName][0];
+}
+
+function addCard(title, description, logo, previews, buttons, langs, anchor, state, category) {
     let cardBody = document.createElement('div');
     cardBody.id = anchor;
     cardBody.classList.add('content-part');
     cardBody.classList.add('box-shadow');
-    cards.appendChild(cardBody);
+    if (category != null) {
+        let categoryRoot = getCategoryRoot(category);
+        categoryRoot.appendChild(cardBody);
+    } else {
+        cards.appendChild(cardBody);
+    }
 
     if (title) {
         let cardTitle = document.createElement('div');
@@ -176,15 +238,18 @@ function addCard(title, description, logo, previews, buttons, langs, anchor, sta
             cardLangs.appendChild(cardLogo);
         }
     }
+
+    return cardBody;
 }
 
-addCard('Logic', 
+let logicCard = addCard('Logic', 
 `Hello! I am logic and BananaPen.
 I love playing ScrapMechanic and programming.
 This page is something like a collection of my projects that are ready for publication.
 You will also find my contacts here so that you can contact me.`,
 null, null, 
 null, ['c', 'cs', 'js', 'lua', 'python']);
+cards.insertBefore(logicCard, cards.firstChild)
 
 addCard('LGC Boombox', 
 `WORK IN PROCESS! wait for the release
@@ -198,7 +263,7 @@ null, [
 ], 
 [
     ['Project page', 'https://github.com/igorkll/LGC-Boombox']
-], ['js', 'cs'], null, states.WIP);
+], ['js', 'cs'], null, states.WIP, 'Devices');
 
 addCard('WinBox Maker', 
 `a tool for creating minimal embed versions of windows
@@ -218,7 +283,7 @@ please note that winbox maker does not provide Windows images, it only provides 
 [
     ['Project page', 'https://github.com/igorkll/WinBox-Maker'],
     ['Download', 'WinBox-Maker', 'dlgithub']
-], ['cs'], 'winbox', states.SUPPORTED);
+], ['cs'], 'winbox', states.SUPPORTED, 'Software');
 
 addCard('SComputers', 
 `SComputers is the best mod adding computers to Scrap Mechanic at the moment!
@@ -230,7 +295,7 @@ the author of the original ScriptableComputer(TheFattestCat) doesn't mind that I
     ['Project Page', 'https://igorkll.github.io/SComputers/'],
     ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2949350596'],
     ['Repository', 'https://github.com/igorkll/SComputers']
-], ['lua'], null, states.SUPPORTED);
+], ['lua'], null, states.SUPPORTED, 'Scrap mechanic mods');
 
 addCard('betterAPI', 
 `this API adds additional methods to the game.
@@ -249,7 +314,7 @@ manual installation:
 [
     ['Project Page', 'https://igorkll.github.io/betterAPI/'],
     ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3177944610']
-], ['lua', 'python', 'cpp', 'cs', 'c'], 'betterAPI', states.SUPPORTED);
+], ['lua', 'python', 'cpp', 'cs', 'c'], 'betterAPI', states.SUPPORTED, 'Scrap mechanic mods');
 
 addCard('NES Emulator', 
 `this mod allows you to emulate your favorite games from the NES platform right inside Scrap Mechanic!
@@ -273,7 +338,7 @@ the emulator always works on the server side so that the game is synchronous for
 null, ['images/NES_Emulator.jpg'], 
 [
     ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3353025650']
-], ['lua'], null, states.COMPLETED);
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
 
 addCard('Scrap Mechanic Server', 
 `This is a survival server with mods
@@ -284,7 +349,7 @@ The server has protection against crashes and dupes`,
 [
     ['Project page', 'https://igorkll.github.io/smserver/'],
     ['Steam page', 'https://steamcommunity.com/profiles/76561199809172866/']
-], ['lua', 'cs', 'python'], null, states.SUSPENDED);
+], ['lua', 'cs', 'python'], null, states.SUSPENDED, 'Scrap mechanic mods');
 
 addCard('Robotization', 
 `this mod allows you to create autopiloted cars/aircraft.
@@ -300,7 +365,7 @@ returns to the past at the time of 0.3.5))`,
 null, ['images/robotization.jpg'], 
 [
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2936300656']
-], ['lua'], null, states.COMPLETED);
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
 
 addCard('Pocket Universe', 
 `this mod allows you to create a separate small world in one block!
@@ -309,7 +374,7 @@ please note that it is highly discouraged to use bearings inside the pocket univ
 null, ['images/pocket_universe.jpg'], 
 [
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3088831605']
-], ['lua'], null, states.COMPLETED);
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
 
 addCard('Wired & Wireless Cameras', 
 `Adds cameras to the game with the ability to set a password and connect to them via a monitor.
@@ -319,7 +384,90 @@ the cameras can be connected directly or wirelessly.`,
 null, ['images/wired_wireless_cameras.jpg'], 
 [
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3034272798']
-], ['lua'], null, states.COMPLETED);
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
+
+addCard('The Garment Cracker', 
+`This custom game allows you to unlock all the clothes in the game in a couple of minutes.
+dressbot is accelerated, and does everything in one go.
+endless clothes and cotton appear in the inventory.
+this option is great for those who do not want to sweat getting clothes or play only in the creative.`,
+null, ['images/the_garment_cracker.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3157384106']
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
+
+addCard('Dangerous Blocks', 
+`various DANGEROUS blocks, be careful!
+
+black hole:
+* sucks in creations/players/mobs
+
+virus block:
+* jumps between creations, spreads and interferes with the work of creations`,
+null, ['images/dangerous_blocks.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2989704611']
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
+
+addCard('sound mod', 
+`this mod adds speakers, turntables and records.
+betterAPI game extensions are required for the mod to work.
+the mod supports crafting, but the plates are not crafting.
+plates in survival mode spawn in peace on earth.
+the chance of finding a record is extremely small, on average one record will spawn once every 30 minutes. and the probability of finding it for the average player is ~ 10%. which means that you will receive approximately one record at 5 o'clock`,
+null, ['images/sound_mod.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=2948210047']
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
+
+addCard('alert mod', 
+`contains three blocks for displaying messages to all players.
+you enter the message yourself, which will be displayed when a logical signal is given.
+
+types of output blocks:
+* alert (displays a message from the top of the screen)
+* chat
+* console (outputs a message to the game's debugging console (launch option -dev))`,
+null, ['images/alert_mod.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3336418301']
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
+
+addCard('advanced destruction physics', 
+`This mod adds full-fledged destruction physics to the game.
+This mod works automatically and does not require complicated configuration.
+This mod (unlike similar ones available in the workshop) allows you to destroy one object against another (for example, you can break through a house with a car).
+Please note that large creations can break down under their own weight.
+The quality of destruction physics may decrease with lower FPS!!
+The mod is not yet fully completed, and there may be bugs and inaccuracies in it.
+IT IS STRONGLY NOT RECOMMENDED TO BUILD ANYTHING IN THE WORLD WHERE THIS MOD IS ENABLED, AS YOUR CREATION MAY SPONTANEOUSLY COLLAPSE!!!!`,
+null, [
+    'images/advanced_destruction_physics.jpg',
+    'images/advanced_destruction_physics/1.jpg',
+    'images/advanced_destruction_physics/2.jpg',
+    'images/advanced_destruction_physics/3.jpg',
+], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3171090685']
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
+
+addCard('online boombox', 
+`This radio runs on betterAPI and can play music via a direct link.
+unfortunately, you cannot insert a link from youtube or something like that here,
+but you can place your .mp3/.wav file on any hosting (for example, github) and insert a direct (raw) link to the file.
+direct links to streaming Internet radio stations will also work (however, connecting to a streaming radio station can take a long time and not the first time).
+
+SComputers api:
+component name - onlineBoombox
+onlineBoombox.play()
+onlineBoombox.stop()
+onlineBoombox.setVolume(value:number(0-1))
+onlineBoombox.setMute(state:boolean)
+onlineBoombox.setUrl(url:string)`,
+null, ['images/online_boombox.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3185287679']
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
 
 addCard('esp32 opencomputers', 
 `<h1 style="font-size: 32px; font-weight: bold; margin: 11px 0;">ESP32 - opencomputers emulator</h1><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">emulates opencomputers on esp32</li><li style="margin: 8px 0;">the original opencomputers font</li><li style="margin: 8px 0;">sound is supported</li><li style="margin: 8px 0;">support screen backlight control via screen.turnOff / screen.turnOn</li><li style="margin: 8px 0;">screen.getAspectRatio returns the actual aspect ratio of the display</li><li style="margin: 8px 0;">all work with esp-idf is done in the "hal.h" and "hal.c" files so that the code can be easily adapted to different platforms and peripherals</li><li style="margin: 8px 0;">supports unicode</li><li style="margin: 8px 0;">to simulate the right mouse button, use a long press at one point of the screen</li><li style="margin: 8px 0;">computer case LEDs are supported</li><li style="margin: 8px 0;">a large number of settings in config.h</li><li style="margin: 8px 0;">hardware on/off/reboot buttons are supported</li><li style="margin: 8px 0;">self-locking power is supported</li><li style="margin: 8px 0;">the UUIDs of all components are randomly generated when the device is turned on for the first time</li><li style="margin: 8px 0;">screen precise mode is supported</li><li style="margin: 8px 0;">an SD card is supported (it is defined as a floppy disk)</li><li style="margin: 8px 0;">disk_drive.eject() unmounts the sd card. after that, it can be extracted without the risk of damaging the filesystem</li><li style="margin: 8px 0;">you can assign a separate LED to the memory card, which will blink when it is accessed</li></ul>`,
@@ -329,7 +477,7 @@ null, [
 [
     ['Project page', 'https://github.com/igorkll/esp32_opencomputers'],
     ['Download', 'esp32_opencomputers', 'dlgithub']
-], ['c', 'lua'], null, states.SUSPENDED);
+], ['c', 'lua'], null, states.SUSPENDED, 'Other');
 
 addCard('os in opencomputers - liked', 
 `<h1 style="font-size: 32px; font-weight: bold; margin: 11px 0;">liked &amp; likeOS</h1><p style="margin: 16px 0; line-height: 1.6; color: #ffffff;">liked is a system based on likeOS.<br>designed for computers from the OpenComputers mod for Minecraft.<br>the installer can be run from any other OS or from the eeprom firmware.</p><h3 style="font-size: 19px; font-weight: bold; margin: 14px 0;">minimum system requirements:</h3><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">video card - tier2</li><li style="margin: 8px 0;">monitor - tier2</li><li style="margin: 8px 0;">RAM - 768KB</li><li style="margin: 8px 0;">processor - tier1</li><li style="margin: 8px 0;">hdd - tier2</li></ul><h3 style="font-size: 19px; font-weight: bold; margin: 14px 0;">recommended system requirements:</h3><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">video card - tier3</li><li style="margin: 8px 0;">monitor - tier3</li><li style="margin: 8px 0;">RAM - 1536KB</li><li style="margin: 8px 0;">processor - tier2</li><li style="margin: 8px 0;">hdd - tier2</li></ul><p style="margin: 16px 0; line-height: 1.6; color: #ffffff;">if openOS is installed on the device, then during installation, liked will offer to save your OS.<br>after which it can be launched with a single click on the liked desktop.</p><h2 style="font-size: 24px; font-weight: bold; margin: 12px 0;">installer link</h2><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">installer: <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua</a></li><li style="margin: 8px 0;">computercraft version(not supported yet): <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua</a></li></ul><h2 style="font-size: 24px; font-weight: bold; margin: 12px 0;">installation commands:</h2><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">openOS : wget <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/webInstaller.lua</a> /tmp/like; /tmp/like</li><li style="margin: 8px 0;">craftOS: wget run <a href="https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua" title="" style="color: #03d6d2; text-decoration: none;">https://raw.githubusercontent.com/igorkll/liked/main/installer/computercraft.lua</a></li></ul>`,
@@ -338,5 +486,5 @@ null, [
 ], 
 [
     ['Project page', 'https://github.com/igorkll/liked']
-], ['lua'], null, states.REJECTED);
+], ['lua'], null, states.REJECTED, 'Other');
 }

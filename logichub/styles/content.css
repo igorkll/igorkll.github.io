@@ -5,8 +5,6 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
-
-    padding-top: var(--titlebar-height);
 }
 
 .content-part {
