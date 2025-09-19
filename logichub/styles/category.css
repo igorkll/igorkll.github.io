@@ -1,7 +1,6 @@
 .category-selector {
     margin-bottom: var(--content-margin);
 
-    height: 100px;
     width: 100%;
     max-width: 1000px;
 
@@ -9,19 +8,15 @@
 
     border-radius: 30px;
 
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    grid-template-rows: repeat(auto, auto);
 
     overflow: hidden;
 }
 
 .category-selector-button {
     background-color: rgba(255, 255, 255, 0.4);
-
-    flex: 1;
-    align-self: stretch;
 
     display: flex;
     justify-content: center;
@@ -35,7 +30,7 @@
     padding: 15px;
     box-sizing: border-box;
 
-    border: 2px solid rgba(173, 173, 173, 0.4);
+    border: 2px solid rgba(82, 82, 82, 0.4);
     transition: background-color 0.2s ease;
 }
 

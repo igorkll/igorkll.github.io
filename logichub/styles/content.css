@@ -40,31 +40,62 @@
 }
 
 .content-preview-scroll {
-    margin: var(--content-padding);
-    padding: var(--content-padding);
-
     display: flex;
+
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
     gap: 10px;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
+
+    scrollbar-width: none;
 }
 
-.content-preview-scroll::-webkit-scrollbar-track {
-  background-color: rgb(111, 146, 177);
-  border-radius: 100vh;
+.content-scroll-container {
+    position: relative;
 }
 
-.content-preview-scroll::-webkit-scrollbar-thumb {
-  background-color: rgb(33, 162, 243);
-  border-radius: 100vh;
-  border: 3px solid rgb(111, 146, 177);
+.content-scroll-button-container {
+    position: absolute;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 200;
+    pointer-events: none;
 }
 
-.content-preview-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(94, 191, 251);
+.content-scroll-button-container * {
+  pointer-events: auto;
+}
+
+.content-scroll-button {
+    margin: calc(var(--content-padding) * 2);
+
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.489);
+    transition: background-color 0.2s ease;
+    border-radius: 100vh;
+
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-scroll-button:hover {
+    background-color: rgba(154, 255, 221, 0.796);
+}
+
+.content-scroll-button:active {
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .content-preview {
@@ -77,6 +108,9 @@
 
     flex-shrink: 0;
     scroll-snap-align: center;
+
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .content-description {

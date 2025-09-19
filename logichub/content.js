@@ -99,9 +99,17 @@ function addCard(title, description, logo, previews, buttons, langs, anchor, sta
             cardPreview.src = previews[0];
             cardBody.appendChild(cardPreview);
         } else {
+            let previewScrollContainer = document.createElement('div');
+            previewScrollContainer.classList.add('content-scroll-container');
+            cardBody.appendChild(previewScrollContainer);
+
+            let previewScrollButtons = document.createElement('div');
+            previewScrollButtons.classList.add('content-scroll-button-container');
+            previewScrollContainer.appendChild(previewScrollButtons);
+
             let previewScroll = document.createElement('div');
             previewScroll.classList.add('content-preview-scroll');
-            cardBody.appendChild(previewScroll);
+            previewScrollContainer.appendChild(previewScroll);
 
             for (let preview of previews) {
                 if (getExtension(preview) == 'mp4') {
@@ -119,6 +127,45 @@ function addCard(title, description, logo, previews, buttons, langs, anchor, sta
                     previewScroll.appendChild(cardPreview);
                 }
             }
+
+            let previewScrollSub;
+            let previewScrollAdd;
+
+            let updateArrows = (index, maxIndex) => {
+                previewScrollSub.style.visibility = index == 0 ? 'hidden' : 'visible';
+                previewScrollAdd.style.visibility = index == (maxIndex - 1) ? 'hidden' : 'visible';
+            };
+
+            previewScrollSub = document.createElement('div');
+            previewScrollSub.classList.add('content-scroll-button');
+            previewScrollButtons.appendChild(previewScrollSub);
+
+            let previewScrollSubIcon = document.createElement('div');
+            previewScrollSubIcon.style.width = '60%';
+            previewScrollSub.appendChild(previewScrollSubIcon);
+            placeSvg('svg/left.svg', previewScrollSubIcon, '#000000ff');
+            
+            previewScrollSub.addEventListener('click', () => {
+                let [index, maxIndex] = scrollToItem(previewScroll, -1);
+                updateArrows(index, maxIndex);
+            });
+
+            previewScrollAdd = document.createElement('div');
+            previewScrollAdd.classList.add('content-scroll-button');
+            previewScrollButtons.appendChild(previewScrollAdd);
+            
+            let previewScrollAddIcon = document.createElement('div');
+            previewScrollAddIcon.style.width = '60%';
+            previewScrollAdd.appendChild(previewScrollAddIcon);
+            placeSvg('svg/right.svg', previewScrollAddIcon, '#000000ff');
+
+            previewScrollAdd.addEventListener('click', () => {
+                let [index, maxIndex] = scrollToItem(previewScroll, 1);
+                updateArrows(index, maxIndex);
+            });
+
+            let [index, maxIndex] = scrollToItem(previewScroll, 0);
+            updateArrows(index, maxIndex);
         }
     }
     
@@ -256,7 +303,7 @@ null, null,
 null, ['c', 'cs', 'js', 'lua', 'python']);
 cards.insertBefore(logicCard, cards.firstChild)
 
-// ---------------------------------------------------------------
+// --------------------------------------------------------------- Devices
 
 addCard('LGC Boombox', 
 `WORK IN PROCESS! wait for the release
@@ -271,6 +318,8 @@ null, [
 [
     ['Project page', 'https://github.com/igorkll/LGC-Boombox']
 ], ['js', 'cs'], null, states.WIP, 'Devices');
+
+// --------------------------------------------------------------- Software
 
 addCard('WinBox Maker', 
 `a tool for creating minimal embed versions of windows
@@ -291,6 +340,21 @@ please note that winbox maker does not provide Windows images, it only provides 
     ['Project page', 'https://github.com/igorkll/WinBox-Maker'],
     ['Download', 'WinBox-Maker', 'dlgithub']
 ], ['cs'], 'winbox', states.SUPPORTED, 'Software');
+
+// --------------------------------------------------------------- Services
+
+addCard('Scrap Mechanic Server', 
+`This is a survival server with mods
+Here you can play with other people
+You can build houses, create your own settlement, farm, or become a programmer and write code for SComputers!
+The server has protection against crashes and dupes`,
+'logos/smserver.png', ['images/smserver.png'], 
+[
+    ['Project page', 'https://igorkll.github.io/smserver/'],
+    ['Steam page', 'https://steamcommunity.com/profiles/76561199809172866/']
+], ['lua', 'cs', 'python'], null, states.SUSPENDED, 'Services');
+
+// --------------------------------------------------------------- Scrap mechanic mods
 
 addCard('SComputers', 
 `SComputers is the best mod adding computers to Scrap Mechanic at the moment!
@@ -346,17 +410,6 @@ null, ['images/NES_Emulator.jpg'],
 [
     ['Steam page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3353025650']
 ], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
-
-addCard('Scrap Mechanic Server', 
-`This is a survival server with mods
-Here you can play with other people
-You can build houses, create your own settlement, farm, or become a programmer and write code for SComputers!
-The server has protection against crashes and dupes`,
-'logos/smserver.png', ['images/smserver.png'], 
-[
-    ['Project page', 'https://igorkll.github.io/smserver/'],
-    ['Steam page', 'https://steamcommunity.com/profiles/76561199809172866/']
-], ['lua', 'cs', 'python'], null, states.SUSPENDED, 'Scrap mechanic mods');
 
 addCard('Robotization', 
 `this mod allows you to create autopiloted cars/aircraft.
@@ -476,6 +529,8 @@ null, ['images/online_boombox.jpg'],
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3185287679']
 ], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
 
+// --------------------------------------------------------------- Other
+
 addCard('esp32 opencomputers', 
 `<h1 style="font-size: 32px; font-weight: bold; margin: 11px 0;">ESP32 - opencomputers emulator</h1><ul style="padding-left: 24px; list-style-type: disc;"><li style="margin: 8px 0;">emulates opencomputers on esp32</li><li style="margin: 8px 0;">the original opencomputers font</li><li style="margin: 8px 0;">sound is supported</li><li style="margin: 8px 0;">support screen backlight control via screen.turnOff / screen.turnOn</li><li style="margin: 8px 0;">screen.getAspectRatio returns the actual aspect ratio of the display</li><li style="margin: 8px 0;">all work with esp-idf is done in the "hal.h" and "hal.c" files so that the code can be easily adapted to different platforms and peripherals</li><li style="margin: 8px 0;">supports unicode</li><li style="margin: 8px 0;">to simulate the right mouse button, use a long press at one point of the screen</li><li style="margin: 8px 0;">computer case LEDs are supported</li><li style="margin: 8px 0;">a large number of settings in config.h</li><li style="margin: 8px 0;">hardware on/off/reboot buttons are supported</li><li style="margin: 8px 0;">self-locking power is supported</li><li style="margin: 8px 0;">the UUIDs of all components are randomly generated when the device is turned on for the first time</li><li style="margin: 8px 0;">screen precise mode is supported</li><li style="margin: 8px 0;">an SD card is supported (it is defined as a floppy disk)</li><li style="margin: 8px 0;">disk_drive.eject() unmounts the sd card. after that, it can be extracted without the risk of damaging the filesystem</li><li style="margin: 8px 0;">you can assign a separate LED to the memory card, which will blink when it is accessed</li></ul>`,
 null, [
@@ -503,6 +558,14 @@ if (anchor) {
     let category = anchors[anchor];
     if (category != null) {
         selectCategory(category);
+    }
+
+    let element = document.getElementById(anchor);
+    if (element != null) {
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
     }
 }
 

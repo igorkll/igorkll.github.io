@@ -44,6 +44,27 @@ function getExtension(path) {
     return parts[parts.length - 1];
 }
 
+function scrollToItem(container, direction) {
+    let children = Array.from(container.children);
+    let containerLeft = container.scrollLeft;
+    let targetIndex = 0;
+
+    for (let i = 0; i < children.length; i++) {
+        if (children[i].offsetLeft >= containerLeft + 1) {
+            targetIndex = i;
+            break;
+        }
+    }
+
+    targetIndex += direction;
+    if (targetIndex < 0) targetIndex = 0;
+    if (targetIndex >= children.length) targetIndex = children.length - 1;
+
+    children[targetIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+
+    return [targetIndex, children.length];
+}
+
 setTimeout(() => {
     setInterval(() => {
         let element = document.getElementById('google_translate_element');
