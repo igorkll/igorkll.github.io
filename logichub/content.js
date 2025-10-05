@@ -352,7 +352,7 @@ The server has protection against crashes and dupes`,
 [
     ['Project page', 'https://igorkll.github.io/smserver/'],
     ['Steam page', 'https://steamcommunity.com/profiles/76561199809172866/']
-], ['lua', 'cs', 'python'], null, states.SUSPENDED, 'Services');
+], ['lua', 'cs', 'python'], null, states.SUPPORTED, 'Services');
 
 // --------------------------------------------------------------- Scrap mechanic mods
 
