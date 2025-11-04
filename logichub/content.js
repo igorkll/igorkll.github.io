@@ -294,6 +294,12 @@ function addCard(title, description, logo, previews, buttons, langs, anchor, sta
     return cardBody;
 }
 
+function addNote(title, message) {
+    addCard(title, message,
+    null, null, 
+    null, null, null, null, "Roadmap");
+}
+
 let logicCard = addCard('Logic', 
 `Hello! I am logic and BananaPen.
 I love playing ScrapMechanic and programming.
@@ -302,6 +308,34 @@ You will also find my contacts here so that you can contact me.`,
 null, null, 
 null, ['c', 'cs', 'js', 'lua', 'python']);
 cards.insertBefore(logicCard, cards.firstChild)
+
+// --------------------------------------------------------------- Notes
+
+addNote('LGC Boombox', 
+`it will be necessary to finally finish this project. add Bluetooth, wifi, browser, sorting and search in explorer and battery level detector`);
+
+addNote('Logic Hub', 
+`adapt the page to touchscreens, improve auto-translation, and add a settings menu.`);
+
+addNote('Everyfun Sandbox', 
+`Add dynamic creations, inventory, a default map, multiplayer, a menu for creating and managing worlds and present the first version of this game to the world`);
+
+addNote('Winbox Maker', 
+`* add options for configuring WinRE (at the moment it is simply disabled but not removed from the image) (the ability to allow/prohibit entry into the recovery menu, activate/deactivate auto-entry in case of failure and replace the functionality of the recovery menu with custom or functionality provided by winbox maker, or even completely remove it from the image if it is not needed)
+* the ability to export a device firmware update file *.wnu, which can be installed via custom recovery (WinRE) if it was activated in the original image and its functionality was changed to that provided by winbox maker
+* the ability to integrate custom bcd settings into the image
+* an alternative way to export *.img is by creating a bootable image immediately (without installing via qemu), however, in this case, the output will be an uninitialized img, and the device with it cannot be immediately given to the user without turning on at least once
+* export *.esd
+* the ability to preset settings such as the system language (and add them) and keyboard layouts (including several) and the ability to set keyboard shortcuts to change them.
+* The ability to integrate appx/msix into an image (including unsigned ones) and use a packaged/UWP application as the main kiosk application.
+* more settings for windows customization, including those that are not calculated for kiosks but are suitable for creating custom builds for PCs (for example, customization of personalization, desktop and explorer)
+* the ability to set settings through a virtual machine with a running system (but without violating the concept of replicability and full version control through git) that is, the virtual machine will start only when it is necessary to make changes to the settings, then winbox maker will check what exactly has been changed in the system and save in the project resources only the changes that will later be integrated into the image with each build and will be deployed again in the virtual machine if necessary to manually change the settings.
+* replacing the system boot logo for BIOS-based devices via reassembly bootres.dll
+* ability to customize network behavior
+* the ability to set up auto-connection to wifi
+* the ability to integrate remote access tools into a ready-made image
+* the ability to change the list of enabled/disabled services
+* add more build events (for example, to mount WinPE and WinRE so that they can be changed from them)`);
 
 // --------------------------------------------------------------- Devices
 
