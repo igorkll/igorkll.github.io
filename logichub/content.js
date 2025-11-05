@@ -335,7 +335,18 @@ addNote('Winbox Maker',
 * the ability to set up auto-connection to wifi
 * the ability to integrate remote access tools into a ready-made image
 * the ability to change the list of enabled/disabled services
-* add more build events (for example, to mount WinPE and WinRE so that they can be changed from them)`);
+* add more build events (for example, to mount WinPE and WinRE so that they can be changed from them)
+* a menu with deletion settings where you can remove unnecessary files from the image or disable dism components
+* the ability to create several "export templates" that can be based on different base images (including images for different processor architectures) and can be configured to overwrite individual project settings (for example, you can set a different output image format and different system activation keys) and then you can export the project using all the templates by pressing one button and say at once get a project build for ARM and x86, or immediately get a project build in both the installation iso file format and the already installed system in img format
+* add more options to modify the system installer
+* add the option to enlarge the system volume to the maximum size when the device is turned on for the first time. This can be used if the system is deployed on a device from an exported img with a fixed size and the size of the drive in the device has a larger volume than the exported img file.
+* the ability to install a postinstall script that will be executed only the first time it is turned on on the actual device when deployed via img, and not twice (the first time after installation on qemu and the second time when running on a real machine) how is this happening now by default with the current postinstall script "winbox user"
+* the ability to set the swap partition configuration
+* the ability to configure app locker and UWF (unified write filter)
+* the ability to use wim/esd as a base system image (in this case, the iso cannot be exported)
+* exporting the system in FFU (full flash image) format
+* the ability to install the gpu driver in the image in "deep" mode. in this case, they will be embedded in the image with the native installer and deployed through it the first time you turn it on (but with updates disabled and the proprietary panel) this will allow you to install not only the driver itself, but also the video card libraries (for example, PhysX on nvidia)
+* export to raspberry pi using the WoR project`);
 
 // --------------------------------------------------------------- Devices
 
