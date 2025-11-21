@@ -67,6 +67,80 @@ function getCategoryRoot(categoryName) {
     return categoriesList[categoryName][0];
 }
 
+function addState(parent, state) {
+    let stateText;
+    let stateColor;
+    let stateIcon;
+    switch (state) {
+        case states.WIP:
+            stateText = "Work in process";
+            stateColor = '#f9c701ff';
+            stateIcon = 'svg/wip.svg';
+            break;
+
+        case states.SUSPENDED:
+            stateText = "Suspended";
+            stateColor = '#f96001ff';
+            stateIcon = 'svg/suspended.svg';
+            break;
+
+        case states.COMPLETED:
+            stateText = "Completed";
+            stateColor = '#01f901ff';
+            stateIcon = 'svg/completed.svg';
+            break;
+
+        case states.SUPPORTED:
+            stateText = "Supported";
+            stateColor = '#01f9e0ff';
+            stateIcon = 'svg/supported.svg';
+            break;
+
+        case states.REJECTED:
+            stateText = "Rejected";
+            stateColor = '#f8130bff';
+            stateIcon = 'svg/rejected.svg';
+            break;
+    }
+
+    if (stateText != null) {
+        let stateObj = document.createElement('div');
+        stateObj.classList.add('state');
+        stateObj.classList.add('box-shadow');
+        stateObj.classList.add('content-horisontal');
+        stateObj.style.gap = 'var(--content-padding)'
+        parent.appendChild(stateObj);
+
+        let stateIconObj = document.createElement('div');
+        stateIconObj.style.width = '40px';
+        stateObj.appendChild(stateIconObj);
+
+        let stateTextObj = document.createElement('div');
+        stateTextObj.innerHTML = stateText;
+        stateTextObj.style.color = stateColor;
+        stateObj.appendChild(stateTextObj);
+
+        placeSvg(stateIcon, stateIconObj, stateColor);
+    }
+}
+
+function addText(parent, text) {
+    let stateObj = document.createElement('div');
+    stateObj.classList.add('state');
+    stateObj.classList.add('box-shadow');
+    stateObj.classList.add('content-horisontal');
+    stateObj.style.gap = 'var(--content-padding)'
+    parent.appendChild(stateObj);
+
+    let stateIconObj = document.createElement('div');
+    stateIconObj.style.width = '40px';
+    stateObj.appendChild(stateIconObj);
+
+    let stateTextObj = document.createElement('div');
+    stateTextObj.innerHTML = text;
+    stateObj.appendChild(stateTextObj);
+}
+
 function addCard(title, description, logo, previews, buttons, langs, anchor, state, category) {
     let cardBody = document.createElement('div');
     cardBody.id = anchor;
@@ -211,61 +285,7 @@ function addCard(title, description, logo, previews, buttons, langs, anchor, sta
     let cardStart = document.createElement('div');
     cardStart.classList.add('content-horisontal-start');
     cardCombiner.appendChild(cardStart);
-
-    let stateText;
-    let stateColor;
-    let stateIcon;
-    switch (state) {
-        case states.WIP:
-            stateText = "Work in process";
-            stateColor = '#f9c701ff';
-            stateIcon = 'svg/wip.svg';
-            break;
-
-        case states.SUSPENDED:
-            stateText = "Suspended";
-            stateColor = '#f96001ff';
-            stateIcon = 'svg/suspended.svg';
-            break;
-
-        case states.COMPLETED:
-            stateText = "Completed";
-            stateColor = '#01f901ff';
-            stateIcon = 'svg/completed.svg';
-            break;
-
-        case states.SUPPORTED:
-            stateText = "Supported";
-            stateColor = '#01f9e0ff';
-            stateIcon = 'svg/supported.svg';
-            break;
-
-        case states.REJECTED:
-            stateText = "Rejected";
-            stateColor = '#f8130bff';
-            stateIcon = 'svg/rejected.svg';
-            break;
-    }
-
-    if (stateText != null) {
-        let stateObj = document.createElement('div');
-        stateObj.classList.add('state');
-        stateObj.classList.add('box-shadow');
-        stateObj.classList.add('content-horisontal');
-        stateObj.style.gap = 'var(--content-padding)'
-        cardStart.appendChild(stateObj);
-
-        let stateIconObj = document.createElement('div');
-        stateIconObj.style.width = '40px';
-        stateObj.appendChild(stateIconObj);
-
-        let stateTextObj = document.createElement('div');
-        stateTextObj.innerHTML = stateText;
-        stateTextObj.style.color = stateColor;
-        stateObj.appendChild(stateTextObj);
-
-        placeSvg(stateIcon, stateIconObj, stateColor);
-    }
+    addState(cardStart, state);
 
     let cardTitlebar = document.createElement('div');
     cardTitlebar.classList.add('content-titlebar');
@@ -300,6 +320,36 @@ function addNote(title, message) {
     null, null, null, null, "Roadmap");
 }
 
+function addRoadmap(title, messages) {
+    let cardBody = document.createElement('div');
+    cardBody.classList.add('content-part');
+    cardBody.classList.add('box-shadow');
+
+    let categoryRoot = getCategoryRoot("Roadmap");
+    categoryRoot.appendChild(cardBody);
+
+    if (title) {
+        let cardTitle = document.createElement('div');
+        cardTitle.classList.add('content-title');
+        cardTitle.classList.add('text-shadow');
+        cardTitle.innerHTML = title
+        cardBody.appendChild(cardTitle);
+    }
+
+    let roadmap = document.createElement('div');
+    roadmap.classList.add('roadmap-grid');
+    cardBody.appendChild(roadmap);
+
+    for (let i = 0; i < messages.length; i += 2) {
+        let state = messages[i];
+        let text = messages[i + 1];
+        addState(roadmap, state);
+        addText(roadmap, text);
+    }
+
+    return cardBody;
+}
+
 let logicCard = addCard('Logic', 
 `Hello! I am logic and BananaPen.
 I love playing ScrapMechanic and programming.
@@ -320,33 +370,55 @@ addNote('Logic Hub',
 addNote('Everyfun Sandbox', 
 `Add dynamic creations, inventory, a default map, multiplayer, a menu for creating and managing worlds and present the first version of this game to the world`);
 
-addNote('Winbox Maker', 
-`* add options for configuring WinRE (at the moment it is simply disabled but not removed from the image) (the ability to allow/prohibit entry into the recovery menu, activate/deactivate auto-entry in case of failure and replace the functionality of the recovery menu with custom or functionality provided by winbox maker, or even completely remove it from the image if it is not needed)
-* the ability to export a device firmware update file *.wnu, which can be installed via custom recovery (WinRE) if it was activated in the original image and its functionality was changed to that provided by winbox maker
-* the ability to integrate custom bcd settings into the image
-* an alternative way to export *.img is by creating a bootable image immediately (without installing via qemu), however, in this case, the output will be an uninitialized img, and the device with it cannot be immediately given to the user without turning on at least once
-* export *.esd
-* the ability to preset settings such as the system language (and add them) and keyboard layouts (including several) and the ability to set keyboard shortcuts to change them.
-* The ability to integrate appx/msix into an image (including unsigned ones) and use a packaged/UWP application as the main kiosk application.
-* more settings for windows customization, including those that are not calculated for kiosks but are suitable for creating custom builds for PCs (for example, customization of personalization, desktop and explorer)
-* the ability to set settings through a virtual machine with a running system (but without violating the concept of replicability and full version control through git) that is, the virtual machine will start only when it is necessary to make changes to the settings, then winbox maker will check what exactly has been changed in the system and save in the project resources only the changes that will later be integrated into the image with each build and will be deployed again in the virtual machine if necessary to manually change the settings.
-* replacing the system boot logo for BIOS-based devices via reassembly bootres.dll
-* ability to customize network behavior
-* the ability to set up auto-connection to wifi
-* the ability to integrate remote access tools into a ready-made image
-* the ability to change the list of enabled/disabled services
-* add more build events (for example, to mount WinPE and WinRE so that they can be changed from them)
-* a menu with deletion settings where you can remove unnecessary files from the image or disable dism components
-* the ability to create several "export templates" that can be based on different base images (including images for different processor architectures) and can be configured to overwrite individual project settings (for example, you can set a different output image format and different system activation keys) and then you can export the project using all the templates by pressing one button and say at once get a project build for ARM and x86, or immediately get a project build in both the installation iso file format and the already installed system in img format
-* add more options to modify the system installer
-* add the option to enlarge the system volume to the maximum size when the device is turned on for the first time. This can be used if the system is deployed on a device from an exported img with a fixed size and the size of the drive in the device has a larger volume than the exported img file.
-* the ability to install a postinstall script that will be executed only the first time it is turned on on the actual device when deployed via img, and not twice (the first time after installation on qemu and the second time when running on a real machine) how is this happening now by default with the current postinstall script "winbox user"
-* the ability to set the swap partition configuration
-* the ability to configure app locker and UWF (unified write filter)
-* the ability to use wim/esd as a base system image (in this case, the iso cannot be exported)
-* exporting the system in FFU (full flash image) format
-* the ability to install the gpu driver in the image in "deep" mode. in this case, they will be embedded in the image with the native installer and deployed through it the first time you turn it on (but with updates disabled and the proprietary panel) this will allow you to install not only the driver itself, but also the video card libraries (for example, PhysX on nvidia)
-* export to raspberry pi using the WoR project`);
+addRoadmap('Winbox Maker', 
+[
+    states.WIP, `add options for configuring WinRE (at the moment it is simply disabled but not removed from the image) (the ability to allow/prohibit entry into the recovery menu, activate/deactivate auto-entry in case of failure and replace the functionality of the recovery menu with custom or functionality provided by winbox maker, or even completely remove it from the image if it is not needed)`,
+    states.WIP, `the ability to export a device firmware update file *.wnu, which can be installed via custom recovery (WinRE) if it was activated in the original image and its functionality was changed to that provided by winbox maker`,
+    states.WIP, `the ability to integrate custom bcd settings into the image`,
+    states.WIP, `an alternative way to export *.img is by creating a bootable image immediately (without installing via qemu), however, in this case, the output will be an uninitialized img, and the device with it cannot be immediately given to the user without turning on at least once`,
+    states.WIP, `export *.esd`,
+    states.WIP, `the ability to preset settings such as the system language (and add them) and keyboard layouts (including several) and the ability to set keyboard shortcuts to change them.`,
+    states.WIP, `The ability to integrate appx/msix into an image (including unsigned ones) and use a packaged/UWP application as the main kiosk application.`,
+    states.WIP, `more settings for windows customization, including those that are not calculated for kiosks but are suitable for creating custom builds for PCs (for example, customization of personalization, desktop and explorer)`,
+    states.WIP, `the ability to set settings through a virtual machine with a running system (but without violating the concept of replicability and full version control through git) that is, the virtual machine will start only when it is necessary to make changes to the settings, then winbox maker will check what exactly has been changed in the system and save in the project resources only the changes that will later be integrated into the image with each build and will be deployed again in the virtual machine if necessary to manually change the settings. I want to implement this in the form of "layers" of modification, in each of which it will be possible to make different changes to the system (install programs and drivers in the usual way and change settings) and then it will be possible to arrange the modification layers in any order by placing somewhere between them the "winbox maker default" layer where the modifications of the winbox maker itself are located. the modification layers will be saved in the "winbox_resources/_layers" directory`,
+    states.WIP, `replacing the system boot logo for BIOS-based devices via reassembly bootres.dll`,
+    states.WIP, `ability to customize network behavior`,
+    states.WIP, `the ability to set up auto-connection to wifi`,
+    states.WIP, `the ability to integrate remote access tools into a ready-made image`,
+    states.WIP, `the ability to change the list of enabled/disabled services`,
+    states.WIP, `add more build events (for example, to mount WinPE and WinRE so that they can be changed from them)`,
+    states.WIP, `a menu with deletion settings where you can remove unnecessary files from the image or disable dism components`,
+    states.WIP, `the ability to create several "export templates" that can be based on different base images (including images for different processor architectures) and can be configured to overwrite individual project settings (for example, you can set a different output image format and different system activation keys) and then you can export the project using all the templates by pressing one button and say at once get a project build for ARM and x86, or immediately get a project build in both the installation iso file format and the already installed system in img format`,
+    states.WIP, `add more options to modify the system installer`,
+    states.WIP, `add the option to enlarge the system volume to the maximum size when the device is turned on for the first time. This can be used if the system is deployed on a device from an exported img with a fixed size and the size of the drive in the device has a larger volume than the exported img file.`,
+    states.WIP, `the ability to install a postinstall script that will be executed only the first time it is turned on on the actual device when deployed via img, and not twice (the first time after installation on qemu and the second time when running on a real machine) how is this happening now by default with the current postinstall script "winbox user"`,
+    states.WIP, `the ability to set the swap partition configuration`,
+    states.WIP, `the ability to configure app locker and UWF (unified write filter)`,
+    states.WIP, `the ability to use wim/esd as a base system image (in this case, the iso cannot be exported)`,
+    states.WIP, `exporting the system in FFU (full flash image) format`,
+    states.WIP, `the ability to install the gpu driver in the image in "deep" mode. in this case, they will be embedded in the image with the native installer and deployed through it the first time you turn it on (but with updates disabled and the proprietary panel) this will allow you to install not only the driver itself, but also the video card libraries (for example, PhysX on nvidia)`,
+    states.WIP, `export to raspberry pi using the WoR project`,
+    states.WIP, `the ability to configure the replacement of the EFI logo at system startup (via efivars and CLI utilities from motherboard manufacturers), however, this is not possible on every motherboard.`,
+    states.WIP, `the ability to specify in what ways the system activation key specified in the project settings will be applied (by adding a key file to the installer, via DISM for the mounted system, via slmgr in SetupComplete) at the moment, all these three methods are used simultaneously, and since the slmgr call occurs in the SetupComplete script, the key is actually saved in the script in clear text which is not good. I want to give users the opportunity to decide exactly how the activation key will be applied`,
+    states.WIP, `add the option "run install.wim before packaging" when it is activated after the install.wim build, but before it is packaged, the system will be started on qemu and shut down before the "first boot action" stage. in this case, install.wim will include a system that has already been initially configured, which will speed up the installation of the system from the image in the future (this option will not make sense when exporting to img via qemu, since the system will already be with the initial configuration inside *.img)`,
+    states.WIP, `the architecture filter on the "build", "download", "layers" tab will be optional, but it will allow you to perform some actions only during assembly for the specified architecture, which improves the ability to assemble a single project into several architectures.`,
+    states.WIP, `setting the time zone, auto-synchronization of time, switching to winter time (in particular, checkbox to DISABLE this bullshit) and also is the BIOS time UTC/local`
+]);
+
+addNote('syslbuild', 
+`syslbuild is a build system for linux distributions (analogous to buildroot, yocta project and OpenEmbedded) that is primarily designed for embedded and kiosk distributions. The program is a python script that builds a distribution package from a description in json. The assembler can assemble the system from ready-made popular distributions such as debian, but by implementing their own settings and patches, as well as independently assemble software and libraries from the source code or copy ready-made files from the project folder. at the output, you can get an already installed system in img format with a bootloader and a partition table (OEM image) so is the boot (life) or installation iso image.
+any behavior of the system can be customized by changing the json configuration, and the build will always remain replicated, and to make changes it will only be necessary to change the json and rebuild the system.
+syslbuild can be used both to generate img for BIOS/UEFI and to generate img for running on OrangePi and Raspberry Pi of different models.
+a bunch of examples will be added to syslbuild with the assembly of different systems for different platforms with different tasks.
+starting from a simple debian-based operating system for navigator, where there will be only one application running from root, the boot logo will be replaced, sysrq and virtual tty will be disabled
+ending with full-fledged desktop distributions pre-configured to work in certain tasks (for example, in an office with early configured remote access and with root rights blocked)
+syslbuild will support cross-build for other architectures, as well as one project can be compiled for multiple architectures at once (you can make your project only once, and then export it for x86_64 and OrangePi zero 3 if you need it).
+syslbuild provides many functions for creating locked down operating systems designed to work in kiosk mode or on embedded devices (ATM, car radios, medical equipment, information stands)
+among them: disabling sysrq and virtual tty (it is better not to use systemd on embedded systems at all) and installing your application as a system shell. as a result, you will receive an img with the system already installed for your desired platform, with your custom download logo and one application from which you cannot exit. however, this is not the only scope of application.
+syslbuild projects can also use git to control project versions, and changes are made not in the mounted system, but in a json text file and other files in the project folder, which makes it easy to track changes and demolish new ones, as well as work in the command.
+syslbuild will make it easy to create your own operating systems based on open source linux software and configure them to work for your needs.
+syslbuild also allows you to add links to the files you need to the project file and they will be downloaded during the build, which prevents the need to store all the source code in the syslbuild project repository. if you are using another distribution as the basis of your OS, then you can specify a specific snapshot (which will be the best solution)
+syslbuild can also be used to build LFS/BLFS.`);
 
 // --------------------------------------------------------------- Devices
 

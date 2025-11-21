@@ -179,3 +179,9 @@
     height: 50px;
     margin: 5px;
 }
+
+.roadmap-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    width: 100%;
+}
