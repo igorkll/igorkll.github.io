@@ -376,7 +376,7 @@ addRoadmap('Winbox Maker',
     states.WIP, `the ability to export a device firmware update file *.wnu, which can be installed via custom recovery (WinRE) if it was activated in the original image and its functionality was changed to that provided by winbox maker`,
     states.WIP, `the ability to integrate custom bcd settings into the image`,
     states.WIP, `an alternative way to export *.img is by creating a bootable image immediately (without installing via qemu), however, in this case, the output will be an uninitialized img, and the device with it cannot be immediately given to the user without turning on at least once`,
-    states.WIP, `export *.esd`,
+    states.COMPLETED, `export *.esd`,
     states.WIP, `the ability to preset settings such as the system language (and add them) and keyboard layouts (including several) and the ability to set keyboard shortcuts to change them.`,
     states.WIP, `The ability to integrate appx/msix into an image (including unsigned ones) and use a packaged/UWP application as the main kiosk application.`,
     states.WIP, `more settings for windows customization, including those that are not calculated for kiosks but are suitable for creating custom builds for PCs (for example, customization of personalization, desktop and explorer)`,
@@ -399,10 +399,10 @@ addRoadmap('Winbox Maker',
     states.WIP, `the ability to install the gpu driver in the image in "deep" mode. in this case, they will be embedded in the image with the native installer and deployed through it the first time you turn it on (but with updates disabled and the proprietary panel) this will allow you to install not only the driver itself, but also the video card libraries (for example, PhysX on nvidia)`,
     states.WIP, `export to raspberry pi using the WoR project`,
     states.WIP, `the ability to configure the replacement of the EFI logo at system startup (via efivars and CLI utilities from motherboard manufacturers), however, this is not possible on every motherboard.`,
-    states.WIP, `the ability to specify in what ways the system activation key specified in the project settings will be applied (by adding a key file to the installer, via DISM for the mounted system, via slmgr in SetupComplete) at the moment, all these three methods are used simultaneously, and since the slmgr call occurs in the SetupComplete script, the key is actually saved in the script in clear text which is not good. I want to give users the opportunity to decide exactly how the activation key will be applied`,
+    states.COMPLETED, `the ability to specify in what ways the system activation key specified in the project settings will be applied (by adding a key file to the installer, via DISM for the mounted system, via slmgr in SetupComplete) at the moment, all these three methods are used simultaneously, and since the slmgr call occurs in the SetupComplete script, the key is actually saved in the script in clear text which is not good. I want to give users the opportunity to decide exactly how the activation key will be applied`,
     states.WIP, `add the option "run install.wim before packaging" when it is activated after the install.wim build, but before it is packaged, the system will be started on qemu and shut down before the "first boot action" stage. in this case, install.wim will include a system that has already been initially configured, which will speed up the installation of the system from the image in the future (this option will not make sense when exporting to img via qemu, since the system will already be with the initial configuration inside *.img)`,
     states.WIP, `the architecture filter on the "build", "download", "layers" tab will be optional, but it will allow you to perform some actions only during assembly for the specified architecture, which improves the ability to assemble a single project into several architectures.`,
-    states.WIP, `setting the time zone, auto-synchronization of time, switching to winter time (in particular, checkbox to DISABLE this bullshit) and also is the BIOS time UTC/local`
+    states.COMPLETED, `setting the time zone, auto-synchronization of time, switching to winter time (in particular, checkbox to DISABLE this bullshit) and also is the BIOS time UTC/local`
 ]);
 
 addNote('syslbuild', 
