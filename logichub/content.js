@@ -420,6 +420,66 @@ syslbuild will make it easy to create your own operating systems based on open s
 syslbuild also allows you to add links to the files you need to the project file and they will be downloaded during the build, which prevents the need to store all the source code in the syslbuild project repository. if you are using another distribution as the basis of your OS, then you can specify a specific snapshot (which will be the best solution)
 syslbuild can also be used to build LFS/BLFS.`);
 
+addNote('USB_gadget_UI.deb', 
+`this package will allow laptops, tablets, and smartphones running the debian operating system
+(or other debian-compatible devices that support the installation of deb packages)
+which can be charged via a type C, micro usb or another type of USB will be determined by the computer as a peripheral device in USB gadget mode
+the idea was borrowed from android, for some reason unknown to me, such convenient functionality is not supported in Windows and all those operating systems that I checked
+however, if your laptop supports type C charging, then it can probably work as a USB client in hardware
+this package will allow you to connect your laptop to a computer via a type C cable, after which a pop up UI will appear on the screen with a choice of operating modes (charging only, file transfer (only the user's directory will be available) and possibly other modes such as transferring images from a webcam, which will allow you to use the laptop as a PC camera)
+when you select file transfer mode, the laptop will immediately be detected by the computer as a file storage and you can view and edit files in the user's directory and on flash drives and microSD connected to the laptop (as is done in android)
+I sincerely don't understand why someone didn't do it except Google in android, why it's not in Windows, ubuntu and mint, but it will be extremely useful.`);
+
+addNote('skyOS', 
+`a new linux distribution that I develop in my spare time
+
+WARNING: next, you will receive very harsh statements about the most popular linux distributions, if you may be traumatized by this, please do not read further 😉
+WARNING 2: Chipy, don't read this. I don't want to hurt your psyche 😁. i excluded arch from the list of distributions that I have complaints about in WARNING 3)
+WARNING 3: this statement applies ONLY to distributions for the end user, which in my opinion should be completely different. for distributions that are used on servers, as a package base for creating embedded or other systems or distributions for advanced users like arch linux or gentoo, these principles DO NOT APPLY
+
+problems with all linux distributions except ChromeOS and android:
+I SINCERELY DO NOT UNDERSTAND why there is still not a single non-commercial opensource distribution that will do FINE
+WHY the FUCK does a good half of distributions have this fucking systemd that crashes every now and then, why the hell do CONSOLE POP-UP MESSAGES sometimes APPEAR ON TOP OF the BOOT LOGO when booting the system?
+why did I HAVE to OPEN a TERMINAL to set up hibernation mode in linux mint! I HATE THE FUCKING TERMINAL AND I DON'T WANT TO SEE IT ON MY PC!!!
+why do most distributions have a package manager that CHANGES THE ENVIRONMENT FOR THE ENTIRE SYSTEM, AND DOES IT USING ROOT ACCESS?! WHAT KIND OF IDIOT CAME UP WITH THE IDEA TO INSTALL APPLICATIONS USING ROOT ACCESS??
+All this inevitably turns into a hell of dependencies that CANNOT be RAKED OUT.
+why the fuck do file access rights continue to work when I connect an external flash drive with an ext4 file system? WHAT THE FUCK?? why can't you mount it by disabling file access rights and adding noexec (so that you can't get root rights on someone else's PC using a fucking USB flash drive with the SUID executable)
+WHY IS THERE A SYSTEM OF "USERS" AT ALL?? WHAT THE FUCK?? why do I need a file access rights system? WHY IS IT STUCK IN THE SYSTEM IN FRONT OF THE USER?!! WHAT THE FUCK????
+imagine a housewife who wants to come home, sit at her computer, drink tea and watch youtube, and the system keeps asking her to enter her root password, log in to the terminal to update something, trying to impose the use of a batch manager that changes system directories, and for some reason displaying some obscure file access rights for each file in the GUI. this is terrible!!
+LITERALLY, NOT A SINGLE linux distribution except android and ChromeOS still cannot become a normal operating system for the masses. WELL, WHY DON'T STUPID ENGINEERS UNDERSTAND THAT ALL THIS CRAP IS NOT NEEDED BY ORDINARY USERS AND SHOULD BE FUCKING CUT OUT OF THE SYSTEM FOR THE SAKE OF SIMPLIFICATION FOR ORDINARY USERS! how Google did it in its android and chromeOS
+why the fuck don't almost some distributions silently clean the cache of their fucking package manager and update the package list automatically, as a result, if the user tries to use only the GUI of the package manager, then most likely EVERYTHING WILL JUST BREAK AND the OS WILL BE FILLED WITH GARBAGE! IT'S FUCKED UP! It's just a failure.
+how can there be anything INCONGRUOUS in one system, two package managers like flatpak and apt. but only applications from one run in an isolated environment and do not require root to install, while others run with user rights and require root to install. HOW ARE YOU GOING TO EXPLAIN THIS SHIT TO THE USER?? imagine that a smartphone will appear, complete with 10 pages of instructions on how to set up x11 and use the package manager, how packages in the flatpak format differ from deb, and so on, BUT SUCH A PHONE WOULD SWEAT IN THE TRASH AND A PERSON WOULD GO AND BUY AN IPHONE, BECAUSE THERE IS NO SUCH SHIT.
+IF SOMEONE DOESN'T START CHANGING SOMETHING, THEN THERE SIMPLY WON'T BE A FUTURE FOR OPEN SOURCE LINUX DISTRIBUTIONS!!
+Most people DON'T WANT TO, WON'T, AREN'T GOING TO, AND THEY DON'T HAVE TIME TO STUDY HOW THE SYSTEM WORKS INTERNALLY. Not because they're stupid, BUT BECAUSE THEY DON'T NEED IT, THEY're NOT INTERESTED, and it's a waste of time for them.
+NOT ALL PEOPLE ARE ENGINEERS. there are janitors and locksmiths, truck drivers and security guards, salesmen and groomsmen. AND THEY WILL NOT USE AN OPERATING SYSTEM IN WHICH THE TERMINAL WILL HAVE TO BE OPENED AT LEAST ONCE IN THEIR LIFE.
+that doesn't mean they're stupid, THEY JUST DON'T FUCKING NEED IT.
+the fact that desktop linux currently looks more like a terminal for hackers than a normal OS like android or macOS is SIMPLY COMPLETELY KILLING THE FUTURE OF OPEN SOURCE SYSTEMS ON THE DESKTOP WITHOUT GIVING UP A SINGLE CHANCE!
+I URGE linux distribution developers who are user-friendly at least a little bit, at least OUT OF THE CORNER OF THEIR EYE, TO LISTEN TO THESE ARGUMENTS.
+if we really want to make a user-friendly and user-friendly linux distribution AND NOT COMPLETELY RUIN the FUTURE OF LINUX ON the DESKTOP, then we will have to cut out of the system: terminal, root access, user system (including the ability to create users through useradd), batch manager, sysrq and virtual ttys. We will also need to add a permission system for applications and a sandbox like in android.
+The terminal and root access can be opened in a menu like "for developers" or "for advanced users" to leave it as a backup option. BUT THIS SHOULD NOT BE THE MAIN METHOD OF MANAGING THE SYSTEM! This should not be seen by the average user at all.
+also, the root file system itself should be read-only and updated atomically (that is, the entire system is updated in one block at once, you can download only changes to optimize download time, BUT one version of the system for different users should ALWAYS have completely the same configuration)
+the user's file directory, internal PC disks and external USB flash drives and disks must be mounted WITH file access rights COMPLETELY DISABLED so that access rights do not affect the accessibility of the file to the user at all (it's FUCKING STRANGE when a person connects a flash drive and suddenly it turns out that he does not have access to some file on it) they should also be mounted with noexec to eliminate vulnerabilities with SUID
+
+the main feature of the distribution is user friendly and the complete abandonment of terminal and root access as a means of system management
+this operating system was inspired by android and ChromeOS, which I consider to be almost perfect representatives of linux systems
+i decided to start development on the basis of the debian distribution as a package base, but apt and dpkg were cut out and replaced with self-written solutions.
+the entire UI of the system will be made on electron, and the system framework for writing applications in java script.
+All applications will run in a sandbox and have a strictly limited set of privileges that the user can manage through settings.
+the root filesystem is read-only and is updated atomically
+The PID is used as the identifier of the application installed in the system to differentiate access to application files in order to isolate them from each other.
+The GID is used to grant permissions in the system to grant access to something through a toggle in the settings.
+sysrq and virtual tty are completely inaccessible.
+there is no multiuser system at all. the password can be set on the device lock screen (as in android), but not on a specific user (because there are no users)
+there is no getty, instead it has its own lock screen and its own shell.
+there is a complete lack of terminal and root access as system management tools. you can find them in the "for developers" settings, but this is not the main system management tool, but rather a debugging tool.
+there is no way to change access rights to files at all. it will not be in the GUI, and all file systems accessible to the user will be mounted without this functionality
+(there is no need to change file access rights when there are no users as a phenomenon to the PID and the GID is used by the system to allocate application rights and create sandboxes)
+
+the distribution is planned to be available for PCs, laptops, tablets, smartphones and single-board computers.
+It is also planned to develop a configurator tool that will automate the process of creating custom SkyOS images for embedded/kiosk solutions.
+the quality of the system will be improved .img images for BIOS and for UEFI (optional) which can be installed on a computer disk and it will work immediately. initramfs will have a script that will automatically expand the user's file system to the maximum possible size
+`);
+
 // --------------------------------------------------------------- Devices
 
 addCard('LGC Boombox', 
