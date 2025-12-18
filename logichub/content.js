@@ -1,3 +1,5 @@
+let anchors = {};
+
 {
 let cards = document.getElementById('cards');
 let categories = document.getElementById('categories');
@@ -11,10 +13,9 @@ const states = {
 };
 
 let categoriesList = [];
-let anchors = {};
 let seletedCategory;
 
-function selectCategory(categoryName) {
+window.selectCategory = function (categoryName) {
     for (let key in categoriesList) {
         let categoryObj = categoriesList[key];
         categoryObj[0].style.display = 'none';
@@ -32,7 +33,7 @@ function addCategory(categoryName) {
     categoryButton.classList.add('category-selector-button');
 
     if (categoryName != null) {
-        categoryButton.innerHTML = categoryName;
+        categoryButton.innerText = categoryName;
     }
 
     categoryButton.addEventListener('click', () => {
@@ -116,7 +117,7 @@ function addState(parent, state) {
         stateObj.appendChild(stateIconObj);
 
         let stateTextObj = document.createElement('div');
-        stateTextObj.innerHTML = stateText;
+        stateTextObj.innerText = stateText;
         stateTextObj.style.color = stateColor;
         stateObj.appendChild(stateTextObj);
 
@@ -126,7 +127,8 @@ function addState(parent, state) {
 
 function addText(parent, text) {
     let stateObj = document.createElement('div');
-    stateObj.classList.add('state');
+    stateObj.classList.add('content-description');
+    stateObj.classList.add('text-shadow');
     stateObj.classList.add('box-shadow');
     stateObj.classList.add('content-horisontal');
     stateObj.style.gap = 'var(--content-padding)'
@@ -141,7 +143,7 @@ function addText(parent, text) {
     stateObj.appendChild(stateTextObj);
 }
 
-function addCard(title, description, logo, previews, buttons, langs, anchor, state, category) {
+window.addCard = function (title, description, logo, previews, buttons, langs, anchor, state, category, minititle) {
     let cardBody = document.createElement('div');
     cardBody.id = anchor;
     cardBody.classList.add('content-part');
@@ -161,8 +163,16 @@ function addCard(title, description, logo, previews, buttons, langs, anchor, sta
         let cardTitle = document.createElement('div');
         cardTitle.classList.add('content-title');
         cardTitle.classList.add('text-shadow');
-        cardTitle.innerHTML = title
+        cardTitle.innerText = title;
         cardBody.appendChild(cardTitle);
+    }
+
+    if (minititle) {
+        let cardMiniTitle = document.createElement('div');
+        cardMiniTitle.classList.add('content-mini-title');
+        cardMiniTitle.classList.add('text-shadow');
+        cardMiniTitle.innerText = minititle;
+        cardBody.appendChild(cardMiniTitle);
     }
 
     if (previews) {
@@ -266,7 +276,7 @@ function addCard(title, description, logo, previews, buttons, langs, anchor, sta
             let cardButton = document.createElement('div');
             cardButton.classList.add('button');
             cardButton.classList.add('box-shadow');
-            cardButton.innerHTML = buttoninfo[0];
+            cardButton.innerText = buttoninfo[0];
             cardButtons.appendChild(cardButton);
 
             cardButton.addEventListener('click', () => {
@@ -332,7 +342,7 @@ function addRoadmap(title, messages) {
         let cardTitle = document.createElement('div');
         cardTitle.classList.add('content-title');
         cardTitle.classList.add('text-shadow');
-        cardTitle.innerHTML = title
+        cardTitle.innerText = title
         cardBody.appendChild(cardTitle);
     }
 
@@ -726,24 +736,5 @@ null, [
 [
     ['Project page', 'https://github.com/igorkll/liked']
 ], ['lua'], null, states.REJECTED, 'Other');
-
-// ---------------------------------------------------------------
-
-let anchor = location.hash.substring(1);
-
-if (anchor) {
-    let category = anchors[anchor];
-    if (category != null) {
-        selectCategory(category);
-    }
-
-    let element = document.getElementById(anchor);
-    if (element != null) {
-        element.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-    }
-}
 
 }
