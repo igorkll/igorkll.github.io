@@ -324,10 +324,10 @@ window.addCard = function (title, description, logo, previews, buttons, langs, a
     return cardBody;
 }
 
-function addNote(title, message) {
+function addNote(title, message, category="Roadmap") {
     addCard(title, message,
     null, null, 
-    null, null, null, null, "Roadmap");
+    null, null, null, null, category);
 }
 
 function addRoadmap(title, messages) {
@@ -736,5 +736,18 @@ null, [
 [
     ['Project page', 'https://github.com/igorkll/liked']
 ], ['lua'], null, states.REJECTED, 'Other');
+
+// --------------------------------------------------------------- Ideas
+
+addNote('Syberia Continuation Game Generator with AI', 
+`I want to somehow write something like a script that, using neural networks, will allow me to endlessly generate a sequel to one of my favorite games, Syberia, starting with either the first or the second part (what came out recently is complete shit.. although I went through all the parts)
+I understand that at the moment this idea is rather closer to fantasy than something more feasible, but I think that GPT 5 can already generate a plot, and if I had access to the neural networks I need, I would be able to do something more +- working
+
+here are the current versions of the tools in the order they are used to try to create manual continuations:
+chatGPT: create an alternative sequel plot for the game Syberia (check out the plot on the Internet), starting with part 1 and continuing it, that is, your plot should start where the plot of the original game ended (на Русском)
+
+In these promts, you can change some settings such as the language of the game and the part with which the generation continues.
+if I have access to all the keys and free time, then I will do it`, 'Ideas');
+    
 
 }
