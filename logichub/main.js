@@ -5,21 +5,34 @@ function googleTranslateElementInit() {
     }, 'google_translate_element');
 }
 
-function downloadRelease(repository) {
+function downloadRelease(repository, type='asset') {
     fetch(`https://api.github.com/repos/igorkll/${repository}/releases/latest`)
         .then(response => response.json())
         .then(data => {
-            const asset = data.assets[0];
-            if (asset) {
-                window.location.href = asset.browser_download_url;
+            let url;
+
+            if (type === 'zip') {
+                url = data.zipball_url;
+            } else if (type === 'tar') {
+                url = data.tarball_url;
             } else {
-                alert('There are no files available for download.');
+                const asset = data.assets?.[0];
+                if (asset) {
+                    url = asset.browser_download_url;
+                }
+            }
+
+            if (url) {
+                window.location.href = url;
+            } else {
+                alert('No downloadable content found for this release.');
             }
         })
-        .catch(error => {
-            alert('Couldn\'t get information about the release.');
+        .catch(() => {
+            alert('Could not get release information.');
         });
 }
+
 
 function placeSvg(url, container, color) {
     fetch(url).then(response => response.text()).then(svgText => {

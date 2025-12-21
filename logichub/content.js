@@ -285,6 +285,10 @@ window.addCard = function (title, description, logo, previews, buttons, langs, a
 
                 if (actiontype === 'dlgithub') {
                     downloadRelease(buttoninfo[1]);
+                } else if (actiontype === 'dlgithub_source_zip') {
+                    downloadRelease(buttoninfo[1], 'zip');
+                } else if (actiontype === 'dlgithub_source_tar') {
+                    downloadRelease(buttoninfo[1], 'tar');
                 } else {
                     window.open(buttoninfo[1], '_blank');
                 }
@@ -415,21 +419,6 @@ addRoadmap('Winbox Maker',
     states.COMPLETED, `setting the time zone, auto-synchronization of time, switching to winter time (in particular, checkbox to DISABLE this bullshit) and also is the BIOS time UTC/local`
 ]);
 
-addNote('syslbuild', 
-`syslbuild is a build system for linux distributions (analogous to buildroot, yocta project and OpenEmbedded) that is primarily designed for embedded and kiosk distributions. The program is a python script that builds a distribution package from a description in json. The assembler can assemble the system from ready-made popular distributions such as debian, but by implementing their own settings and patches, as well as independently assemble software and libraries from the source code or copy ready-made files from the project folder. at the output, you can get an already installed system in img format with a bootloader and a partition table (OEM image) so is the boot (life) or installation iso image.
-any behavior of the system can be customized by changing the json configuration, and the build will always remain replicated, and to make changes it will only be necessary to change the json and rebuild the system.
-syslbuild can be used both to generate img for BIOS/UEFI and to generate img for running on OrangePi and Raspberry Pi of different models.
-a bunch of examples will be added to syslbuild with the assembly of different systems for different platforms with different tasks.
-starting from a simple debian-based operating system for navigator, where there will be only one application running from root, the boot logo will be replaced, sysrq and virtual tty will be disabled
-ending with full-fledged desktop distributions pre-configured to work in certain tasks (for example, in an office with early configured remote access and with root rights blocked)
-syslbuild will support cross-build for other architectures, as well as one project can be compiled for multiple architectures at once (you can make your project only once, and then export it for x86_64 and OrangePi zero 3 if you need it).
-syslbuild provides many functions for creating locked down operating systems designed to work in kiosk mode or on embedded devices (ATM, car radios, medical equipment, information stands)
-among them: disabling sysrq and virtual tty (it is better not to use systemd on embedded systems at all) and installing your application as a system shell. as a result, you will receive an img with the system already installed for your desired platform, with your custom download logo and one application from which you cannot exit. however, this is not the only scope of application.
-syslbuild projects can also use git to control project versions, and changes are made not in the mounted system, but in a json text file and other files in the project folder, which makes it easy to track changes and demolish new ones, as well as work in the command.
-syslbuild will make it easy to create your own operating systems based on open source linux software and configure them to work for your needs.
-syslbuild also allows you to add links to the files you need to the project file and they will be downloaded during the build, which prevents the need to store all the source code in the syslbuild project repository. if you are using another distribution as the basis of your OS, then you can specify a specific snapshot (which will be the best solution)
-syslbuild can also be used to build LFS/BLFS.`);
-
 addNote('USB_gadget_UI.deb', 
 `this package will allow laptops, tablets, and smartphones running the debian operating system
 (or other debian-compatible devices that support the installation of deb packages)
@@ -527,6 +516,28 @@ please note that winbox maker does not provide Windows images, it only provides 
     ['Project page', 'https://github.com/igorkll/WinBox-Maker'],
     ['Download', 'WinBox-Maker', 'dlgithub']
 ], ['cs'], 'winbox', states.SUPPORTED, 'Software');
+
+addCard('syslbuild (BETA)', 
+`syslbuild is a build system for linux distributions (analogous to buildroot, yocta project and OpenEmbedded) that is primarily designed for embedded and kiosk distributions. The program is a python script that builds a distribution package from a description in json. The assembler can assemble the system from ready-made popular distributions such as debian, but by implementing their own settings and patches, as well as independently assemble software and libraries from the source code or copy ready-made files from the project folder. at the output, you can get an already installed system in img format with a bootloader and a partition table (OEM image) so is the boot (life) or installation iso image.
+any behavior of the system can be customized by changing the json configuration, and the build will always remain replicated, and to make changes it will only be necessary to change the json and rebuild the system.
+syslbuild can be used both to generate img for BIOS/UEFI and to generate img for running on OrangePi and Raspberry Pi of different models.
+a bunch of examples will be added to syslbuild with the assembly of different systems for different platforms with different tasks.
+starting from a simple debian-based operating system for navigator, where there will be only one application running from root, the boot logo will be replaced, sysrq and virtual tty will be disabled
+ending with full-fledged desktop distributions pre-configured to work in certain tasks (for example, in an office with early configured remote access and with root rights blocked)
+syslbuild will support cross-build for other architectures, as well as one project can be compiled for multiple architectures at once (you can make your project only once, and then export it for x86_64 and OrangePi zero 3 if you need it).
+syslbuild provides many functions for creating locked down operating systems designed to work in kiosk mode or on embedded devices (ATM, car radios, medical equipment, information stands)
+among them: disabling sysrq and virtual tty (it is better not to use systemd on embedded systems at all) and installing your application as a system shell. as a result, you will receive an img with the system already installed for your desired platform, with your custom download logo and one application from which you cannot exit. however, this is not the only scope of application.
+syslbuild projects can also use git to control project versions, and changes are made not in the mounted system, but in a json text file and other files in the project folder, which makes it easy to track changes and demolish new ones, as well as work in the command.
+syslbuild will make it easy to create your own operating systems based on open source linux software and configure them to work for your needs.
+syslbuild also allows you to add links to the files you need to the project file and they will be downloaded during the build, which prevents the need to store all the source code in the syslbuild project repository. if you are using another distribution as the basis of your OS, then you can specify a specific snapshot (which will be the best solution)
+syslbuild can also be used to build LFS/BLFS.`,
+'logos/syslbuild.png', [
+    'https://raw.githubusercontent.com/igorkll/syslbuild/refs/heads/main/preview.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/syslbuild'],
+    ['Download', 'syslbuild', 'dlgithub_source_zip']
+], ['python'], 'syslbuild', states.WIP, 'Software');
 
 // --------------------------------------------------------------- Services
 
