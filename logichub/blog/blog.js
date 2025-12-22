@@ -1,3 +1,9 @@
+addCard('winbox-maker development', 
+`In the next version of winbox maker, it will be possible to specify keyboard layouts.`,
+null, [
+    "blog/images/2.png"
+], null, null, null, null, 'Blog', '15:33 december 22 2025');
+
 addCard('skyOS development', 
 `I am developing a linux distribution (SkyOS), the main trailer of which is user friendly and complete abandonment of terminal and root access. For more information, see the roadmap tab.
 
