@@ -1,3 +1,20 @@
+addCard('windows is a dumpster', 
+`I'm doing nothing more than SAWING the SHIT OUT OF WINDOWS at the request of one person!
+you have no idea how fucked up and overloaded this operating system is,
+the list of disabled tasks in schtasks STUPIDLY DOES NOT FIT INTO THE DISCORD MESSAGE WITHOUT NITRO!
+after removing all this crap, windows "suddenly" starts consuming 600 megabytes of RAM instead of 1.5-2 gigabytes, but it works fine.
+I SINCERELY DON'T UNDERSTAND WHY MICROSOFT IS DOING THIS!!
+FOR WHAT!! Why?? why so much junk? FOR WHAT!
+it is impossible to use it, it interferes with computer operation.
+after all, they see that with each windows update, the share of linux based systems on the desktop grows by ~ 1%, DON'T THEY UNDERSTAND THAT THEY WILL KILL WINDOWS THIS WAY?
+WHY microsoft, instead of SAWING OUT the SHIT, shove it even more. WHY, JUST FUCKING FOR WHAT!
+windows won't start buying more from this, they won't get more money, THEY'LL JUST LOSE THEIR COMPETITIVE ADVANTAGE AND LOSE 100% TO ANDROID IF GOOGLE MAKES THE OFFICIAL DESKTOP VERSION!
+why can't they give you a choice: install shit (maximum compatibility with legacy software), DON'T INSTALL SHIT!
+why DO I HAVE TO FINISH THEIR WORK FOR THEM!`,
+null, [
+    "blog/images/3.png"
+], null, null, null, null, 'Blog', '19:44 december 25 2025');
+
 addCard('winbox-maker development', 
 `In the next version of winbox maker, it will be possible to specify keyboard layouts.`,
 null, [

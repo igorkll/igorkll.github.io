@@ -10,6 +10,7 @@ const states = {
     SUPPORTED: 2,
     COMPLETED: 3,
     REJECTED: 4,
+    BETA: 5
 };
 
 let categoriesList = [];
@@ -100,6 +101,12 @@ function addState(parent, state) {
         case states.REJECTED:
             stateText = "Rejected";
             stateColor = '#f8130bff';
+            stateIcon = 'svg/rejected.svg';
+            break;
+
+        case states.BETA:
+            stateText = "Beta test";
+            stateColor = '#ff5afcff';
             stateIcon = 'svg/rejected.svg';
             break;
     }
@@ -524,7 +531,7 @@ null, [
 ], 
 [
     ['Project page', 'https://github.com/igorkll/LGC-Boombox']
-], ['js', 'cs'], null, states.WIP, 'Devices');
+], ['js', 'cs'], null, states.BETA, 'Devices');
 
 // --------------------------------------------------------------- Software
 
@@ -568,7 +575,7 @@ syslbuild can also be used to build LFS/BLFS.`,
 [
     ['Project page', 'https://github.com/igorkll/syslbuild'],
     ['Download', 'syslbuild', 'dlgithub_source_zip']
-], ['python'], 'syslbuild', states.WIP, 'Software');
+], ['python'], 'syslbuild', states.BETA, 'Software');
 
 // --------------------------------------------------------------- Services
 
