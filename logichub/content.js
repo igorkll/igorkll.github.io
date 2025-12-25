@@ -107,7 +107,7 @@ function addState(parent, state) {
         case states.BETA:
             stateText = "Beta test";
             stateColor = '#ff5afcff';
-            stateIcon = 'svg/rejected.svg';
+            stateIcon = 'svg/beta.svg';
             break;
     }
 
