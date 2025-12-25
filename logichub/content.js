@@ -375,6 +375,13 @@ cards.insertBefore(logicCard, cards.firstChild)
 
 // --------------------------------------------------------------- Notes
 
+addNote(null,
+`This is my roadmap! That's what I'm going to do, or have already started doing. It's just a collection of ideas that I need to find the time to implement.
+Some of them have already been implemented, some are in the process, some are just in the idea format.
+sooner or later, everything is likely to be implemented, but it takes time.
+If someone likes any of the ideas from this list, you could speed up the development by making a cash donation to boosty, or by contacting me and discussing another way.
+I also don't mind taking software development orders.`);
+
 addNote('LGC Boombox', 
 `it will be necessary to finally finish this project. add Bluetooth, wifi, browser, sorting and search in explorer and battery level detector`);
 
@@ -418,6 +425,30 @@ addRoadmap('Winbox Maker',
     states.WIP, `the architecture filter on the "build", "download", "layers" tab will be optional, but it will allow you to perform some actions only during assembly for the specified architecture, which improves the ability to assemble a single project into several architectures.`,
     states.COMPLETED, `setting the time zone, auto-synchronization of time, switching to winter time (in particular, checkbox to DISABLE this bullshit) and also is the BIOS time UTC/local`
 ]);
+
+addNote('Livesys maker', 
+`The program is an alternative to winbox maker,
+for those who prefer the "classic" approach in the settings of OEM operating systems - through installation on a virtual machine to make changes.
+Although I plan to write this program for windows, it will also be able to manage the creation of OEM linux and windows distributions.
+the main task of this program is to control the versions of disk images and minimize the occupied space.
+for example, for windows, you need a 20 GB file for a disk, but you also need to contrast the versions of the project...
+in general, it will be necessary to calculate the difference between two virtual disks somehow. that's basically all.
+The main configuration will be performed on a virtual machine, or using the built-in tools of livesys maker.
+you simply create a project, select a basic system image, and livesys maker will launch a virtual machine where you will configure the OS.
+manually... yes, this approach is more convenient for someone than the declarative one in winbox maker...
+as a normal embedded developer, it hurts me to look at this, but yes there are such people and I want to give them at least a tool for version control of the system image instead of "copy a 20 gig file the disk image"
+This program is more suitable for creating OEM images of systems for laptops/computers or other devices than for embedded or kiosks.
+since the main task is to provide a convenient toolkit for project version control, launching a virtual machine and configuring it (without unnecessary fuss with the configuration of virtual machines)`);
+
+addNote('Gnubox maker', 
+`this program will be a kind of add-on for syslbuild (my build script for creating linux system images) and will essentially be a kind of winbox maker in the linux world.
+it will allow you to select the base distribution, configure packages, configuration, network, and language.
+add your files and settings and automatically pack it all into an image (installer, live or img for firmware on disk) just like winbox maker,
+gnubox maker will create a project with all the settings and its versions can be contrasted via git,
+the entire configuration will also be in json format and the GUI will allow you to change system settings.
+although the settings are made through the GUI, the approach is still declarative, since the configuration with all project files can be controlled through git.
+The scope of the project is to create embedded/ kiosk/ OEM assemblies from ready-made Linux distributions and subsequent update management.
+The gnubox maker tools will be designed in such a way as to ensure the cross-assembly of one system on different platforms. This way you can make your embedded /kiosk /oem assembly once and then export it to a PC, tablet, smartphone and orange PI (the device is selected as an example) if the device is not in the list of supported devices, you can add it yourself. you won't have to change the configuration much to export a single image for both a PC and a supported smartphone model (pine phone, pine phone pro, librem 5 will definitely be supported out of the box, although I'll have to get reference devices for development somewhere)`);
 
 addNote('USB_gadget_UI.deb', 
 `this package will allow laptops, tablets, and smartphones running the debian operating system
