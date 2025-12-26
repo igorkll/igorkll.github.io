@@ -1,3 +1,12 @@
+addCard('writing winbox maker recovery', 
+`this will be in the next version of winbox maker 1.8.0
+This will be the official recovery for winbox maker.
+It is activated with a single button in the project and supports basic customization through winbox maker settings.
+to run it in your project, it is enough to set one check mark during the build and then call from your application C:\\WinboxApi\\reboot_to_recovery.bat`,
+null, [
+    "blog/images/4.png"
+], null, null, null, null, 'Blog', '20:16 december 26 2025');
+
 addCard('windows is a dumpster', 
 `I'm doing nothing more than SAWING the SHIT OUT OF WINDOWS at the request of one person!
 you have no idea how fucked up and overloaded this operating system is,
