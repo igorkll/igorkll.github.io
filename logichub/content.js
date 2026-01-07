@@ -236,6 +236,7 @@ window.addCard = function (title, description, logo, previews, buttons, langs, a
 
             previewScrollSub = document.createElement('div');
             previewScrollSub.classList.add('content-scroll-button');
+            previewScrollSub.classList.add('box-shadow');
             previewScrollButtons.appendChild(previewScrollSub);
 
             let previewScrollSubIcon = document.createElement('div');
@@ -250,6 +251,7 @@ window.addCard = function (title, description, logo, previews, buttons, langs, a
 
             previewScrollAdd = document.createElement('div');
             previewScrollAdd.classList.add('content-scroll-button');
+            previewScrollAdd.classList.add('box-shadow');
             previewScrollButtons.appendChild(previewScrollAdd);
             
             let previewScrollAddIcon = document.createElement('div');
@@ -384,7 +386,7 @@ I love playing ScrapMechanic and programming.
 This page is something like a collection of my projects that are ready for publication.
 You will also find my contacts here so that you can contact me.`,
 null, null, 
-null, ['c', 'cs', 'js', 'lua', 'python']);
+null, ['c', 'cs', 'js', 'lua', 'python', 'cpp']);
 cards.insertBefore(logicCard, cards.firstChild)
 
 // --------------------------------------------------------------- Notes
@@ -407,24 +409,24 @@ addNote('Everyfun Sandbox',
 
 addRoadmap('Winbox Maker', 
 [
-    states.WAIT_PUBLISH, `add options for configuring WinRE (at the moment it is simply disabled but not removed from the image) (the ability to allow/prohibit entry into the recovery menu, activate/deactivate auto-entry in case of failure and replace the functionality of the recovery menu with custom or functionality provided by winbox maker, or even completely remove it from the image if it is not needed)`,
+    states.COMPLETED, `add options for configuring WinRE (at the moment it is simply disabled but not removed from the image) (the ability to allow/prohibit entry into the recovery menu, activate/deactivate auto-entry in case of failure and replace the functionality of the recovery menu with custom or functionality provided by winbox maker, or even completely remove it from the image if it is not needed)`,
     states.WIP, `the ability to export a device firmware update file *.wnu, which can be installed via custom recovery (WinRE) if it was activated in the original image and its functionality was changed to that provided by winbox maker`,
     states.WIP, `the ability to integrate custom bcd settings into the image`,
     states.WIP, `an alternative way to export *.img is by creating a bootable image immediately (without installing via qemu), however, in this case, the output will be an uninitialized img, and the device with it cannot be immediately given to the user without turning on at least once`,
     states.COMPLETED, `export *.esd`,
     states.WIP, `the ability to preset settings such as the system language (and add them) and keyboard layouts (including several) and the ability to set keyboard shortcuts to change them.`,
     states.WIP, `The ability to integrate appx/msix into an image (including unsigned ones) and use a packaged/UWP application as the main kiosk application.`,
-    states.WAIT_PUBLISH, `more settings for windows customization, including those that are not calculated for kiosks but are suitable for creating custom builds for PCs (for example, customization of personalization, desktop and explorer)`,
+    states.COMPLETED, `more settings for windows customization, including those that are not calculated for kiosks but are suitable for creating custom builds for PCs (for example, customization of personalization, desktop and explorer)`,
     states.WIP, `the ability to set settings through a virtual machine with a running system (but without violating the concept of replicability and full version control through git) that is, the virtual machine will start only when it is necessary to make changes to the settings, then winbox maker will check what exactly has been changed in the system and save in the project resources only the changes that will later be integrated into the image with each build and will be deployed again in the virtual machine if necessary to manually change the settings. I want to implement this in the form of "layers" of modification, in each of which it will be possible to make different changes to the system (install programs and drivers in the usual way and change settings) and then it will be possible to arrange the modification layers in any order by placing somewhere between them the "winbox maker default" layer where the modifications of the winbox maker itself are located. the modification layers will be saved in the "winbox_resources/_layers" directory`,
     states.WIP, `replacing the system boot logo for BIOS-based devices via reassembly bootres.dll`,
     states.WIP, `ability to customize network behavior`,
     states.WIP, `the ability to set up auto-connection to wifi`,
     states.WIP, `the ability to integrate remote access tools into a ready-made image`,
-    states.WAIT_PUBLISH, `the ability to change the list of enabled/disabled services`,
-    states.WAIT_PUBLISH, `add more build events (for example, to mount WinPE and WinRE so that they can be changed from them)`,
-    states.WAIT_PUBLISH, `a menu with deletion settings where you can remove unnecessary files from the image or disable dism components`,
+    states.COMPLETED, `the ability to change the list of enabled/disabled services`,
+    states.COMPLETED, `add more build events (for example, to mount WinPE and WinRE so that they can be changed from them)`,
+    states.COMPLETED, `a menu with deletion settings where you can remove unnecessary files from the image or disable dism components`,
     states.WIP, `the ability to create several "export templates" that can be based on different base images (including images for different processor architectures) and can be configured to overwrite individual project settings (for example, you can set a different output image format and different system activation keys) and then you can export the project using all the templates by pressing one button and say at once get a project build for ARM and x86, or immediately get a project build in both the installation iso file format and the already installed system in img format`,
-    states.WAIT_PUBLISH, `add more options to modify the system installer`,
+    states.COMPLETED, `add more options to modify the system installer`,
     states.WIP, `add the option to enlarge the system volume to the maximum size when the device is turned on for the first time. This can be used if the system is deployed on a device from an exported img with a fixed size and the size of the drive in the device has a larger volume than the exported img file.`,
     states.WIP, `the ability to install a postinstall script that will be executed only the first time it is turned on on the actual device when deployed via img, and not twice (the first time after installation on qemu and the second time when running on a real machine) how is this happening now by default with the current postinstall script "winbox user"`,
     states.WIP, `the ability to set the swap partition configuration`,
@@ -553,9 +555,15 @@ please note that the program requires the "dism" utility. usually it is built in
 the program is recommended to be used with the original English image of "Windows 10 Enterprise"
 please note that winbox maker does not provide Windows images, it only provides a tool for reassembling Windows for use in kiosk mode`,
 'logos/winbox.png', [
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/previewlogo.png',
     'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview.png',
     'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview2.png',
     'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview3.png',
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview4.png',
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview5.png',
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview6.png',
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview7.png',
+    'https://raw.githubusercontent.com/igorkll/WinBox-Maker/refs/heads/master/preview8.png',
 ], 
 [
     ['Project page', 'https://github.com/igorkll/WinBox-Maker'],

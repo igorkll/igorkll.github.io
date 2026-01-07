@@ -1,16 +1,16 @@
 ::-webkit-scrollbar {
-  width: 20px;
-  height: 20px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: rgb(111, 146, 177);
+  background-color: rgb(70, 92, 111);
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: rgb(33, 162, 243);
   border-radius: 100vh;
-  border: 3px solid rgb(111, 146, 177);
+  border: 3px solid rgba(70, 92, 111);
 }
 
 ::-webkit-scrollbar-thumb:hover {
