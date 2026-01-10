@@ -812,6 +812,23 @@ chatGPT: create an alternative sequel plot for the game Syberia (check out the p
 
 In these promts, you can change some settings such as the language of the game and the part with which the generation continues.
 if I have access to all the keys and free time, then I will do it`, 'Ideas');
+
+// --------------------------------------------------------------- Portfolio
+
+addCard('Ordy', 
+`Ordy is a smart digital assistant designed to bring order into your daily life.
+
+It helps you remember important things, manage tasks, set reminders, and keep track of your schedule — all in one simple and intuitive place. Ordy understands natural language, so you can talk to it like a real assistant, not a complicated app.
+
+Whether it’s a meeting tomorrow, a quick reminder, or organizing your day, Ordy keeps everything clear, structured, and stress-free.
+
+No chaos.
+No overthinking.
+Just order — with Ordy.`,
+null, ['images/ordy.jpg'], 
+[
+    ['Project page', 'https://my-ordy.com/']
+], ['python', 'js'], null, states.SUPPORTED, 'Portfolio');
     
 
 }
