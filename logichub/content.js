@@ -189,7 +189,7 @@ window.addCard = function (title, description, logo, previews, buttons, langs, a
         cardBody.appendChild(cardMiniTitle);
     }
 
-    if (previews) {
+    if (previews && previews.length > 0) {
         if (previews.length == 1) {
             let cardPreview = document.createElement('img');
             cardPreview.classList.add('content-preview');
@@ -800,6 +800,16 @@ null, [
 [
     ['Project page', 'https://github.com/igorkll/liked']
 ], ['lua'], null, states.REJECTED, 'Other');
+
+addCard('efivars-cli-powershell', 
+`A powershell cli interface for reading and writing to efi variables for windows.
+allows you to view the entire efi variables list for all GUIDs, write and read variables.`,
+null, [
+], 
+[
+    ['Project page', 'https://github.com/igorkll/efivars-cli-powershell'],
+    ['Download', 'efivars-cli-powershell', 'dlgithub_source_zip']
+], ['ps1'], null, states.COMPLETED, 'Other');
 
 // --------------------------------------------------------------- Ideas
 
