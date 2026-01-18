@@ -811,6 +811,15 @@ null, [
     ['Download', 'efivars-cli-powershell', 'dlgithub_source_zip']
 ], ['ps1'], null, states.COMPLETED, 'Other');
 
+addCard('linux-embedded-patchs', 
+`a set of patches for creating embedded linux`,
+null, [
+], 
+[
+    ['Project page', 'https://github.com/igorkll/linux-embedded-patchs'],
+    ['Download', 'linux-embedded-patchs', 'dlgithub_source_zip']
+], null, null, states.COMPLETED, 'Other');
+
 // --------------------------------------------------------------- Ideas
 
 addNote('Syberia Continuation Game Generator with AI', 
