@@ -780,6 +780,13 @@ null, ['images/online_boombox.jpg'],
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3185287679']
 ], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
 
+addCard('SComputers invisible [SComputers addon]', 
+`adds invisible versions of all blocks from SComputers and power toys`,
+null, ['images/scomputers_invisible.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3654930099']
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
+
 // --------------------------------------------------------------- Other
 
 addCard('esp32 opencomputers', 
