@@ -1,0 +1,168 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+
+}
+
+:root {
+    --shadow: 0px 0px 5px 1px rgb(0, 0, 0, 0.6);
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow-x: hidden;
+    overflow-y: overlay;
+
+    box-sizing: border-box;
+    background: rgb(58, 58, 58);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: stretch;
+}
+
+header {
+    box-shadow: var(--shadow);
+
+    flex-shrink: 0;
+    height: 80px;
+    background: rgb(205, 102, 38);
+
+    padding: 5px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+
+    position: sticky;
+    z-index: 1;
+    top: 0px;
+    left: 0px;
+
+    overflow: hidden;
+}
+
+.header-icon {
+    width: 70px;
+    height: 70px;
+}
+
+.header-title {
+    color: white;
+    font-size: 40px;
+    font-weight: 900;
+}
+
+.size-normalizer {
+    position: relative;
+}
+
+.size-normalizer img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-grid-container {
+    flex: 1;
+}
+
+.gallery-grid {
+    padding: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.gallery-item {
+    box-shadow: var(--shadow);
+    background: rgb(26, 26, 26);
+    position: relative;
+    min-width: 200px;
+    min-height: 200px;
+    transition: transform 0.15s ease;
+    cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .gallery-item:hover {
+        transform: scale(1.05);
+    }
+}
+
+.gallery-item img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.fullscreen-image {
+    z-index: 10;
+
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+
+    background: #00000046;
+    backdrop-filter: blur(20px);
+
+    transition: opacity 0.15s ease;
+    opacity: 0;
+}
+
+.fullscreen-image-open {
+    opacity: 1;
+}
+
+.fullscreen-image img {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: calc(100% - 80px);
+    height: calc(100% - 80px);
+
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 30px;
+    }
+
+    .gallery-item {
+        width: 100%;
+        min-height: 300px;
+    }
+
+    .fullscreen-image img {
+        top: 20px;
+        left: 20px;
+        width: calc(100% - 40px);
+        height: calc(100% - 40px);
+    }
+}
