@@ -592,6 +592,16 @@ syslbuild can also be used to build LFS/BLFS.`,
     ['Download', 'syslbuild', 'dlgithub_source_zip']
 ], ['python'], 'syslbuild', states.BETA, 'Software');
 
+addCard('EveryfunSandbox', 
+`the game I'm writing right now. something like a minecraft clone and scrap mechanic at the same time. but the main thing is that the game will have a lot of electronics and work with real files. for example, there will be a gramophone and a recording device that will allow you to replicate records from real mp3 on a computer inside the game, the game will copy the file to the save folder and link it to the item. A video recorder will work on the same principle. The game will also have computers in lua as an interpreter. the game will be in the genre of survival`,
+'logos/everyfunsandbox.png', [
+    'https://raw.githubusercontent.com/igorkll/EveryfunSandbox/refs/heads/main/EveryfunSandbox/gui/splash.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/EveryfunSandbox']//,
+    //['Download', 'EveryfunSandbox', 'dlgithub_source_zip']
+], ['godot'], null, states.WIP, 'Software');
+
 // --------------------------------------------------------------- Services
 
 addCard('Scrap Mechanic Server', 
@@ -780,6 +790,13 @@ null, ['images/online_boombox.jpg'],
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3185287679']
 ], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
 
+addCard('SComputers invisible [SComputers addon]', 
+`adds invisible versions of all blocks from SComputers and power toys`,
+null, ['images/scomputers_invisible.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3654930099']
+], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
+
 // --------------------------------------------------------------- Other
 
 addCard('esp32 opencomputers', 
@@ -812,13 +829,49 @@ null, [
 ], ['ps1'], null, states.COMPLETED, 'Other');
 
 addCard('linux-embedded-patchs', 
-`a set of patches for creating embedded linux`,
+`a set of patches for embedded linux systems
+the patches were tested on kernel version 6.8.12
+these patches should also work on newer kernel versions, because the \`patch\` utility applies changes using contextual lines and can automatically adjust offsets if the surrounding code has shifted
+in order for these patches to work, make sure that \`CONFIG_WERROR\` is NOT enabled in the kernel config
+<h2>pathes</h2><ul><li>disable_vt_swithing_from_keyboard.patch - disables VT switching at the kernel level, but VT switching can still work from x11. it completely kills VT switching from the keyboard, but does not prevent VT switching from userspace (for example, via chvt). please note that if you disabled VT switching using the patch, it will only work in tty! switching processing can still occur at the graphics session level, it's easy to disable in x11, but it depends on the composer in wayland</li>
+  <li>disable_sysrq.patch - it completely prohibits the operation of sysrq, regardless of the kernel parameters</li>
+  <li>disable_cad.patch - blocks restarting by pressing ctrl+alt+del</li>
+  <li>disable_printk.patch - will make the kernel shut up</li></ul>`,
 null, [
 ], 
 [
     ['Project page', 'https://github.com/igorkll/linux-embedded-patchs'],
     ['Download', 'linux-embedded-patchs', 'dlgithub_source_zip']
 ], null, null, states.COMPLETED, 'Other');
+
+addCard('custom-debian-initramfs-init', 
+`custom /init script for initramfs in debian, adding several useful parameters to the cmdline of the kernel  
+the parameters added here make the most sense for embedded devices  
+it also allows you to mount rootfs from *.img (loop), including from real rootfs  
+Attention! I have NO guarantee that this will go down to your system and won't break it. I warned you, I'm not responsible for anything  
+<h2>kernel parameters</h2><ul><li>clear - clears the terminal during initialization. does this as early as possible. the original script has initramfs.clear, but apparently it doesn't work
+<li>noCursorBlink - prevents cursor blinking when loading
+<li>earlysplash - an alternative way to initialize plymouth is to try to initialize plymouth as early as possible. for plymouth to really work, you need the splash parameter right after quiet. in this case, you will get something like "quiet splash earlysplash"
+<li>noctrlaltdel - disables support for ctrl+alt+del in the kernel as early as possible
+<li>nosysrq - disables support for sysrq in the kernel as early as possible. As practice shows, sysrq=0 does not always work
+<li>loop=/path - allows you to mount loop files (rootfs in .img file) as root (it seems like this already exists in ubuntu but not in debian) here is the path relative to the initramfs root, however, the real root is accessible via the path /realroot so you can mount the loop, which is located in the real root partition. also, if there is an empty realroot directory inside your loop rootfs, then the real root will be mounted there.
+<li>loopflags= - flags that the loop will be mounted with (not necessary for the loop= to work)
+<li>loopfstype= - the type of file system inside the loop file. can be determined automatically, not necessary for the loop= to work
+<li>loopreadonly - it says that the loop needs to be mounted as readonly even if the real root is not readonly
+<li>makevartmp - makes a tmpfs "/var" directory by copying the real contents into it. may be necessary for readonly filesystems
+<li>makehometmp - makes a tmpfs "/home" directory by copying the real contents into it. may be necessary for readonly filesystems
+<li>makeroothometmp - makes a tmpfs "/root" directory by copying the real contents into it. may be necessary for readonly filesystems
+<li>logodelay=10 - It was created to create a delay in system loading and the logo was displayed longer.
+<li>minlogotime=10 - a more preferable option. sets exactly the minimum display time for the logo and does not make a stupid delay. it starts before of the init system, but after mounting, when the environment is almost ready.
+<li>logoautohide - automatically hides the logo just before the initialization system starts. it should be used if your userspace itself does not hide the logo
+<li>root_processing - enables additional processing of the root partition. It doesn't do anything by itself, but it's needed for other parameters.
+<li>root_expand - expands the root partition to the maximum possible size on this disk. This is necessary if you are publishing a system image that can be written to any disk with an unknown size, and you need rootfs to take up all available space. you also need to add root_processing</li></ul>`,
+null, [
+], 
+[
+    ['Project page', 'https://github.com/igorkll/custom-debian-initramfs-init'],
+    ['Download', 'custom-debian-initramfs-init', 'dlgithub_source_zip']
+], ['bash'], null, states.BETA, 'Other');
 
 // --------------------------------------------------------------- Ideas
 
