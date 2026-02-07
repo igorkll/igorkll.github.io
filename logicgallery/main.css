@@ -85,13 +85,15 @@ header {
 }
 
 .gallery-grid {
-    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
 
     display: flex;
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 20px;
+    padding: 20px;
 }
 
 .gallery-item {
