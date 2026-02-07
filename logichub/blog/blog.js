@@ -1,3 +1,14 @@
+addCard('fucking plymouth', 
+`THE FUCKING PLYMOUTH DEVELOPERS WON'T SEE EMBEDDED!
+there is keyboard processing in plymouth, and pressing esc brings up the console.
+AND YOU CAN'T FUCKING TURN IT OFF!!
+The developers of plymouth HATE EMBEDDED, where the OS should not handle CERTAIN keyboard shortcuts and SHOULD JUST RUN ONE APPLICATION!
+now I will have to patch plymouth (I will post a modified version) in order to achieve the ideal embedded behavior on gnu/linux.
+I beat windows in my winbox maker, and I'll beat linux in gnubox maker!
+this stuff will never show up on my embedded devices,
+I will make kernel and software patches to disable ABSOLUTELY ALL hotkeys and ABSOLUTELY EVERYTHING that can come out on the screen except my application.`,
+null, [], null, null, null, null, 'Blog', '5:42 february 7 2026');
+
 addCard('writing winbox maker recovery', 
 `this will be in the next version of winbox maker 1.8.0
 This will be the official recovery for winbox maker.

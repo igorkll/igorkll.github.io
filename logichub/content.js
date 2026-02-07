@@ -866,12 +866,22 @@ Attention! I have NO guarantee that this will go down to your system and won't b
 <li>logoautohide - automatically hides the logo just before the initialization system starts. it should be used if your userspace itself does not hide the logo
 <li>root_processing - enables additional processing of the root partition. It doesn't do anything by itself, but it's needed for other parameters.
 <li>root_expand - expands the root partition to the maximum possible size on this disk. This is necessary if you are publishing a system image that can be written to any disk with an unknown size, and you need rootfs to take up all available space. you also need to add root_processing</li></ul>`,
-null, [
-], 
+null, [],
 [
     ['Project page', 'https://github.com/igorkll/custom-debian-initramfs-init'],
     ['Download', 'custom-debian-initramfs-init', 'dlgithub_source_zip']
-], ['bash'], null, states.BETA, 'Other');
+], ['bash'], null, states.SUPPORTED, 'Other');
+
+// --------------------------------------------------------------- Web
+
+addCard('Logic Gallery', 
+`just a collection of art,
+I had nothing to do and I wrote it during the assembly of my linux distribution
+(building the system is a long process and I decided not to waste time)`,
+null, ['images/logicgallery.png'],
+[
+    ['Open', 'https://igorkll.github.io/logicgallery'],
+], ['js'], null, states.SUPPORTED, 'Web');
 
 // --------------------------------------------------------------- Ideas
 
