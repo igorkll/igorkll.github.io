@@ -872,6 +872,17 @@ null, [],
     ['Download', 'custom-debian-initramfs-init', 'dlgithub_source_zip']
 ], ['bash'], null, states.SUPPORTED, 'Other');
 
+addCard('embedded-plymouth', 
+`This is a patched version of plymouth for use on embedded devices.
+the difference is that it does not respond to pressing the ESC button like the original plymouth and does not show the console...
+that's all... there is no difference anymore...
+It took me about 5 hours of my life because someone was too lazy to add one setting.`,
+null, ['images/embedded_plymouth.png'],
+[
+    ['Project page', 'https://github.com/igorkll/embedded-plymouth'],
+    ['Download', 'embedded-plymouth', 'dlgithub_source_zip']
+], ['c'], null, states.COMPLETED, 'Other');
+
 // --------------------------------------------------------------- Web
 
 addCard('Logic Gallery', 
