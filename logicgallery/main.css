@@ -23,7 +23,7 @@ body {
     height: 100%;
 
     overflow-x: hidden;
-    overflow-y: overlay;
+    overflow-y: hidden;
 
     box-sizing: border-box;
     background: rgb(58, 58, 58);
@@ -81,6 +81,7 @@ header {
 }
 
 .gallery-grid-container {
+    overflow-y: auto;
     flex: 1;
 }
 
