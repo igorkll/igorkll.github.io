@@ -885,6 +885,15 @@ null, ['images/embedded_plymouth.png'],
 
 // --------------------------------------------------------------- Web
 
+addCard('Embedded Purity Movement', 
+`the digital church.
+a religion based on the correct creation of embedded operating systems, a replicated approach and a complete lock on all keyboard shortcuts.
+Maybe it's time for me to go to the madhouse...`,
+null, ['images/EmbeddedPurityMovement.png'],
+[
+    ['Open', 'https://igorkll.github.io/EmbeddedPurityMovement'],
+], ['js'], null, states.SUPPORTED, 'Web');
+
 addCard('Logic Gallery', 
 `just a collection of art,
 I had nothing to do and I wrote it during the assembly of my linux distribution

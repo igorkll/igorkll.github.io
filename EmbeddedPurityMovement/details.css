@@ -1,0 +1,20 @@
+details {
+    text-align: left;
+    align-self: stretch;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+}
+
+details[open] .content {
+    padding: 10px;
+    gap: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Embedded Purity Movement</title>
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="details.css">
+        <link rel="stylesheet" href="hyperlinks.css">
+        <link rel="stylesheet" href="scrollbar.css">
+    </head>
+    <body>
+        <main>
+            <img src="background.png" class="backgroundImage"></img>
+            <h1>Embedded Purity Movement</h1>
+            <div class="scroll">
+                <h2>the religion of pure embedded systems and automated assembly<h2>
+                <h2>religion tells us how the process of creating an embedded operating system should go and how its behavior should differ from a regular operating system<h2>
+                <h3>An embedded operating system can be made from a regular linux or Windows distribution. but the process of its creation must be special, so as not to violate the precepts of the "Embedded Purity Movement"<h3>
+                <h3>The following describes what the process of creating an embedded operating system should be, what its behavior in production should be, and what is a MORTAL SIN</h3>
+                <details>
+                    <summary>Creation process</summary>
+                    <div class="content">
+                        <span>The process of creating an embedded operating system should be:</span>
+
+                        <details>
+                            <summary>1. automated</summary>
+                            <div class="content">
+                                <span>downloading of the base image of the system and its modification by assembly scripts is allowed, manual set of the base image of the system for the reassembly tool is allowed. further creation of the embedded operating system should be performed completely automatically and the result should be a ready-made image in .img format, which should already contain bootloader and a partition table (if required) and if designed for standard x86 computers, it should work being written using "dd" without additional configuration.</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>2. replicated</summary>
+                            <div class="content">
+                                <span>every time I start the assembly line (whether it's a script or a GUI program), I have to get a functionally identical output image of the operating system. The image should immediately be configured and not require additional configuration, it should immediately be stripped of ALL hotkeys and everything that could come out on top of the embedded application.</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>3. controlled through a version control system</summary>
+                            <div class="content">
+                                <span>The output image should be determined by text files (configs). although they can be edited through the graphical interface, the tool for creating an embedded operating system must be built in such a way as to be able to save and upload the configuration to the config folder so that it can be contrasted through the version control system. what the embedded operating system will be is determined by the configuration files in the version control system. Editing an already running operating system is NOT ALLOWED in an attempt to turn it into embedded images cannot be controlled through a version control system, the process is not automated and CANNOT BE REPEATED - this is a MORTAL SIN</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>4. fixed versions of packages</summary>
+                            <div class="content">
+                                <span>all versions of packages, base images, and modules that the assembly script downloads based on links in the system configuration must have a fixed version so that the assembly is reproducible after a long time. It is forbidden to use rolling release repositories that do not have snapshots as a batch database. if a basic system image is used to create an embedded image, then it must also be fixed for the entire project, for example by using a link to the image in the configuration files.</span>
+                            </div>
+                        </details>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>Behavior in production</summary>
+                    <div class="content">
+                        <details>
+                            <summary>1. cleanliness of the boot screen</summary>
+                            <div class="content">
+                                <span>this point is sacred and its violation is a MORTAL SIN. when loading an embedded device in production, only the device's logo, a console of some kind, should appear on the screen, and nothing superfluous should flash. the appearance of the login screen (for example, from windows) is UNACCEPTABLE. nothing superfluous should overlap the device's logo during the boot process.</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>2. zero response of the operating system to the keyboard</summary>
+                            <div class="content">
+                                <span>The operating system itself should not process keyboard shortcuts unless they were explicitly allowed in the embedded system configuration files. nothing should work, ctrl+alt+del and sysrq are blocked in the kernel, switching virtual TTY is blocked. even ESC is disabled on the plymouth loading screen. This requires patching the source code of the linux and plymouth kernels, however, this has already been done as part of the "Embedded Purity Movement" project and you can use its developments.</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>3. no system UI</summary>
+                            <div class="content">
+                                <span>The embedded device's operation process must be fully performed in its wrapper application. that is, after downloading, the device logo disappears and the device shell immediately appears. THE SYSTEM UI IS NOT ALLOWED TO APPEAR EVEN FOR A MILLISECOND! THIS IS A MORTAL SIN. The system UI may "blink" if the embedded device application is simply installed in startup rather than replacing the system shell, but THIS IS UNACCEPTABLE! some KIND of system UI or overlay SHOULD NOT APPEAR ON THE EMBEDDED DEVICE SCREEN! Blinking the desktop or console even for a millisecond IS A MORTAL SIN AND IS NOT ALLOWED.</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>4. no system sounds</summary>
+                            <div class="content">
+                                <span>an application running in an embedded operating system can make a sound - the embedded operating system itself does NOT, UNDER NO CIRCUMSTANCES</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>5. there is no way to access the system UI</summary>
+                            <div class="content">
+                                <span>There should be NO way to access the system UI in a ready-made embedded operating system</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>6. prohibition of modular updates</summary>
+                            <div class="content">
+                                <span>Although updates can be delivered as a "change" from the previous version of the system to the new one, it cannot be modular. that is, there should not be a situation where packages are updated separately or windows receives any "security patches" instead of directly receiving a new version of the image immediately with the updated system and application.</span>
+                            </div>
+                        </details>
+                    </div>
+                </details>
+
+                <details style="color: rgb(214, 40, 13);">
+                    <summary>MORTAL SINS</summary>
+                    <div class="content">
+                        <details>
+                            <summary>1. manual system configuration</summary>
+                            <div class="content">
+                                <span>It is forbidden to deploy the base image of the system on the target device in order to manually modify it and then replicate it. creating a system image for an embedded device should be done exclusively using the build system and build scripts from configuration files that are contrasted through the version control system and they give you a replicated build with each build.</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>2. unblocked system hotkeys</summary>
+                            <div class="content">
+                                <span>ALL hotkeys in the operating system itself must be LOCKED. sometimes this requires patching the kernel source code (disabling ctrl+alt+del immediately upon kernel startup, disabling VT switching) and the plymouth sources to disable the display of boot logs when pressing ESC</span>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>3. unclean boot screen</summary>
+                            <div class="content">
+                                <span>The device should load like this: the device's logo appears, and after the full download, the device's shell (application) appears immediately. during the loading process, the account login screen or the desktop SHOULD NOT appear (even for a millisecond, this is simply not allowed) and it should not be possible to press ESC and see the boot log (yes, this requires patching the plymouth source code)</span>
+                            </div>
+                        </details>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>recommended software</summary>
+                    <div class="content">
+                        <details>
+                            <summary>1. winbox maker</summary>
+                            <div class="content">
+                                <span>automated creation of windows assemblies for embedded devices</span>
+                                <a href="https://github.com/igorkll/WinBox-Maker" target="_blank">https://github.com/igorkll/WinBox-Maker</a>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>2. syslbuild</summary>
+                            <div class="content">
+                                <span>script for automatic assembly of embedded linux systems</span>
+                                <a href="https://github.com/igorkll/syslbuild" target="_blank">https://github.com/igorkll/syslbuild</a>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>3. linux embedded patchs</summary>
+                            <div class="content">
+                                <span>linux kernel patches for embedded devices</span>
+                                <span>this ensures that the hotkeys of the kernel itself are disabled</span>
+                                <a href="https://github.com/igorkll/linux-embedded-patchs" target="_blank">https://github.com/igorkll/linux-embedded-patchs</a>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>4. custom debian initramfs init</summary>
+                            <div class="content">
+                                <span>a custom debian initialization script that adds additional kernel parameters that can be convenient on embedded systems</span>
+                                <a href="https://github.com/igorkll/custom-debian-initramfs-init" target="_blank">https://github.com/igorkll/custom-debian-initramfs-init</a>
+                            </div>
+                        </details>
+
+                        <details>
+                            <summary>5. embedded plymouth</summary>
+                            <div class="content">
+                                <span>This version of plymouth is unique in that it does not handle the ESC key during the boot process, which allows it to fully comply with the requirements of the "Embedded Purity Movement"</span>
+                                <span>ESC processing was simply cut from the plymouth source code in this fork</span>
+                                <a href="https://github.com/igorkll/embedded-plymouth" target="_blank">https://github.com/igorkll/embedded-plymouth</a>
+                            </div>
+                        </details>
+                    </div>
+                </details>
+            </div>
+        </main>
+
+        <audio autoplay loop muted id="soundtrack">
+            <source src="soundtrack.mp3" type="audio/mpeg">
+        </audio>
+
+        <audio id="smallswitch" src="smallswitch.mp3" preload="auto"></audio>
+        <audio id="largeswitch" src="largeswitch.mp3" preload="auto"></audio>
+
+        <script src="main.js"></script>
+    </body>
+</html>
