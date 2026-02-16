@@ -570,7 +570,7 @@ please note that winbox maker does not provide Windows images, it only provides 
     ['Download', 'WinBox-Maker', 'dlgithub']
 ], ['cs'], 'winbox', states.SUPPORTED, 'Software');
 
-addCard('syslbuild (BETA)', 
+addCard('syslbuild', 
 `syslbuild is a build system for linux distributions (analogous to buildroot, yocta project and OpenEmbedded) that is primarily designed for embedded and kiosk distributions. The program is a python script that builds a distribution package from a description in json. The assembler can assemble the system from ready-made popular distributions such as debian, but by implementing their own settings and patches, as well as independently assemble software and libraries from the source code or copy ready-made files from the project folder. at the output, you can get an already installed system in img format with a bootloader and a partition table (OEM image) so is the boot (life) or installation iso image.
 any behavior of the system can be customized by changing the json configuration, and the build will always remain replicated, and to make changes it will only be necessary to change the json and rebuild the system.
 syslbuild can be used both to generate img for BIOS/UEFI and to generate img for running on OrangePi and Raspberry Pi of different models.
@@ -590,7 +590,31 @@ syslbuild can also be used to build LFS/BLFS.`,
 [
     ['Project page', 'https://github.com/igorkll/syslbuild'],
     ['Download', 'syslbuild', 'dlgithub_source_zip']
-], ['python'], 'syslbuild', states.BETA, 'Software');
+], ['python'], 'syslbuild', states.SUPPORTED, 'Software');
+
+addCard('GnuBox Maker', 
+`the easiest way is to create an embedded/kiosk linux distribution with a single application that cannot be exited
+it uses a patched linux kernel, which prevents switching VT and using ctrl+alt+del
+Gnubox maker works on the image generation principle. that is, first you create a Gnubox maker project on your computer, set all the necessary settings, add files and packages, and then assemble the project for the platforms you need and write the resulting firmware to the target devices
+the source code of gnubox maker is located in the syslbuild repository as it is part of a single project: https://github.com/igorkll/syslbuild
+Attention! since the gnubox maker projects are building from root in the host system, be careful what you build
+Gnubox Maker creates a special Linux system for a single application. After launching, you cannot exit it or switch to other programs. Everything you need to work is assembled automatically from files and scripts, and the system is immediately ready for use
+By default, Gnubox maker provides a completely clean loading screen (with your logo optional) and the complete inability to exit the application embedded in the image
+Gnubox maker is ideally suited for: household appliances, ATM, car radios, smart home control panels
+wherever you need a closed linux for one application, Gnubox maker will be an ideal option for generating an image for a ready-made device
+A minimum of 60 GB of free space on a PC is recommended for using Gnubox maker
+Gnubox maker secures the build from the project, which allows you to save the configuration and repeat the build of the system
+as well as Gnubox maker projects can be controlled via git
+The .img images for x86 / x86_64 that Gnubox maker generates are universal. they can be written to a USB drive or to a hard disk/SSD. also, when the device is turned on for the first time, the partition size will increase to the maximum possible (up to the entire available disk space) so that the OS can use all available space
+a similar program for creating Windows images for embedded devices: https://github.com/igorkll/WinBox-Maker`,
+'logos/gnubox.png', [
+    'https://raw.githubusercontent.com/igorkll/Gnubox-Maker/refs/heads/main/preview.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/Gnubox-Maker'],
+    ['Syslbuild page', 'https://github.com/igorkll/syslbuild'],
+    ['Download', 'syslbuild', 'dlgithub']
+], ['python'], 'gnubox', states.BETA, 'Software');
 
 addCard('EveryfunSandbox', 
 `the game I'm writing right now. something like a minecraft clone and scrap mechanic at the same time. but the main thing is that the game will have a lot of electronics and work with real files. for example, there will be a gramophone and a recording device that will allow you to replicate records from real mp3 on a computer inside the game, the game will copy the file to the save folder and link it to the item. A video recorder will work on the same principle. The game will also have computers in lua as an interpreter. the game will be in the genre of survival`,
