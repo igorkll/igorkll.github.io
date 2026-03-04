@@ -626,6 +626,22 @@ addCard('EveryfunSandbox',
     //['Download', 'EveryfunSandbox', 'dlgithub_source_zip']
 ], ['godot'], null, states.WIP, 'Software');
 
+addCard('image-deployer', 
+`universal raw image installer for x86
+This is a simple image installer
+it starts from a USB flash drive and works in both BIOS and UEFI
+running from dvd and on 32-bit machines is not supported!
+the image contains an ext4 DATA partition (the last partition in the image) that will expand to the full size of the media when the installer is first started
+You can put your .img files in this section and the installer will help you install them on your computer's disk
+The project was built using gnubox maker: https://github.com/igorkll/Gnubox-Maker`,
+'logos/image-deployer.png', [
+    'https://raw.githubusercontent.com/igorkll/image-deployer/refs/heads/main/preview.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/image-deployer'],
+    ['Download', 'https://drive.google.com/file/d/1S_TPnbrVpCp6TOyJG5vLdvbxz-iLMLS_/view?usp=sharing']
+], ['js'], null, states.SUPPORTED, 'Software');
+
 // --------------------------------------------------------------- Services
 
 addCard('Scrap Mechanic Server', 
