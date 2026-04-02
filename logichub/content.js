@@ -923,6 +923,17 @@ null, ['images/embedded_plymouth.png'],
     ['Download', 'embedded-plymouth', 'dlgithub_source_zip']
 ], ['c'], null, states.COMPLETED, 'Other');
 
+addCard('liamounts', 
+`the system of automatic mounting of removable media for linux
+this module exists to replace udisks2 in my distribution
+the main distinguishing feature is that all external devices with a linux file system are mounted ignoring access rights
+this is necessary because my distribution does not have root access, and this solution will allow you to freely use removable media from ext4 without worrying about access rights`,
+null, null,
+[
+    ['Project page', 'https://github.com/igorkll/liamounts'],
+    ['Download', 'liamounts', 'dlgithub_source_zip']
+], ['bash'], null, states.COMPLETED, 'Other');
+
 // --------------------------------------------------------------- Web
 
 addCard('Embedded Purity Movement', 
@@ -942,6 +953,18 @@ null, ['images/logicgallery.png'],
 [
     ['Open', 'https://igorkll.github.io/logicgallery'],
 ], ['js'], null, states.SUPPORTED, 'Web');
+
+addCard('multiprint', 
+`this program allows you to print images on sheets through a printer. you can print many images at once and arrange several on the same page.`,
+null, [
+    'https://raw.githubusercontent.com/igorkll/multiprint/refs/heads/main/preview.png',
+    'https://raw.githubusercontent.com/igorkll/multiprint/refs/heads/main/preview2.png',
+],
+[
+    ['Project page', 'https://github.com/igorkll/multiprint'],
+    ['Download', 'multiprint', 'dlgithub_source_zip'],
+    ['Open online', 'https://igorkll.github.io/multiprint/multiprint.html']
+], ['js'], null, states.COMPLETED, 'Web');
 
 // --------------------------------------------------------------- Ideas
 
@@ -970,7 +993,15 @@ Just order — with Ordy.`,
 null, ['images/ordy.jpg'], 
 [
     ['Project page', 'https://my-ordy.com/']
-], ['python', 'js'], null, states.SUPPORTED, 'Portfolio');
-    
+], ['python', 'js'], null, states.COMPLETED, 'Portfolio');
+
+addCard('brainrotgen', 
+`This python program generates brainrot videos in several genres via GPT 5.
+It uses fixed resources for music, backgrounds, and images, but they are divided into categories based on generation topics.
+The main text of the story is generated using AI. AI is also used to generate a sequence of images, names, descriptions, and speech synthesis.
+at the output of the program, 3 videos with different genres are created in one run: brainrot, horror and detective.
+in the directory of each video there are 3 text files with the text of the story, title and description.`,
+null, ['images/brainrotgen/1.png', 'images/brainrotgen/2.png', 'images/brainrotgen/3.png'], 
+[], ['python'], null, states.COMPLETED, 'Portfolio');
 
 }

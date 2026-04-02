@@ -111,10 +111,14 @@
 }
 
 .content-preview {
+    background: rgba(88, 86, 86, 0.4);
+
     margin: var(--content-padding);
     
     width: calc(100% - (var(--content-padding) * 2));
-    object-fit: cover;
+    object-fit: contain;
+
+    max-height: 600px;
 
     border-radius: 15px;
 
