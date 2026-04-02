@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>multiprint</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            MULTIPRINT
+        </div>
+        <div class="control-box">
+            <input type="file" id="fileInput" multiple accept="image/*">
+            <label>Columns count (X): </label>
+            <input type="number" id="cols" value="3" min="1" max="128">
+            <label>Rows count (Y): </label>
+            <input type="number" id="rows" value="2" min="1" max="128">
+            <label>Padding (mm): </label>
+            <input type="number" id="padding" value="5" min="0" max="90000">
+            <label>
+                <input type="checkbox" id="keepAspect" checked>
+                Keep aspect ratio
+            </label>
+            <div class="spacer"></div>
+            <label id="pagesCount">
+                0 pages
+            </label>
+            <button class="printBtn" id="printBtn">Print</button>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
