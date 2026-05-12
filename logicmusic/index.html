@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Logic Gallery</title>
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <header>
+            <div class="size-normalizer header-icon clickable" onclick="window.open('https://igorkll.github.io', '_blank');">
+                <img src="icon.png" class="interactive"></img>
+            </div>
+            <div class="header-title">Logic Music</div>
+        </header>
+
+        <div class="gallery-grid-container">
+            <div class="gallery-grid" id="playlist">
+            </div>
+        </div>
+
+        <div class="player-box" id="player-box">
+            <div class="track-preview-box" id="play-pause">
+                <div class="track-preview">
+                    <img id="current-track-preview" src="">
+                </div>
+            </div>
+            <div class="size-normalizer player-progress-bar-box" id="process-slider">
+                <div class="player-progress-bar">
+                    <div class="player-progress-bar-filler" id="progress">
+                    </div>
+                </div>
+                <div class="player-progress-overlay">
+                    <snap id="currentTimeSpan"></snap>
+                    <snap id="durationSpan"></snap>
+                </div>
+            </div>
+            <div class="player-volume-bar" id="volume-slider">
+                <div class="player-volume-bar-filler" id="volume">
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            the music on this page is generated using suno.ai
+        </footer>
+    
+        <audio id="audio"></audio>
+        <script src="main.js"></script>
+    </body>
+</html>

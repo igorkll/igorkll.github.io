@@ -954,6 +954,13 @@ null, ['images/logicgallery.png'],
     ['Open', 'https://igorkll.github.io/logicgallery'],
 ], ['js'], null, states.SUPPORTED, 'Web');
 
+addCard('Logic Music', 
+`a set of my music generated via suno.ai`,
+null, ['images/logicmusic.png'],
+[
+    ['Open', 'https://igorkll.github.io/logicmusic'],
+], ['js'], null, states.SUPPORTED, 'Web');
+
 addCard('multiprint', 
 `this program allows you to print images on sheets through a printer. you can print many images at once and arrange several on the same page.`,
 null, [

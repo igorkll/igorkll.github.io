@@ -62,6 +62,10 @@ header {
     height: 70px;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 .header-title {
     color: white;
     font-size: 40px;
