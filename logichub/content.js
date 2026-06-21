@@ -614,7 +614,23 @@ a similar program for creating Windows images for embedded devices: https://gith
     ['Project page', 'https://github.com/igorkll/Gnubox-Maker'],
     ['Syslbuild page', 'https://github.com/igorkll/syslbuild'],
     ['Download', 'syslbuild', 'dlgithub']
-], ['python'], 'gnubox', states.BETA, 'Software');
+], ['python'], 'gnubox', states.SUPPORTED, 'Software');
+
+addCard('mkbootable', 
+`create a bootable linux image from your application  
+there will be nothing superfluous in the boot image created from your application. no system hotkeys. no visual artifacts during loading like the flashing VT. just your logo followed immediately by the app  
+the source code of mkbootable is located in the syslbuild repository as it is part of a single project: https://github.com/igorkll/syslbuild  
+this project is an abstraction layer above Gnubox maker, which in turn is an abstraction layer above syslbuild  
+all of this is part of a single syslbuild project  
+the program cache is located at the path: /home/$USER/.mkbootable and can take up a HUGE AMOUNT`,
+'logos/mkbootable.png', [
+    'https://raw.githubusercontent.com/igorkll/mkbootable/refs/heads/main/preview.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/mkbootable'],
+    ['Syslbuild page', 'https://github.com/igorkll/syslbuild'],
+    ['Download', 'syslbuild', 'dlgithub']
+], ['python'], 'mkbootable', states.BETA, 'Software');
 
 addCard('EveryfunSandbox', 
 `the game I'm writing right now. something like a minecraft clone and scrap mechanic at the same time. but the main thing is that the game will have a lot of electronics and work with real files. for example, there will be a gramophone and a recording device that will allow you to replicate records from real mp3 on a computer inside the game, the game will copy the file to the save folder and link it to the item. A video recorder will work on the same principle. The game will also have computers in lua as an interpreter. the game will be in the genre of survival`,
