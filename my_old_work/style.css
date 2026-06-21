@@ -16,10 +16,13 @@ body {
     flex-direction: column;
     justify-content: start;
     align-items: center;
+    gap: 20px;
+
+    padding: 20px;
 }
 
 .project-container {
-    max-width: 600px;
+    max-width: 800px;
     width: 100%;
 
     display: flex;
