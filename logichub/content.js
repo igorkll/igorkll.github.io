@@ -972,6 +972,22 @@ null, null,
     ['Download', 'linux-embedded-setup-scripts', 'dlgithub_source_zip']
 ], ['bash'], null, states.WIP, 'Other');
 
+addCard('electron-kiosk-with-keyboard-template', 
+`template for a kiosk with a keyboard for electron  
+disables all electron hotkeys. allows you to give access to the keyboard to unauthorized people  
+<h2>hotkeys disabled</h2>* F5
+* F11
+* F12
+* ctrl+R
+* ctrl+W
+* ctrl+Q
+* ctrl+M`,
+null, null,
+[
+    ['Project page', 'https://github.com/igorkll/electron-kiosk-with-keyboard-template'],
+    ['Download', 'electron-kiosk-with-keyboard-template', 'dlgithub_source_zip']
+], ['js'], null, states.COMPLETED, 'Other');
+
 // --------------------------------------------------------------- Web
 
 addCard('Embedded Purity Movement', 
