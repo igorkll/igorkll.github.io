@@ -42,6 +42,30 @@ body {
     border-radius: 15px;
     border: #ffffff solid 1px;
     padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+}
+
+.project-title {
+    font-size: 20px;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-style {
+    background-color: #626262;
+    border-radius: 2px;
+    border: #ffffff solid 2px;
 }
 
 .description {
@@ -51,7 +75,7 @@ body {
     padding: 10px;
 }
 
-.title {
+.main-title {
     background-color: #7e7e7e;
     height: 60px;
     
