@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VmCraft</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="fonts/VT323.css">
+    </head>
+    <body>
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "./three.js/build/three.module.js",
+                    "three/addons/": "./three.js/examples/jsm/"
+                }
+            }
+        </script>
+
+        <div id="hud" class="overlay">
+            <div class="cross">
+            </div>
+        </div>
+
+        <div id="menu" class="overlay" style="display: block;">
+        </div>
+
+        <div id="debug-overlay" class="overlay overlay-text">
+        </div>
+
+        <script src="v86/libv86.js"></script>
+        <script type="module" src="Game.js"></script>
+        <script type="module" src="Gui.js"></script>
+        <script type="module" src="Menu.js"></script>
+        <script type="module" src="Modals.js"></script>
+        <script type="module" src="WorldManager.js"></script>
+        <script type="module" src="Kastili.js"></script>
+    </body>
+</html>
+
