@@ -391,6 +391,14 @@ cards.insertBefore(logicCard, cards.firstChild)
 
 // --------------------------------------------------------------- Notes
 
+addNote('Winbox maker reference images',
+`These are the reference images for Winbox maker. winbox maker is guaranteed to work if you use these images as the base for creating the OS.
+after importing the image, select the edition and architecture specified after the image in winbox maker.
+
+reference images:
+en_windows_10_enterprise_x64.iso - Windows 10 Enterprise - x64: <a href="https://drive.google.com/file/d/1QdhT-9cDznO0jzJRZUFDG4Dc0p0vcfzl/view?usp=sharing">https://drive.google.com/file/d/1QdhT-9cDznO0jzJRZUFDG4Dc0p0vcfzl/view?usp=sharing</a>
+en_windows_10_iot_enterprise_ltsc_2021_x64.iso - Windows 10 Enterprise LTSC 2021 - x64: <a href="https://drive.google.com/file/d/1U_faVxo2ZXnFjIlXmQA-_m08vbFl0Aos/view?usp=sharing">https://drive.google.com/file/d/1U_faVxo2ZXnFjIlXmQA-_m08vbFl0Aos/view?usp=sharing</a>`);
+
 addNote(null,
 `This is my roadmap! That's what I'm going to do, or have already started doing. It's just a collection of ideas that I need to find the time to implement.
 Some of them have already been implemented, some are in the process, some are just in the idea format.
@@ -624,39 +632,18 @@ this project is an abstraction layer above Gnubox maker, which in turn is an abs
 all of this is part of a single syslbuild project  
 the program cache is located at the path: /home/$USER/.mkbootable and can take up a HUGE AMOUNT`,
 'logos/mkbootable.png', [
-    'https://raw.githubusercontent.com/igorkll/mkbootable/refs/heads/main/preview.png'
+    'https://raw.githubusercontent.com/igorkll/mkbootable/refs/heads/main/preview.png',
+    'https://raw.githubusercontent.com/igorkll/syslbuild/refs/heads/main/screenshots/mkbootable/1.png',
+    'https://raw.githubusercontent.com/igorkll/syslbuild/refs/heads/main/screenshots/mkbootable/2.png',
+    'https://raw.githubusercontent.com/igorkll/syslbuild/refs/heads/main/screenshots/mkbootable/3.png',
+    'https://raw.githubusercontent.com/igorkll/syslbuild/refs/heads/main/screenshots/mkbootable/4.png',
+    'https://raw.githubusercontent.com/igorkll/syslbuild/refs/heads/main/screenshots/mkbootable/5.png'
 ], 
 [
     ['Project page', 'https://github.com/igorkll/mkbootable'],
     ['Syslbuild page', 'https://github.com/igorkll/syslbuild'],
     ['Download', 'syslbuild', 'dlgithub']
 ], ['python'], 'mkbootable', states.BETA, 'Software');
-
-addCard('EveryfunSandbox', 
-`the game I'm writing right now. something like a minecraft clone and scrap mechanic at the same time. but the main thing is that the game will have a lot of electronics and work with real files. for example, there will be a gramophone and a recording device that will allow you to replicate records from real mp3 on a computer inside the game, the game will copy the file to the save folder and link it to the item. A video recorder will work on the same principle. The game will also have computers in lua as an interpreter. the game will be in the genre of survival`,
-'logos/everyfunsandbox.png', [
-    'https://raw.githubusercontent.com/igorkll/EveryfunSandbox/refs/heads/main/EveryfunSandbox/gui/splash.png'
-], 
-[
-    ['Project page', 'https://github.com/igorkll/EveryfunSandbox']//,
-    //['Download', 'EveryfunSandbox', 'dlgithub_source_zip']
-], ['godot'], null, states.WIP, 'Software');
-
-addCard('image-deployer', 
-`universal raw image installer for x86
-This is a simple image installer
-it starts from a USB flash drive and works in both BIOS and UEFI
-running from dvd and on 32-bit machines is not supported!
-the image contains an ext4 DATA partition (the last partition in the image) that will expand to the full size of the media when the installer is first started
-You can put your .img files in this section and the installer will help you install them on your computer's disk
-The project was built using gnubox maker: https://github.com/igorkll/Gnubox-Maker`,
-'logos/image-deployer.png', [
-    'https://raw.githubusercontent.com/igorkll/image-deployer/refs/heads/main/preview.png'
-], 
-[
-    ['Project page', 'https://github.com/igorkll/image-deployer'],
-    ['Download', 'https://drive.google.com/file/d/1S_TPnbrVpCp6TOyJG5vLdvbxz-iLMLS_/view?usp=sharing']
-], ['js'], null, states.SUPPORTED, 'Software');
 
 addCard('grammowavcli', 
 `converts a music file into a 3D model of a record for printing on a 3D printer and listening on a gramophone
@@ -1027,6 +1014,70 @@ null, [
     ['Open online', 'https://igorkll.github.io/multiprint/multiprint.html']
 ], ['js'], null, states.COMPLETED, 'Web');
 
+// --------------------------------------------------------------- OS
+
+addCard('ALinux', 
+`minimal linux build for my projects
+Architecture: x86
+Target firmware: BIOS / UEFI in legacy mode
+There is no UEFI support to avoid taking up space for an EFI partition
+Build system: https://github.com/igorkll/syslbuild
+although this distribution contains full-fledged GNU utilities (NOT busybox) and several useful tools,
+it is still minimal and highly specialized. for example, it does not contain a login and user system, but only a root
+
+supported tools
+* lua / luac
+* python3
+* bash
+* nano`,
+null, [],
+[
+    ['Open', 'https://github.com/igorkll/ALinux'],
+    ['Download', 'ALinux', 'dlgithub']
+], ['python'], null, states.COMPLETED, 'OS');
+
+addCard('image-deployer', 
+`universal raw image installer for x86
+This is a simple image installer
+it starts from a USB flash drive and works in both BIOS and UEFI
+running from dvd and on 32-bit machines is not supported!
+the image contains an ext4 DATA partition (the last partition in the image) that will expand to the full size of the media when the installer is first started
+You can put your .img files in this section and the installer will help you install them on your computer's disk
+The project was built using gnubox maker: https://github.com/igorkll/Gnubox-Maker`,
+'logos/image-deployer.png', [
+    'https://raw.githubusercontent.com/igorkll/image-deployer/refs/heads/main/preview.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/image-deployer'],
+    ['Download', 'https://drive.google.com/file/d/1S_TPnbrVpCp6TOyJG5vLdvbxz-iLMLS_/view?usp=sharing']
+], ['js'], null, states.COMPLETED, 'OS');
+
+// --------------------------------------------------------------- Games
+
+addCard('EveryfunSandbox', 
+`the game I'm writing right now. something like a minecraft clone and scrap mechanic at the same time. but the main thing is that the game will have a lot of electronics and work with real files. for example, there will be a gramophone and a recording device that will allow you to replicate records from real mp3 on a computer inside the game, the game will copy the file to the save folder and link it to the item. A video recorder will work on the same principle. The game will also have computers in lua as an interpreter. the game will be in the genre of survival`,
+'logos/everyfunsandbox.png', [
+    'https://raw.githubusercontent.com/igorkll/EveryfunSandbox/refs/heads/main/EveryfunSandbox/gui/splash.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/EveryfunSandbox']//,
+    //['Download', 'EveryfunSandbox', 'dlgithub_source_zip']
+], ['godot'], null, states.WIP, 'Games');
+
+addCard('VmCraft', 
+`cube game with virtual machines
+rather an experimental project. I wanted to work with virtual machines and 3D graphics on the web
+Nevertheless, it works and the VMs start up
+Play online: https://igorkll.github.io/VmCraft
+Download: https://github.com/igorkll/VmCraft/releases`,
+null, [
+    'https://raw.githubusercontent.com/igorkll/VmCraft/refs/heads/main/preview.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/VmCraft'],
+    ['Download', 'VmCraft', 'dlgithub_source_zip']
+], ['js'], null, states.WIP, 'Games');
+
 // --------------------------------------------------------------- Ideas
 
 addNote('Syberia Continuation Game Generator with AI', 
@@ -1064,5 +1115,16 @@ at the output of the program, 3 videos with different genres are created in one 
 in the directory of each video there are 3 text files with the text of the story, title and description.`,
 null, ['images/brainrotgen/1.png', 'images/brainrotgen/2.png', 'images/brainrotgen/3.png'], 
 [], ['python'], null, states.COMPLETED, 'Portfolio');
+
+addCard('strange piano', 
+`piano backlight with wifi control on esp32c3
+reads data from the midi port
+controls the addressable LED strip
+please note that a special optocoupler circuit is required to connect to the midi port`,
+null, [], 
+[
+    ['Project page', 'https://github.com/igorkll/strange_piano'],
+    ['Download', 'strange_piano', 'dlgithub_source_zip']
+], ['c'], null, states.WIP, 'Portfolio');
 
 }
