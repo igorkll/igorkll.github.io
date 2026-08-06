@@ -1053,9 +1053,9 @@ The project was built using gnubox maker: https://github.com/igorkll/Gnubox-Make
 ], ['js'], null, states.COMPLETED, 'OS');
 
 addCard('microwin',
-`miniature windows 10 built through winbox maker. cleared of nonsense
-the main goal is embedded devices, single-board computers (yes, you can hardly use windows on ARM normally, but you can use motherboards from thin clients that cost only 5-7 dollars in the secondary market and run windows 10 perfectly)
-this is a fairly old version of Windows 10. which is perfect for you if your windows requirements are just to run win32 applications on the cleanest system possible
+`miniature 10 built through winbox maker. cleared of nonsense
+the main goal is embedded devices, single-board computers (yes, you can hardly use on ARM normally, but you can use motherboards from thin clients that cost only 5-7 dollars in the secondary market and run windows 10 perfectly)
+this is a fairly old version of 10. which is perfect for you if your requirements are just to run win32 applications on the cleanest system possible
 the system has built-in visual C++ redistributable for x64 and x86, as well as nircmd and PsExec utilities for automating and extending the system's functionality
 net versions of "9.0.6 , 8.0.17 , 4.8.1 , 4.7.2" are also built in to run applications written in C#`,
 null, [
