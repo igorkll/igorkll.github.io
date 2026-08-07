@@ -107,6 +107,9 @@ body > * {
     justify-content: flex-start;
     align-items: stretch;
     gap: 10px;
+
+    background: #555;
+    padding: 10px;
 }
 
 .scroll-box.has-scrollbar {

@@ -31,8 +31,7 @@ document.body.appendChild(renderer.domElement)
 export let world
 
 (async () => {
-    const worlds = await WorldManager.worldList()
-    let _world = worlds[0] || null
+    let _world = await WorldManager.getWorldFromId(WorldManager.getCurrentWorldId()) || await WorldManager.worldList()[0] || null
     
     if (_world == null) {
         _world = await WorldManager.saveWorld({
@@ -44,6 +43,8 @@ export let world
 })()
 
 export function loadWorld(_world) {
+    world.save()
+    WorldManager.setCurrentWorldId(_world.id)
     world.destroy()
     world = new World(gameBasic, _world)
 }

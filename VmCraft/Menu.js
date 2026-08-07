@@ -3,6 +3,7 @@ import * as WorldManager from './WorldManager.js';
 import * as Game from './Game.js';
 import * as Modals from './Modals.js';
 import * as Kastili from './Kastili.js';
+import * as Utils from './Utils.js';
 
 // -------------------------------- create menu
 
@@ -119,7 +120,7 @@ function deleteWorldModal(world) {
 }
 
 function newWorldModal() {
-    Modals.modalInput("NEW WORLD", "world test").then(name => {
+    Modals.modalInput("NEW WORLD", "world " + Utils.getRandomSuffix()).then(name => {
         if (name) {
             name = name.trim()
             WorldManager.saveWorld({name}, true).then(refreshWorldsList)
@@ -208,6 +209,10 @@ addButton("main", "RESUME", () => {
 addButton("main", "WORLDS", () => {
     refreshWorldsList()
     openSubMenu("worlds")
+})
+
+addButton("main", "SAVE", () => {
+    Game.world.save()
 })
 
 addButton("main", "EXIT", () => {

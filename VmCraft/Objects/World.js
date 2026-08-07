@@ -3,11 +3,13 @@ import * as Utils from "../Utils.js"
 import { Player } from './Player.js'
 import { Robot } from './Robot.js'
 import { Chunk } from './Chunk.js'
+import * as WorldManager from '../WorldManager.js';
 
 export class World {
     constructor(gameBasic, worldData) {
         this.gameBasic = gameBasic
         this.worldId = worldData.id
+        this.worldName = worldData.name
 
         this.loadWorld(worldData)
     }
@@ -17,8 +19,12 @@ export class World {
 
         this.createPlayer(new Three.Vector3(0, 10, 0))
         this.createInteractive(new Three.Vector3(50, 0, 0), Robot)
-        //this.createInteractive(new Three.Vector3(50, 0, 50), Robot)
-        //this.createInteractive(new Three.Vector3(50, 0, 100), Robot)
+
+        for (let ix = -15; ix <= 15; ix++) {
+            for (let iz = -15; iz <= 15; iz++) {
+                this.setBlock(new Three.Vector3(ix, 0, iz), 1)
+            }
+        }
     }
 
     update(delta) {
@@ -139,5 +145,24 @@ export class World {
             }
         }
         this.interactives = []
+    }
+
+    serializeData() {
+        const worldData = {}
+
+        return worldData
+    }
+
+    serialize() {
+        const world = {}
+        world.id = this.worldId
+        world.name = this.worldName
+        world.data = this.serializeData()
+
+        return world
+    }
+
+    save() {
+        WorldManager.saveWorld(this.serialize())
     }
 }

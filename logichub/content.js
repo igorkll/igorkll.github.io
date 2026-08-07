@@ -391,14 +391,6 @@ cards.insertBefore(logicCard, cards.firstChild)
 
 // --------------------------------------------------------------- Notes
 
-addNote('Winbox maker reference images',
-`These are the reference images for Winbox maker. winbox maker is guaranteed to work if you use these images as the base for creating the OS.
-after importing the image, select the edition and architecture specified after the image in winbox maker.
-
-reference images:
-en_windows_10_enterprise_x64.iso - Windows 10 Enterprise - x64: <a href="https://drive.google.com/file/d/1QdhT-9cDznO0jzJRZUFDG4Dc0p0vcfzl/view?usp=sharing">https://drive.google.com/file/d/1QdhT-9cDznO0jzJRZUFDG4Dc0p0vcfzl/view?usp=sharing</a>
-en_windows_10_iot_enterprise_ltsc_2021_x64.iso - Windows 10 Enterprise LTSC 2021 - x64: <a href="https://drive.google.com/file/d/1U_faVxo2ZXnFjIlXmQA-_m08vbFl0Aos/view?usp=sharing">https://drive.google.com/file/d/1U_faVxo2ZXnFjIlXmQA-_m08vbFl0Aos/view?usp=sharing</a>`);
-
 addNote(null,
 `This is my roadmap! That's what I'm going to do, or have already started doing. It's just a collection of ideas that I need to find the time to implement.
 Some of them have already been implemented, some are in the process, some are just in the idea format.
@@ -1051,23 +1043,6 @@ The project was built using gnubox maker: https://github.com/igorkll/Gnubox-Make
     ['Project page', 'https://github.com/igorkll/image-deployer'],
     ['Download', 'https://drive.google.com/file/d/1S_TPnbrVpCp6TOyJG5vLdvbxz-iLMLS_/view?usp=sharing']
 ], ['js'], null, states.COMPLETED, 'OS');
-
-addCard('microwin',
-`miniature 10 built through winbox maker. cleared of nonsense
-the main goal is embedded devices, single-board computers (yes, you can hardly use on ARM normally, but you can use motherboards from thin clients that cost only 5-7 dollars in the secondary market and run 10 perfectly)
-this is a fairly old version of 10. which is perfect for you if your requirements are just to run win32 applications on the cleanest system possible
-the system has built-in visual C++ redistributable for x64 and x86, as well as nircmd and PsExec utilities for automating and extending the system's functionality
-net versions of "9.0.6 , 8.0.17 , 4.8.1 , 4.7.2" are also built in to run applications written in C#`,
-null, [
-    'https://raw.githubusercontent.com/igorkll/microwin/refs/heads/main/microwin/screenshots/1.png',
-    'https://raw.githubusercontent.com/igorkll/microwin/refs/heads/main/microwin/screenshots/2.1.png',
-    'https://raw.githubusercontent.com/igorkll/microwin/refs/heads/main/microwin/screenshots/3.png',
-    'https://raw.githubusercontent.com/igorkll/microwin/refs/heads/main/microwin/screenshots/4.png'
-], 
-[
-    ['Project page', 'https://github.com/igorkll/microwin'],
-    ['Download', 'https://drive.google.com/file/d/1JuPe23BQcUP2f2caOY7zflBIibrfO4xz/view?usp=sharing']
-], [], null, states.COMPLETED, 'OS');
 
 // --------------------------------------------------------------- Games
 

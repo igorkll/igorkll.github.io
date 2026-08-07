@@ -111,7 +111,7 @@ export class Player {
         const blockY = Math.floor(pos.y);
         const blockZ = Math.floor(pos.z);
 
-        if (this.isBlockSolid(blockX, blockY - 1, blockZ)) {
+        if (this.isBlockSolid(blockX, blockY, blockZ)) {
             pos.y = blockY;
             this.data.velocity.y = 0;
             this.data.onGround = true;
@@ -120,7 +120,7 @@ export class Player {
         }
 
         if (this.data.velocity.y > 0) {
-            const headY = Math.floor(pos.y + height);
+            const headY = Math.ceil(pos.y + height);
             if (this.isBlockSolid(blockX, headY, blockZ)) {
                 pos.y = headY - height;
                 this.data.velocity.y = 0;

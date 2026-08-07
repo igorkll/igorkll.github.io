@@ -128,6 +128,8 @@ export class Robot {
         // ---------------------- display
 
         const canvas = document.createElement('canvas')
+        canvas.width = 320
+        canvas.height = 320
 
         const vmTexture = new Three.CanvasTexture(canvas)
         vmTexture.minFilter = Three.NearestFilter
@@ -149,8 +151,7 @@ export class Robot {
 
         this.updateTimer = setInterval(() => {
             this.v86Container.style.display = 'block'
-            canvas.width = this.v86Container.scrollWidth
-            canvas.height = this.v86Container.scrollHeight
+
             html2canvas(this.v86Container, {
                 canvas: canvas,
                 useCORS: true,
@@ -248,6 +249,12 @@ export class Robot {
     destroy() {
         this.gameBasic.scene.remove(this.object)
 
+        this.screen.geometry.dispose()
+        this.screen.material.dispose()
+        if (this.screen.material.map) {
+            this.screen.material.map.dispose()
+        }
+
         if (this.emulator && typeof this.emulator.stop === 'function') {
             this.emulator.stop()
         }
@@ -256,5 +263,10 @@ export class Robot {
         }
 
         clearInterval(this.updateTimer)
+
+        this.object = null
+        this.screen = null
+        this.emulator = null
+        this.v86Container = null
     }
 }

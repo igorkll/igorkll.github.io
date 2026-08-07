@@ -38,6 +38,16 @@ export async function getWorldFromName(name) {
     }
 }
 
+export async function getWorldFromId(id) {
+    try {
+        const world = await db.worlds.where('id').equals(id).first()
+        return world || null
+    } catch (error) {
+        console.error('Failed to find world:', error)
+        return null
+    }
+}
+
 export async function saveWorld(world, forceNew=false) {
     try {
         let existing
@@ -83,4 +93,16 @@ export async function deleteWorld(id) {
         console.error('Delete failed:', error);
         throw error;
     }
+}
+
+export function setCurrentWorldId(id) {
+    localStorage.setItem('currentWorldId', String(id))
+}
+
+export function getCurrentWorldId(id) {
+    const savedId = localStorage.getItem('currentWorldId')
+    if (savedId != null) {
+        return Number(savedId)
+    }
+    return null
 }

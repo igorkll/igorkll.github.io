@@ -44,3 +44,16 @@ export async function loadAndCombineImages(urls) {
 
     return combinedBuffer.buffer;
 }
+
+export function getRandomHexNum() {
+    const randomInt = Math.floor(Math.random() * 16);
+    return randomInt.toString(16).toUpperCase()
+}
+
+export function getRandomSuffix() {
+    let suffix = ""
+    for (let i = 0; i < 4; i++) {
+        suffix += getRandomHexNum()
+    }
+    return suffix
+}
