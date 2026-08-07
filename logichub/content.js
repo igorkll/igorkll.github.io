@@ -951,6 +951,15 @@ null, null,
     ['Download', 'linux-embedded-setup-scripts', 'dlgithub_source_zip']
 ], ['bash'], null, states.WIP, 'Other');
 
+addCard('windows-embedded-setup-scripts', 
+`setup scripts for windows for configuring kiosks and other embedded systems
+It may be useful not only for kiosks`,
+null, null,
+[
+    ['Project page', 'https://github.com/igorkll/windows-embedded-setup-scripts'],
+    ['Download', 'windows-embedded-setup-scripts', 'dlgithub_source_zip']
+], ['ps1'], null, states.WIP, 'Other');
+
 addCard('electron-kiosk-with-keyboard-template', 
 `template for a kiosk with a keyboard for electron  
 disables all electron hotkeys. allows you to give access to the keyboard to unauthorized people  
@@ -1043,6 +1052,22 @@ The project was built using gnubox maker: https://github.com/igorkll/Gnubox-Make
     ['Project page', 'https://github.com/igorkll/image-deployer'],
     ['Download', 'https://drive.google.com/file/d/1S_TPnbrVpCp6TOyJG5vLdvbxz-iLMLS_/view?usp=sharing']
 ], ['js'], null, states.COMPLETED, 'OS');
+
+addCard('microwin',
+`miniature 10 built through winbox maker. cleared of nonsense
+the main goal is embedded devices, single-board computers (yes, you can hardly use on ARM normally, but you can use motherboards from thin clients that cost only 5-7 dollars in the secondary market and run 10 perfectly)
+this is a fairly old version of 10. which is perfect for you if your requirements are just to run win32 applications on the cleanest system possible
+the system has built-in visual C++ redistributable for x64 and x86, as well as nircmd and PsExec utilities for automating and extending the system's functionality
+net versions of "9.0.6 , 8.0.17 , 4.8.1 , 4.7.2" are also built in to run applications written in C#`,
+null, [
+    'https://raw.githubusercontent.com/igorkll/microwin/refs/heads/main/microwin/screenshots/1.png',
+    'https://raw.githubusercontent.com/igorkll/microwin/refs/heads/main/microwin/screenshots/2.1.png',
+    'https://raw.githubusercontent.com/igorkll/microwin/refs/heads/main/microwin/screenshots/3.png',
+    'https://raw.githubusercontent.com/igorkll/microwin/refs/heads/main/microwin/screenshots/4.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/microwin']
+], [], null, states.COMPLETED, 'OS');
 
 // --------------------------------------------------------------- Games
 
