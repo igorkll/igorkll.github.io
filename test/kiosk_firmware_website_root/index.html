@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Integration Demo</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            line-height: 1.6;
+            background: #f8fafc;
+            color: #0b1e33;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+        h1 {
+            margin-top: 0;
+            font-weight: 600;
+            font-size: 2rem;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #e2e8f0;
+        }
+        .status-badge.enabled {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .status-badge.disabled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        button {
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-right: 0.75rem;
+            margin-bottom: 0.5rem;
+            transition: background 0.15s;
+        }
+        button:hover {
+            background: #0f172a;
+        }
+        button.danger {
+            background: #b91c1c;
+        }
+        button.danger:hover {
+            background: #7f1d1d;
+        }
+        pre {
+            background: #f1f5f9;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        .output-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            min-height: 2rem;
+            margin-top: 0.5rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #475569;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1.5rem;
+        }
+        .error-box {
+            background: #fee2e2;
+            border-left: 4px solid #b91c1c;
+            padding: 0.75rem 1.25rem;
+            border-radius: 4px;
+            color: #7f1d1d;
+            font-weight: 500;
+            margin: 1rem 0;
+        }
+        .hint {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-top: 0.25rem;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="app">
+    <h1>⚡ Node.js Integration Test</h1>
+    <p>This page demonstrates what you can do when <strong>nodeIntegration</strong> is enabled and <strong>contextIsolation</strong> is disabled in Electron.</p>
+
+    <!-- Status will be inserted here -->
+    <div id="statusArea"></div>
+
+    <!-- Demo content will be shown only if nodeIntegration is active -->
+    <div id="demoContent" style="display: none;">
+        <h2>✅ Node.js is accessible</h2>
+
+        <div class="card" style="box-shadow: none; border: 1px solid #d1d5db; background: #f9fafb;">
+            <h3>📦 System Information (via Node.js)</h3>
+            <div id="systemInfo"></div>
+        </div>
+
+        <div class="card" style="box-shadow: none; border: 1px solid #d1d5db; background: #f9fafb;">
+            <h3>🖥️ Launch Applications</h3>
+            <div class="flex-row">
+                <button id="launchTerminal">Launch weston-terminal</button>
+                <button id="launchTerminalSudo" class="danger">Launch weston-terminal (sudo)</button>
+            </div>
+            <div id="terminalOutput" class="output-box">⏳ Waiting for action...</div>
+            <p class="hint">⚠️ For <kbd>sudo</kbd> to work without password, your user must have sudo rights with NOPASSWD.</p>
+        </div>
+
+        <div class="card" style="box-shadow: none; border: 1px solid #d1d5db; background: #f9fafb;">
+            <h3>📄 File Read Example</h3>
+            <button id="readHostname">Read /etc/hostname</button>
+            <div id="fileOutput" class="output-box">Press the button to read.</div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    Electron demo — designed for kiosk/appliance systems
+</div>
+
+<script>
+    (function() {
+        // ----- check if Node.js integration is active -----
+        const hasNode = typeof require !== 'undefined' && typeof process !== 'undefined';
+
+        const statusArea = document.getElementById('statusArea');
+        const demoContent = document.getElementById('demoContent');
+
+        if (!hasNode) {
+            // Show error message as an element (not alert)
+            statusArea.innerHTML = `
+                <div class="error-box">
+                    <strong>⚠️ Node.js integration is NOT enabled.</strong><br>
+                    This page requires <code>nodeIntegration: true</code> and <code>contextIsolation: false</code> to work.<br>
+                    Please enable these settings in your Electron webview or BrowserWindow.
+                </div>
+            `;
+            // hide demo
+            demoContent.style.display = 'none';
+            return;
+        }
+
+        // ----- Node.js is available -----
+        // Show status badge
+        statusArea.innerHTML = `
+            <p><span class="status-badge enabled">✅ Node.js integration ENABLED</span></p>
+            <p style="margin-top: -0.5rem;">Node version: <code>${process.version}</code>, platform: <code>${process.platform}</code></p>
+        `;
+        demoContent.style.display = 'block';
+
+        // ----- import needed modules -----
+        const { exec } = require('child_process');
+        const fs = require('fs');
+
+        // ----- helper to update output box -----
+        function setOutput(id, text, isError = false) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.textContent = text;
+                el.style.color = isError ? '#b91c1c' : '#0b1e33';
+            }
+        }
+
+        // ----- system info -----
+        try {
+            const info = {
+                'Node.js version': process.version,
+                'Platform': process.platform,
+                'Architecture': process.arch,
+                'Current user': process.env.USER || process.env.USERNAME || 'unknown',
+                'Working directory': process.cwd(),
+                'Memory usage': JSON.stringify(process.memoryUsage(), null, 2)
+            };
+            const infoHtml = Object.entries(info).map(([k, v]) => 
+                `<strong>${k}:</strong> ${v}`
+            ).join('<br>');
+            document.getElementById('systemInfo').innerHTML = infoHtml;
+        } catch (e) {
+            document.getElementById('systemInfo').textContent = 'Unable to read system info: ' + e.message;
+        }
+
+        // ----- launch terminal (without sudo) -----
+        document.getElementById('launchTerminal').addEventListener('click', function() {
+            setOutput('terminalOutput', 'Launching weston-terminal ...');
+            exec('weston-terminal', (error, stdout, stderr) => {
+                if (error) {
+                    setOutput('terminalOutput', `❌ Error: ${error.message}`, true);
+                    return;
+                }
+                if (stderr) {
+                    setOutput('terminalOutput', `⚠️ stderr: ${stderr}`, true);
+                    return;
+                }
+                setOutput('terminalOutput', `✅ weston-terminal launched successfully (stdout: ${stdout || '(empty)'})`);
+            });
+        });
+
+        // ----- launch terminal with sudo -----
+        document.getElementById('launchTerminalSudo').addEventListener('click', function() {
+            setOutput('terminalOutput', 'Launching weston-terminal with sudo ...');
+            exec('sudo weston-terminal', (error, stdout, stderr) => {
+                if (error) {
+                    setOutput('terminalOutput', `❌ Error: ${error.message}`, true);
+                    return;
+                }
+                if (stderr) {
+                    setOutput('terminalOutput', `⚠️ stderr: ${stderr}`, true);
+                    return;
+                }
+                setOutput('terminalOutput', `✅ weston-terminal launched with sudo (stdout: ${stdout || '(empty)'})`);
+            });
+        });
+
+        // ----- read /etc/hostname -----
+        document.getElementById('readHostname').addEventListener('click', function() {
+            const out = document.getElementById('fileOutput');
+            out.textContent = 'Reading /etc/hostname ...';
+            fs.readFile('/etc/hostname', 'utf8', (err, data) => {
+                if (err) {
+                    out.textContent = `❌ Error reading file: ${err.message}`;
+                    out.style.color = '#b91c1c';
+                    return;
+                }
+                out.textContent = `📄 /etc/hostname content:\n${data.trim() || '(empty file)'}`;
+                out.style.color = '#0b1e33';
+            });
+        });
+
+        // ----- additional example: list directory (optional) -----
+        // We could add more, but this is sufficient to demonstrate
+
+        console.log('Node.js integration demo loaded.');
+    })();
+</script>
+
+</body>
+</html>
