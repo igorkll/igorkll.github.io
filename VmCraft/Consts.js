@@ -1,0 +1,13 @@
+export const gravity = 25;
+export const max_delta = 1 / 100;
+export const terminal_velocity = -50;
+export const velocity_drop = 0.00025;
+export const chunk_loading_distance = 64;
+export const chunk_loading_ver_distance_mul = 0.5;
+export const chunk_loading_update_interval = 1;
+export const atlas_tiles = 16
+export const atlas_size = 512
+export const world_export_extension = "vmc"
+export const EPS = 1e-4
+export const pointer_speed = 1.5
+export const interact_distance = 10

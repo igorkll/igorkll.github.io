@@ -5,7 +5,7 @@ const hud = document.getElementById("hud")
 const debugOverlay = document.getElementById("debug-overlay")
 
 let menuState = false
-let debugOverlayState = false
+export let debugOverlayState = false
 
 let modalRoot = null
 let modalOnCloseCallback = null
@@ -77,6 +77,11 @@ updateHudState()
 changeDebugOverlayState(debugOverlayState)
 
 document.addEventListener('keydown', (e) => {
+    const tag = e.target.tagName
+    if (tag == "INPUT" || tag == "TEXTAREA" || e.target.isContentEditable) {
+        return
+    }
+    
     e.preventDefault()
 
     switch (e.code) {

@@ -1,5 +1,6 @@
 import * as Three from 'three'
 import * as Gui from './Gui.js'
+import * as Consts from './Consts.js'
 import * as WorldManager from './WorldManager.js';
 import { World } from './Objects/World.js'
 import { GameBasic } from './Objects/GameBasic.js'
@@ -28,7 +29,7 @@ const gameBasic = new GameBasic(renderer, scene)
 
 document.body.appendChild(renderer.domElement)
 
-export let world
+export let world = null;
 
 (async () => {
     let _world = await WorldManager.getWorldFromId(WorldManager.getCurrentWorldId()) || await WorldManager.worldList()[0] || null
@@ -43,10 +44,11 @@ export let world
 })()
 
 export function loadWorld(_world) {
-    world.save()
     WorldManager.setCurrentWorldId(_world.id)
-    world.destroy()
-    world = new World(gameBasic, _world)
+    world.save().then(() => {
+        world.destroy()
+        world = new World(gameBasic, _world)
+    })
 }
 
 // ---------------------- frame handle
@@ -63,7 +65,9 @@ updateFps()
 
 function getDebugOverlayText() {
     return `FPS: ${fps}
-Position: ${world.player.data.pos.x.toFixed(3)} ${world.player.data.pos.y.toFixed(3)} ${world.player.data.pos.z.toFixed(3)}`
+Position: ${world.player.data.pos.x.toFixed(3)} ${world.player.data.pos.y.toFixed(3)} ${world.player.data.pos.z.toFixed(3)}
+Velocity: ${world.player.data.velocity.x.toFixed(3)} ${world.player.data.velocity.y.toFixed(3)} ${world.player.data.velocity.z.toFixed(3)}
+Fly: ${world.player.data.fly}`
 }
 
 function frameHandle() {
@@ -72,7 +76,7 @@ function frameHandle() {
     timer.update()
     delta = timer.getDelta()
     if (world) {
-        world.update(delta)
+        world.update(Math.min(delta, Consts.max_delta))
         renderer.render(scene, world.player.camera)
         Gui.updateDebugOverlay(getDebugOverlayText())
     }
@@ -85,4 +89,8 @@ window.addEventListener('resize', () => {
         world.player.camera.updateProjectionMatrix()
     }
     renderer.setSize(window.innerWidth, window.innerHeight)
+})
+
+document.addEventListener("contextmenu", (e) => {
+    e.preventDefault()
 })

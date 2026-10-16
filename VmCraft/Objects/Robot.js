@@ -1,6 +1,7 @@
 import * as Three from "three"
 import * as Utils from "../Utils.js"
 import * as Gui from "../Gui.js"
+import * as ObjectAssotiation from "../ObjectAssotiation.js"
 import html2canvas from '../html2canvas.esm.js'
 
 const geometry = new Three.BoxGeometry(0.8, 0.8, 0.8)
@@ -21,17 +22,32 @@ const imageParts = [
 ]
 
 export class Robot {
-    constructor(gameBasic, pos) {
+    constructor(gameBasic) {
         this.gameBasic = gameBasic
         this.data = {
             speed: 3,
 
-            pos: pos,
-            targetPos: pos,
+            pos: new Three.Vector3(0, 0, 0),
+            targetPos: new Three.Vector3(0, 0, 0),
 
             rot: 0,
             targetRot: 0
         }
+    }
+
+    getSaveData() {
+        return Object.assign({}, this.data, {
+            pos: Utils.getArrFromVec(this.data.pos),
+            targetPos: Utils.getArrFromVec(this.data.targetPos)
+        })
+    }
+
+    setSaveData(data) {
+        this.data = Object.assign({}, data, {
+            pos: Utils.getVecFromArrCheck(data.pos)
+        })
+
+        this.data.targetPos = this.data.pos.clone()
     }
 
     init() {
@@ -50,16 +66,16 @@ export class Robot {
 
         Utils.loadAndCombineImages(imageParts).then((hda_buffer) => {
             this.emulator = new window.V86({
-                wasm_path: "v86/v86.wasm",
+                wasm_path: "libs/v86/v86.wasm",
             
                 screen_container: this.v86Container,
             
                 bios: {
-                    url: "v86/bios/seabios.bin",
+                    url: "libs/v86/bios/seabios.bin",
                 },
             
                 vga_bios: {
-                    url: "v86/bios/vgabios.bin",
+                    url: "libs/v86/bios/vgabios.bin",
                 },
     
                 hda: {
@@ -78,15 +94,22 @@ export class Robot {
                 this.emulator.ready = true
 
                 let recive_buffer = ""
+
                 this.emulator.add_listener('serial0-output-byte', (byte) => {
+                    if (byte === 0xFF || byte === 13) return;
+
                     if (this.isBusy()) {
+                        console.log("robot busy")
                         this.emulator.serial0_send('busy\n')
                         return
                     }
 
                     const ch = String.fromCharCode(byte)
 
+                    console.log("recive", byte, ch)
                     if (ch == '\n') {
+                        console.log("process", recive_buffer)
+
                         let successfully = false
                         switch (recive_buffer) {
                             case "forward":
@@ -149,7 +172,11 @@ export class Robot {
         this.screen.rotation.y = -Math.PI / 2
         this.object.add(this.screen)
 
+        let canvasRendering = false
         this.updateTimer = setInterval(() => {
+            if (canvasRendering) return
+            canvasRendering = true
+
             this.v86Container.style.display = 'block'
 
             html2canvas(this.v86Container, {
@@ -157,6 +184,10 @@ export class Robot {
                 useCORS: true,
                 scale: 1
             }).then(() => {
+                canvasRendering = false
+
+                            
+
                 vmTexture.needsUpdate = true
             })
 
@@ -205,9 +236,9 @@ export class Robot {
     }
 
     rawmove(x, y, z) {
-        this.data.targetX += x
-        this.data.targetY += y
-        this.data.targetZ += z
+        this.data.targetPos.x += x
+        this.data.targetPos.y += y
+        this.data.targetPos.z += z
         return true
     }
 
@@ -221,14 +252,16 @@ export class Robot {
     }
 
     update(delta) {
-        this.data.pos.x += this.mode_delta(this.data.targetPos.x - this.data.pos.x) * delta * this.data.speed
+        const axes = ['x', 'y', 'z'];
+        for (const axis of axes) {
+            this.data.pos[axis] += this.mode_delta(this.data.targetPos[axis] - this.data.pos[axis]) * delta * this.data.speed;
+        }
+
         this.data.rot += this.mode_delta(this.data.targetRot - this.data.rot) * delta * this.data.speed
         
-        this.stopped = Math.abs(this.data.targetX - this.data.pos.x) < 0.05 && Math.abs(this.data.targetY - this.data.pos.y) < 0.05 && Math.abs(this.data.targetY - this.data.pos.z) < 0.05
+        this.stopped = Math.abs(this.data.targetPos.x - this.data.pos.x) < 0.05 && Math.abs(this.data.targetPos.y - this.data.pos.y) < 0.05 && Math.abs(this.data.targetPos.z - this.data.pos.z) < 0.05
         if (this.stopped) {
-            this.data.pos.x = this.data.targetX
-            this.data.pos.y = this.data.targetY
-            this.data.pos.z = this.data.targetZ
+            this.data.pos = this.data.targetPos.clone()
         }
 
         this.stoppedrot = Math.abs(this.data.targetRot - this.data.rot) < 0.05
@@ -270,3 +303,5 @@ export class Robot {
         this.v86Container = null
     }
 }
+
+ObjectAssotiation.registerType("Robot", Robot)

@@ -1,4 +1,5 @@
 import * as Three from "three"
+import * as Utils from "../Utils.js";
 
 export class GameBasic {
     constructor(renderer, scene) {
@@ -7,5 +8,13 @@ export class GameBasic {
 
         this.renderer = renderer
         this.scene = scene
+
+        this.atlasTexture = new Three.TextureLoader().load("textures/atlas.png")
+        this.atlasTexture.magFilter = Three.NearestFilter
+        this.atlasTexture.minFilter = Three.NearestMipmapNearestFilter
+        this.atlasTexture.generateMipmaps = true
+        this.atlasTexture.colorSpace = Three.SRGBColorSpace
+
+        this.blockMaterial = new Three.MeshLambertMaterial({ map: this.atlasTexture })
     }
 }

@@ -81,13 +81,22 @@ body > * {
     border: #444444 ridge 2px;
 }
 
-.game-menu {
+.modal-menu {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
     gap: 10px;
     width: 600px;
+}
+
+.game-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 10px;
+    width: 700px;
 }
 
 .game-menu-hor {
@@ -147,6 +156,11 @@ body > * {
     color: #000000;
 
     text-align: center;
+
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .menu-button:active {
@@ -169,6 +183,13 @@ body > * {
     text-shadow: #000000 0px 0 4px;
 }
 
+.menu-description {
+    font-size: 40px;
+    color: #c5c5c5;
+    text-align: center;
+    text-shadow: #000000 0px 0 4px;
+}
+
 .cross {
     position: absolute;
     top: 50%;
@@ -177,5 +198,29 @@ body > * {
     
     width: 30px;
     height: 30px;
-    background-color: #000000;
+}
+
+.button-img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+::selection {
+    background: #000000;
+    color: #eeeeee;
+}
+
+.menu-input-text {
+    all: unset;
+    cursor: pointer;
+    border: #222222 solid 2px;
+
+    background-color: #eeeeee;
+    height: 80px;
+
+    font-size: 30px;
+    color: #000000;
+
+    text-align: center;
 }

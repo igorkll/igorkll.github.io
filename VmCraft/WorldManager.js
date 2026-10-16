@@ -99,7 +99,7 @@ export function setCurrentWorldId(id) {
     localStorage.setItem('currentWorldId', String(id))
 }
 
-export function getCurrentWorldId(id) {
+export function getCurrentWorldId() {
     const savedId = localStorage.getItem('currentWorldId')
     if (savedId != null) {
         return Number(savedId)

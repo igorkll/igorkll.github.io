@@ -1,9 +1,11 @@
 import * as Gui from './Gui.js';
 import * as WorldManager from './WorldManager.js';
+import * as WorldEncoder from './WorldEncoder.js';
 import * as Game from './Game.js';
 import * as Modals from './Modals.js';
 import * as Kastili from './Kastili.js';
 import * as Utils from './Utils.js';
+import * as Consts from './Consts.js';
 
 // -------------------------------- create menu
 
@@ -28,13 +30,13 @@ function openSubMenu(name) {
     Gui.openModalWindow(getMenu(name))
 }
 
-function addButton(menu, name, callback, height=null, additionalButtons=[]) {
+export function addButton(menu, name, callback=null, height=null, additionalButtons=[]) {
     const btn = document.createElement("button")
     btn.style.flex = '1'
-    btn.textContent = name
+    btn.innerHTML = name
     btn.classList.add("menu-button")
     if (height) btn.style.height = height
-    btn.addEventListener("pointerup", callback)
+    if (callback) btn.addEventListener("pointerup", callback)
 
     if (additionalButtons != true) {
         const btnhost = document.createElement("div")
@@ -79,7 +81,8 @@ addSubMenu("worlds")
 // -------------------------------- worlds menu
 
 function isSelectedWorld(world) {
-    return world.id === Game.world.worldId
+    //return world.id === Game.world.worldId
+    return world.id === WorldManager.getCurrentWorldId()
 }
 
 function smallSecondButton(btn) {
@@ -92,7 +95,7 @@ function highlightButton(btn) {
 }
 
 function renameWorldModal(world) {
-    Modals.modalInput("NEW WORLD", world.name).then(name => {
+    Modals.modalInput("NEW WORLD", null, world.name).then(name => {
         if (name) {
             name = name.trim()
             if (name != world.name) {
@@ -120,7 +123,7 @@ function deleteWorldModal(world) {
 }
 
 function newWorldModal() {
-    Modals.modalInput("NEW WORLD", "world " + Utils.getRandomSuffix()).then(name => {
+    Modals.modalInput("NEW WORLD", null, "world " + Utils.getRandomSuffix()).then(name => {
         if (name) {
             name = name.trim()
             WorldManager.saveWorld({name}, true).then(refreshWorldsList)
@@ -129,7 +132,8 @@ function newWorldModal() {
 }
 
 function importWorldModal() {
-    Modals.windowSelectJsonFile().then(world => {
+    Modals.windowSelectFile(Consts.world_export_extension, false).then(world => {
+        world = WorldEncoder.decodeWorld(world)
         world.id = undefined
         WorldManager.saveWorld(world, true)
         refreshWorldsList()
@@ -143,15 +147,15 @@ function importWorldModal() {
 function addWorldToList(menu, world) {
     const highlight = isSelectedWorld(world)
 
-    const btn_export = addButton(menu, "C", () => {
-        Modals.windowExportFileAdvanced(world, world.name)
+    const btn_export = addButton(menu, '<img class="button-img" src="textures/export.png"></img>', () => {
+        Modals.windowExportFile(WorldEncoder.encodeWorld(world), world.name, Consts.world_export_extension)
     }, null, true)
 
-    const btn_rename = addButton(menu, "B", () => {
+    const btn_rename = addButton(menu, '<img class="button-img" src="textures/rename.png"></img>', () => {
         renameWorldModal(world)
     }, null, true)
 
-    const btn_delete = addButton(menu, "A", () => {
+    const btn_delete = addButton(menu, '<img class="button-img" src="textures/delete.png"></img>', () => {
         deleteWorldModal(world)
     }, null, true)
 
@@ -160,9 +164,12 @@ function addWorldToList(menu, world) {
     smallSecondButton(btn_delete)
 
     const btn_loadWorld = addButton(menu, world.name, () => {
-        Game.loadWorld(world)
+        WorldManager.getWorldFromId(world.id).then(actual_world => {
+            Game.loadWorld(actual_world)
+        })
         refreshWorldsList()
     }, null, [btn_export, btn_rename, btn_delete])
+    btn_loadWorld.style.padding = "0px 8px 0px 8px";
 
     if (highlight) {
         highlightButton(btn_loadWorld)
