@@ -73,22 +73,6 @@
 
             <div class="cool-frame" style="width: 70%; max-width: 1200px;">
                 <center>
-                    <h1>safety</h1>
-                    <div class="cool-text">
-                        to use most of the betterAPI methods, you need to get permission to use betterAPI.</br>
-                        this is done so that once you find a vulnerability, you can't just take and make a virus.</br>
-                        if you want to use betterAPI locally, then you can add your mod to the whitelist yourself.</br>
-                        after you post the mod on steam, you should contact me in the comments on betterAPI or discord so that I add your mod to the betterAPI whitelist.</br>
-                        after that, your mod will be guaranteed to be added to the betterAPI whitelist.</br>
-                        however, I will not add you access to the entire betterAPI. you will only get access to the functions you use.</br>
-                        i have the right to refuse to grant you access to certain parts of betterAPI if I consider that you do not need them to solve your problem.</br>
-                        some of the APIs in betterAPI (those that cannot be used for evil purposes) are public and do not require adding mods to the whitelist. study the documentation to understand what is available to you.</br>
-                    </div>
-                </center>
-            </div>
-
-            <div class="cool-frame" style="width: 70%; max-width: 1200px;">
-                <center>
                     <h1>installation</h1>
                     <div class="cool-text">
                         after installation, the mod will receive and install updates itself.</br>
@@ -193,8 +177,6 @@
                     <h1>registration</h1>
                     <div class="cool-text">
                         first you need to get into the white list of betterAPI mods, to do this, contact me on steam or discord</br>
-                        for debugging, you can add your mod there yourself. the file with the white list of mods is called modsWhitelist.json</br>
-                        in general, I am ready to add anyone to this whitelist who will not use betterAPI for bad purposes</br>
                         before using the better api, you need to register your mod in betterapi</br>
                         to do this, call the better.registration method (it won't be a big deal if you call it several times in a row, subsequent calls will simply be ignored (for example, each time the block is installed))</br>
                     </div>
@@ -446,7 +428,7 @@ better.loadfile("$CONTENT_" .. selfuuid .. "/Scripts/test.lua", nil, _G)</code><
                         </ul>
                     </div>
 
-                    <h2>algorithm api (public API. it is available to all mods and does not require to be added to the betterAPI whitelist)</h2>
+                    <h2>algorithm api</h2>
                     <div class="cool-text">
                         <ul>
                             <li>better.algorithm.base64_encode(string):string - converts text to a base64 string (available from threads)</li>
@@ -510,10 +492,7 @@ better.loadfile("$CONTENT_" .. selfuuid .. "/Scripts/test.lua", nil, _G)</code><
                         <ul>
                             <li>bext.checkArg(argnum, arg, ...) - checks the correctness of the arguments (available from threads)</li>
                             <li>bext.loadDLL(path) - injects a DLL into the game process (available from threads)</li>
-                            <li>bext.modCheck(...) - this method should be called at the beginning of each function that the extension exports to betterAPI and makes available to mods. as arguments, pass all the additional API permissions that the mod must have in order to use this feature. for example: bext.modCheck("audio", "http"). if you place this at the beginning of your function, the mod will need to have access to both audio and http in order to invoke your function (available from threads)</li>
-                            <li>bext.modCheckEx(mods:table, ...) - this function is similar to bext.modCheck. except that it accepts a table with additional mods that should have access to your function. the structure of the table is identical to the one presented in the "modsWhitelist.json" file in betterAPI. please note that the mods table can only contain tables, each of which is a list of description requirements.json in a defiant mod. the mod must satisfy at least one of these tables, all keys in these tables will be compared with the same ones in the description.json and if at least one does not match, then it is assumed that the description.json does not meet the requirements of this table and the check proceeds to the next one. exceptions the "apis" key is an array with a list of APIs available for this mod. if there is no api key, then all "apis" are available to the mod.. note that since the check is implemented in this way, it means that if there is an empty table in the mods table, the function will become available to all mods, as any description.json is able to meet completely missing requirements (available from threads)</li>
-                            <li>bext.modCheckCEx(mods:table, ...) - the name is short for "custom extended" and works the same way as bext.modCheckEx, but your feature will only be available to mods from your list, and will not be available to mods from the standard list (available from threads)</li>
-                            <li>bext.registerHandler_exit(function) - registers a callback function for an exit event from the world (available from threads) (from the thread is called at the end of the stream)</li>
+                            <li>bext.registerHandler_exit(function) - registers a callback function for an exit event from the world (available from threads) (from the thread is called at the end of the thread)</li>
                             <li>bext.registerHandler_tick(function) - registers the callback function for betterAPI tick events</li>
                             <li>bext.isThread - this value is set to true if your extension is loaded from the stream. note that in order for the extension to work in a thread, you must create a "threadExtension.lua" file as an entry point</li>
                         </ul>
