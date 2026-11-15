@@ -542,6 +542,22 @@ null, [
     ['Project page', 'https://github.com/igorkll/LGC-Boombox']
 ], ['js', 'cs'], null, states.BETA, 'Devices');
 
+addCard('LGC Otter smartpet',
+`<h2>Homemade smartpet on ESP32C3</h2>smartpet features 4 mini-games, a variety of locations, and music  
+character status system, money and shop system, achievements  `,
+null, [
+    'https://raw.githubusercontent.com/igorkll/LGC_Otter_smartpet/refs/heads/main/photos/1.jpg',
+    'https://raw.githubusercontent.com/igorkll/LGC_Otter_smartpet/refs/heads/main/photos/2.jpg',
+    'https://raw.githubusercontent.com/igorkll/LGC_Otter_smartpet/refs/heads/main/photos/3.jpg',
+    'https://raw.githubusercontent.com/igorkll/LGC_Otter_smartpet/refs/heads/main/photos/4.jpg',
+    'https://raw.githubusercontent.com/igorkll/LGC_Otter_smartpet/refs/heads/main/photos/5.jpg',
+    'https://raw.githubusercontent.com/igorkll/LGC_Otter_smartpet/refs/heads/main/photos/6.jpg',
+    'https://raw.githubusercontent.com/igorkll/LGC_Otter_smartpet/refs/heads/main/photos/7.jpg'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/LGC_Otter_smartpet']
+], ['c'], null, states.COMPLETED, 'Devices');
+
 // --------------------------------------------------------------- Software
 
 addCard('WinBox Maker', 
@@ -635,7 +651,7 @@ the program cache is located at the path: /home/$USER/.mkbootable and can take u
     ['Project page', 'https://github.com/igorkll/mkbootable'],
     ['Syslbuild page', 'https://github.com/igorkll/syslbuild'],
     ['Download', 'syslbuild', 'dlgithub']
-], ['python'], 'mkbootable', states.BETA, 'Software');
+], ['python'], 'mkbootable', states.SUPPORTED, 'Software');
 
 addCard('grammowavcli', 
 `converts a music file into a 3D model of a record for printing on a 3D printer and listening on a gramophone
@@ -648,7 +664,16 @@ null, [
 ], 
 [
     ['Project page', 'https://github.com/igorkll/grammowavcli']
-], ['python'], null, states.BETA, 'Software');
+], ['python'], null, states.COMPLETED, 'Software');
+
+addCard('super-kiosk-browser', 
+`this browser is designed for kiosks ONLY  
+ensures the complete absence of hotkeys and pop-ups. suitable for keyboard kiosks  
+if you need to create a bootable image for your kiosk, you can use a ready-made utility: https://github.com/igorkll/mkbootable`,
+null, null, 
+[
+    ['Project page', 'https://github.com/igorkll/super-kiosk-browser']
+], ['js'], null, states.COMPLETED, 'Software');
 
 // --------------------------------------------------------------- Services
 
@@ -845,6 +870,16 @@ null, ['images/scomputers_invisible.jpg'],
     ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3654930099']
 ], ['lua'], null, states.COMPLETED, 'Scrap mechanic mods');
 
+addCard('ComputerCraft_Ported', 
+`This is a text port of computercraft for scrap mechanic.
+It is not yet fully completed.
+
+Its operation requires the betterAPI file mod.`,
+null, ['images/cc_ported.jpg'], 
+[
+    ['Project page', 'https://steamcommunity.com/sharedfiles/filedetails/?id=3834353263']
+], ['lua'], null, states.WIP, 'Scrap mechanic mods');
+
 // --------------------------------------------------------------- Other
 
 addCard('esp32 opencomputers', 
@@ -975,6 +1010,41 @@ null, null,
     ['Project page', 'https://github.com/igorkll/electron-kiosk-with-keyboard-template'],
     ['Download', 'electron-kiosk-with-keyboard-template', 'dlgithub_source_zip']
 ], ['js'], null, states.COMPLETED, 'Other');
+
+addCard('edit-from-opencomputers-for-linux',
+`A port of the edit editor from opencomputers for Linux
+config path: ~/.config/edit.cfg
+<h2>dependencies</h2>* lua5.3
+* stty`,
+null,
+[
+    "https://raw.githubusercontent.com/igorkll/edit-from-opencomputers-for-linux/refs/heads/main/screenshots/1.png",
+    "https://raw.githubusercontent.com/igorkll/edit-from-opencomputers-for-linux/refs/heads/main/screenshots/2.png"
+],
+[
+    ['Project page', 'https://github.com/igorkll/edit-from-opencomputers-for-linux']
+], ['lua'], null, states.COMPLETED, 'Other');
+
+addCard('oculus_dk1_steamVR',
+`* SteamVR didn't work with it through native runtime and I had to do it. I JUST WANT TO PLAY!!!!!!!!!
+* with this driver, your Oculus devkit 1 will work in SteamVR without Oculus runtime, without oculus home and oculus link.
+
+<h2>installation</h2>* close SteamVR
+* remove oculus runtime if you installed it.
+* similar with openXR, oculus home and oculus link
+* make sure that VR is displayed in the system simply as a monitor and is not the main monitor
+* download the project release and unzip it to a folder that is convenient for you (you will not be able to delete files later, this will remove the driver)
+* run the python script: registry_driver.py
+
+<h2>warnings</h2>* if tracking doesn't work, launch steamVR first and only then the game
+* if you see a red screen with glasses, try moving the mouse to the VR monitor and making a click
+* if tracking doesn't work, try closing SteamVR and your VR game. then make sure that there are no processes running on the computer oculus_tunnel_32.exe and vrserver.exe if this does not help, restart your computer
+* oculus_tunnel must be built as a 32-bit program(x86)
+* the main "driver" project should be built as a 64-bit DLL`,
+null, null,
+[
+    ['Project page', 'https://github.com/igorkll/oculus_dk1_steamVR']
+], ['cs', 'cpp'], null, states.COMPLETED, 'Other');
 
 // --------------------------------------------------------------- Web
 
@@ -1138,10 +1208,57 @@ addCard('strange piano',
 reads data from the midi port
 controls the addressable LED strip
 please note that a special optocoupler circuit is required to connect to the midi port`,
-null, [], 
+null, null, 
 [
     ['Project page', 'https://github.com/igorkll/strange_piano'],
     ['Download', 'strange_piano', 'dlgithub_source_zip']
 ], ['c'], null, states.WIP, 'Portfolio');
+
+// --------------------------------------------------------------- Libraries
+
+addCard('TSGL', 
+`* extended graphics library for the ESP 32 family controller
+* this library is written entirely in "C"
+* designed exclusively for use with ESP-IDF
+* the esp-idf version i use is v5.4.4
+* also, this library has an APIs for working with other peripherals
+
+<h2>supported platforms</h2>* esp32
+* esp32c3
+
+<h2>supported displays</h2>* st7735
+* st7789
+* st7796
+* pcd8544 (nokia 84x48 display)
+
+<h2>supported ST77XX colormodes</h2>* st7735 - st7735_rgb444 / st7735_rgb565 / st7735_rgb666
+* st7789 - st77XX_rgb444 / st77XX_rgb565 / st77XX_rgb666
+* st7796 - st77XX_rgb565 / st77XX_rgb888
+
+<h2>supported audio formats</h2>* pcm
+* dfpwm
+* nbs
+
+<h2>features</h2>* the ability to install custom drivers without having to change the library code
+* the ability to install drivers directly inside the project
+* the ability to use different color spaces such as high color and true color to choose from
+* the ability to change driver settings for specific display features, which allows you to use 1 driver for most displays (can configure: resolution, offsets, inversion, flipX, flipY, swapXY)
+* are red and blue mixed up? this is not a problem, just send the color encoded on the display not using the driver's color space, but its BGR/RGB counterpart. or set the swapRGB flag in the driver settings
+* support for the 444 color space, where 3 pixels are encoded in 2 bits (accessing such a framebuffer is slower, and working without framebuffer can cause graphical artifacts)
+
+<h2>warnings</h2>* be sure to increase the stack size to at least 8192. for the main task, this is done with the "CONFIG_ESP_MAIN_TASK_STACK_SIZE" parameter in the sdkconfig
+
+<h2>langueches supported</h2>* english (ascii)
+* russian (cp1251)
+
+<h2>commands examples</h2>* convert audio (mono, 8 bit, 8000 sample rate): ffmpeg -i input.mp3 -acodec pcm_u8 -ac 1 -ar 8000 -f u8 output.pcm
+* convert audio fragment (mono, 8 bit, 4000 sample rate): ffmpeg -i input.mp3 -ss 00:10 -to 01:42 -acodec pcm_u8 -ac 1 -ar 4000 -f u8 output.pcm
+* convert audio to dfpwm: ffmpeg -i input.mp3 -ac 1 -ar 48000 -f dfpwm output.dpw
+* compress bmp: ffmpeg -i 24bits_or_32bits.bmp -pix_fmt pal8 8bit_compressed.bmp
+`,
+null, null,
+[
+    ['Project page', 'https://github.com/igorkll/TSGL']
+], ['c'], null, states.SUPPORTED, 'Libraries');
 
 }
