@@ -29,6 +29,7 @@ export const ambientLight =  new Three.HemisphereLight(
     1.0
 );
 
+/*
 const aspect = window.innerWidth / window.innerHeight;
 export const camera = new Three.OrthographicCamera(
     -Consts.HOR_VIEW_SIZE / 2,
@@ -51,6 +52,33 @@ function resize() {
     camera.bottom = -Consts.HOR_VIEW_SIZE / 2 / aspect;
 
     additionalCameraOffset = camera.bottom + 1.5;
+
+    camera.updateProjectionMatrix();
+}
+
+resize();
+*/
+
+function getVerticalFov(horizontalFov, aspect) {
+    const hFov = Three.MathUtils.degToRad(horizontalFov);
+
+    return Three.MathUtils.radToDeg(
+        2 * Math.atan(Math.tan(hFov / 2) / aspect)
+    );
+}
+
+const aspect = window.innerWidth / window.innerHeight;
+export const camera = new Three.PerspectiveCamera(getVerticalFov(Consts.FOV, aspect), aspect, 0.1, 1000);
+
+function resize() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    const aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = aspect;
+    camera.fov = getVerticalFov(Consts.FOV, aspect);
+
+    //additionalCameraOffset = Consts.HOR_VIEW_SIZE / 2 / aspect + 1.5;
 
     camera.updateProjectionMatrix();
 }

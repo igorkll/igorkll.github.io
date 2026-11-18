@@ -127,7 +127,7 @@ export function init() {
 }
 
 function getJumpForce() {
-    return Consts.JUMP_FORCE / current_rhythm;
+    return Consts.JUMP_FORCE;
 }
 
 function getGravity() {
@@ -135,7 +135,7 @@ function getGravity() {
 }
 
 function getDefaultSpeed() {
-    return Consts.DEFAULT_PLATFORM_SPEED * current_rhythm;
+    return Consts.DEFAULT_PLATFORM_SPEED * Math.max((((current_rhythm - 1) * Consts.PLATFORM_SPEED_DEPENDENT_FROM_RHYTHM) + 1), Consts.PLATFORM_SPEED_MIN);
 }
 
 function jump() {
@@ -198,17 +198,23 @@ export function render(delta) {
         old_change_background_time = current_time;
     }
 
-    Main.camera.position.set(Consts.CAMERA_POS.x, Consts.CAMERA_POS.y, Consts.CAMERA_POS.z + Main.additionalCameraOffset);
-    Main.camera.lookAt(new Three.Vector3(Consts.CAMERA_LOOK.x, Consts.CAMERA_LOOK.y, Consts.CAMERA_LOOK.z + Main.additionalCameraOffset));
+    Main.camera.position.set(Consts.CAMERA_POS.x, Consts.CAMERA_POS.y + Main.additionalCameraOffset, Consts.CAMERA_POS.z);
+    Main.camera.lookAt(new Three.Vector3(Consts.CAMERA_LOOK.x, Consts.CAMERA_LOOK.y + Main.additionalCameraOffset, Consts.CAMERA_LOOK.z));
 
     if (current_running) {
         let platformCollide = firstJump;
         firstJump = false;
 
-        platforms.forEach(platform => {
+        for (let i = platforms.length - 1; i >= 0; i--) {
+            const platform = platforms[i];
             platform.position.z += getDefaultSpeed() * delta;
             if (!platformCollide && checkPlatformCollision(platform)) platformCollide = true;
-        })
+
+            if (platform.position.z >= Consts.PLATFORM_DELETE_POSITION) {
+                Main.scene.remove(platforms[i]);
+                platforms.splice(i, 1);
+            }
+        }
         
         if (current_height_pos <= Consts.GROUND_Y) {
             if (platformCollide) {
@@ -280,7 +286,7 @@ function prepairPlatforms() {
     platform_geometry = new Three.BoxGeometry(platform_width, platform_height, platform_width)
 
     if (platform_geometry_long) platform_geometry_long.dispose()
-    platform_geometry_long = new Three.BoxGeometry(Consts.HOR_VIEW_SIZE, platform_height, platform_width)
+    platform_geometry_long = new Three.BoxGeometry(Consts.LONG_PLATFORM_SIZE, platform_height, platform_width)
     
     recreatePlatforms();
 }
@@ -291,6 +297,7 @@ function realStart() {
     current_height_pos = 0;
     current_height_vel = 0;
     current_time = 0;
+    old_change_background_time = 0;
     number_block.textContent = '';
 }
 
@@ -300,6 +307,8 @@ export function start() {
     prepairPlatforms();
 
     current_time = 0;
+    old_change_background_time = 0;
+
     gameover_end = false;
     current_height_pos = Consts.GROUND_Y;
 
