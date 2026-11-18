@@ -13,6 +13,8 @@ html, body {
     touch-action: none;
 
     user-select: none;
+
+    font-size: 30px;
 }
 
 img {
@@ -26,6 +28,8 @@ body {
 canvas {
     touch-action: none;
     cursor: none;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .gui_base {
@@ -56,6 +60,19 @@ canvas {
     pointer-events: none;
 }
 
+.menu-title {
+    color: #ffffff;
+    text-align: center;
+    text-shadow: 0px 0px 3px black;
+}
+
+.menu-description {
+    color: #ffffff;
+    text-align: center;
+    font-size: 22px;
+    text-shadow: 0px 0px 3px black;
+}
+
 .gui_music_list {
     height: calc(min(600px, 90dvh));
 
@@ -83,7 +100,6 @@ canvas {
     backdrop-filter: blur(10px);
 
     color: #ffffff;
-    font-size: 30px;
 
     display: flex;
     flex-direction: row;
@@ -95,6 +111,8 @@ canvas {
     cursor: pointer;
 
     flex-shrink: 0;
+
+    text-shadow: 0px 0px 3px black;
 }
 
 .flex {
@@ -135,9 +153,34 @@ canvas {
 
 }
 
+.gui_music_button {
+    height: calc(70px - (8px * 2));
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #ffffff;
+    border-radius: 7px;
+}
+
+.gui_container {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.gui_container > * {
+    flex: 1;
+    border-radius: 15px;
+}
+
 .button-img {
     width: 80%;
     height: 80%;
     object-fit: contain;
 }
-

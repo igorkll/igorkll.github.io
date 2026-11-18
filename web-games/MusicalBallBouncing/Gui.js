@@ -61,8 +61,12 @@ function editMusic(musicItem) {
 }
 
 function deleteMusic(musicItem) {
-    MusicManager.deleteMusic(musicItem.id);
-    refreshMusicList();
+    Modals.modalYesno("delete music?", musicItem.title).then(accept => {
+        if (accept) {
+            MusicManager.deleteMusic(musicItem.id);
+            refreshMusicList();
+        }
+    })
 }
 
 function addMusicToList(musicItem, editable=false) {
@@ -112,7 +116,12 @@ function refreshMusicList() {
 export function init() {
     document.getElementById("import").addEventListener("click", () => {
         Modals.windowSelectFile("mp3", true).then(mp3data => {
-            MusicManager.saveMusic({mp3data, rhythm: 1.2}, true).then(refreshMusicList);
+            let importTbl = {
+                mp3data,
+                rhythm: 1.5,
+                title: "unknown"
+            };
+            MusicManager.saveMusic(importTbl, true).then(refreshMusicList);
         });
     })
 
@@ -121,7 +130,7 @@ export function init() {
 
 export function setupCanvas(canvas) {
     const callback = (event) => {
-        Game.setPos((event.clientX / window.innerWidth) - 0.5);
+        Game.setPos((event.offsetX / canvas.clientWidth) - 0.5);
     };
 
     canvas.addEventListener('pointermove', callback);

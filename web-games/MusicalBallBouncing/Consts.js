@@ -21,15 +21,18 @@ export const CHANGE_BACKGROUND_AFTER_TIME = 60;
 export const CHANGE_BACKGROUND_SMOOTHED_TIMER = 10;
 export const CHANGE_BACKGROUND_SMOOTHED_SECONDS = 2;
 
-export const RHYTHM_MIN = 0.7;
-export const RHYTHM_MAX = 2;
+export const RHYTHM_MIN = 0.2;
+export const RHYTHM_MAX = 4;
 
 export const DEFAULT_PLATFORM_WIDTH = 1.2;
 export const DEFAULT_PLATFORM_HEIGHT = 0.2;
 export const DEFAULT_PLATFORMS_COUNT = 20;
 export const DEFAULT_PLATFORM_SPEED = 5;
 
-export const PLATFORM_SPEED_DEPENDENT_FROM_RHYTHM = 8;
+export const PLATFORM_SPEED_DEPENDENT_FROM_RHYTHM = 5;
 export const PLATFORM_SPEED_MIN = 0.5;
+export const MAX_RHYTHM_FOR_MATH_JUMP_FORCE = 1.1;
 
 export const FOV = 75;
+
+export const MAX_WIDTH = 600;

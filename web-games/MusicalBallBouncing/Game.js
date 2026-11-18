@@ -82,24 +82,31 @@ function selectPalette() {
 }
 
 function updateAmbientColor(color) {
-    Main.scene.background = color;
-    material.uniforms.color1.value.copy(color).multiplyScalar(7);
+    Main.scene.background = color.multiplyScalar(0.4);
+    material.uniforms.color1.value.copy(color).multiplyScalar(15);
     material.uniforms.color2.value.copy(color).multiplyScalar(2);
     old_smoothed_ambient_color = color;
 }
+
+let smoothedUpdateAmbientColor_intervalId;
 
 function smoothedUpdateAmbientColor(color) {
     let old_color = old_smoothed_ambient_color;
     let value = 0;
     let needSteps = (1000 / Consts.CHANGE_BACKGROUND_SMOOTHED_TIMER) * Consts.CHANGE_BACKGROUND_SMOOTHED_SECONDS;
     let currentStep = 0;
-    let intervalId;
 
-    intervalId = setInterval(() => {
+    if (smoothedUpdateAmbientColor_intervalId)
+        clearInterval(smoothedUpdateAmbientColor_intervalId);
+
+    smoothedUpdateAmbientColor_intervalId = setInterval(() => {
         currentStep++;
         value += 1 / needSteps;
         updateAmbientColor(old_color.clone().lerp(color, value));
-        if (currentStep >= needSteps) clearInterval(intervalId);
+        if (currentStep >= needSteps) {
+            clearInterval(smoothedUpdateAmbientColor_intervalId);
+            smoothedUpdateAmbientColor_intervalId = null;
+        }
     }, Consts.CHANGE_BACKGROUND_SMOOTHED_TIMER);
 
     old_smoothed_ambient_color = color;
@@ -119,15 +126,13 @@ function autoSelectAmbientColor() {
 }
 
 export function init() {
-    Main.sunLight.position.set(50, 100, 50);
-
     Main.scene.add(ball);
 
     autoSelectAmbientColor();
 }
 
 function getJumpForce() {
-    return Consts.JUMP_FORCE;
+    return Consts.JUMP_FORCE * Math.min(current_rhythm, Consts.MAX_RHYTHM_FOR_MATH_JUMP_FORCE);
 }
 
 function getGravity() {
