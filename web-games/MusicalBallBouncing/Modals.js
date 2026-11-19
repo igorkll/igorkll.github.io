@@ -81,11 +81,64 @@ export function createBaseModal(title) {
     return modal
 }
 
-function addModalDescription(modal, description) {
-    const descriptionObj = document.createElement("div")
-    descriptionObj.classList.add("menu-description")
-    descriptionObj.textContent = description
-    modal.appendChild(descriptionObj)
+export function addModalDescription(modal, description) {
+    const descriptionObj = document.createElement("div");
+    descriptionObj.classList.add("menu-description");
+    descriptionObj.textContent = description;
+    modal.appendChild(descriptionObj);
+}
+
+export function addContainer(modal, flex=true) {
+    const obj = document.createElement("div");
+    obj.classList.add("gui_container");
+    if (flex) obj.classList.add("gui_container_flex");
+    modal.appendChild(obj);
+    return obj;
+}
+
+export function addVContainer(modal) {
+    const obj = document.createElement("div");
+    obj.classList.add("gui_container_vertical");
+    modal.appendChild(obj);
+    return obj;
+}
+
+export function addSubTitle(container, subtitle) {
+    const obj = document.createElement("div");
+    obj.classList.add("menu-subtitle");
+    obj.textContent = subtitle;
+    container.appendChild(obj);
+    return obj;
+}
+
+export function addButton(container, text) {
+    const obj = document.createElement("div");
+    obj.classList.add("gui_music_button");
+    obj.textContent = text;
+    container.appendChild(obj);
+    return obj;
+}
+
+export function addSeekBar(container, defaultValue, changeCallback, saveCallback, minVal=0, maxVal=1, step=0.01) {
+    const seekbar = document.createElement("input");
+
+    seekbar.type = "range";
+    seekbar.min = minVal;
+    seekbar.max = maxVal;
+    seekbar.step = step;
+    seekbar.value = defaultValue;
+
+    seekbar.addEventListener("input", () => {
+        changeCallback?.(Number(seekbar.value));
+    });
+
+    seekbar.addEventListener("change", () => {
+        saveCallback?.(Number(seekbar.value));
+    });
+
+    container.appendChild(seekbar);
+
+    return seekbar;
 }
 
 export function modalYesno(title, description=null) {
@@ -94,6 +147,7 @@ export function modalYesno(title, description=null) {
 
     const container = document.createElement("div")
     container.classList.add("gui_container")
+    container.classList.add("gui_container_flex")
     modal.appendChild(container)
 
     const noButton = document.createElement("div")

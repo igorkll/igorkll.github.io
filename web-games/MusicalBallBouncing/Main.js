@@ -22,6 +22,8 @@ export const renderer = new Three.WebGLRenderer({
 
 export const composer = new EffectComposer(renderer);
 
+export const canvasItem = renderer.domElement;
+
 document.body.appendChild(renderer.domElement);
 Gui.setupCanvas(renderer.domElement);
 
