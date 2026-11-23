@@ -75,7 +75,7 @@ resize();
 
 // -------------------------------------
 
-document.addEventListener("click", () => {
+document.addEventListener("pointerdown", () => {
     document.documentElement.requestFullscreen();
 });
 
