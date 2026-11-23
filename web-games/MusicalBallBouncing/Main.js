@@ -75,7 +75,14 @@ resize();
 
 // -------------------------------------
 
-document.addEventListener("pointerdown", () => {
+document.body.addEventListener("click", (e) => {
+    const t = e.target;
+    const isBackground = t === document.body || t === document.documentElement;
+    const isCanvas = t instanceof HTMLCanvasElement;
+
+    if (!isBackground && !isCanvas) return;
+    if (document.fullscreenElement) return;
+
     document.documentElement.requestFullscreen();
 });
 

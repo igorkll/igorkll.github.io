@@ -38,6 +38,8 @@ export function getEffectsVolume() {
 }
 
 function startGame(musicItem) {
+    document.documentElement.requestFullscreen();
+    
     stopGame();
 
     let audio;
