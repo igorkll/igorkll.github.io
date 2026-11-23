@@ -141,6 +141,20 @@ export function addSeekBar(container, defaultValue, changeCallback, saveCallback
     return seekbar;
 }
 
+export function addTextInput(container, defaultText, changeCallback) {
+    const textInput = document.createElement("input");
+    textInput.type = "text";
+    textInput.placeholder = "Track name...";
+    textInput.value = defaultText;
+
+    textInput.addEventListener("input", () => {
+        changeCallback?.(textInput.value);
+    });
+
+    container.appendChild(textInput);
+    return textInput;
+}
+
 export function modalYesno(title, description=null) {
     const modal = createBaseModal(title)
     if (description) addModalDescription(modal, description)

@@ -1,10 +1,11 @@
 *, *::after, *::before {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 @font-face {
     font-family: "Sevenish";
-    src: url("./fonts/Sevenish/Sevenish.ttf") format("truetype");
+    src: url("../fonts/Sevenish/Sevenish.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -113,6 +114,37 @@ canvas {
     height: 70px;
 
     border-radius: 15px;
+    border: 2px solid #ffffff6e;
+    background-color: #ffffff26;
+    backdrop-filter: blur(10px);
+
+    color: #ffffff;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 8px;
+    transition: background-color 0.1s linear;
+    cursor: pointer;
+
+    flex-shrink: 0;
+
+    text-shadow: 0px 0px 3px black;
+}
+
+input[type="text"] {
+    all: unset;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+
+    appearance: none;
+
+    height: 70px;
+
+    border-radius: 15px;
+    border: 2px solid #ffffff6e;
     background-color: #ffffff26;
     backdrop-filter: blur(10px);
 
@@ -164,6 +196,7 @@ canvas {
     justify-content: center;
 
     background-color: #ffffff;
+    border: 2px solid #0000009d;
     border-radius: 7px;
 
     margin-left: 8px;
@@ -178,12 +211,15 @@ canvas {
     justify-content: center;
 
     background-color: #ffffff;
+    border: 2px solid #0000009d;
     border-radius: 7px;
 
     cursor: pointer;
 
     padding: 6px;
     font-size: 25px;
+
+    border-radius: 15px;
 }
 
 .gui_container {
@@ -209,7 +245,6 @@ canvas {
 
 .gui_container_flex > * {
     flex: 1;
-    border-radius: 15px;
 }
 
 .button-img {

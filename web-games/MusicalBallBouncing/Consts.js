@@ -45,3 +45,7 @@ export const MAX_RHYTHM_FOR_MATH_JUMP_FORCE = 1.1;
 export const FOV = 75;
 
 export const MAX_WIDTH = 600;
+
+export const DEFAULT_MASTER_VOLUME = 0.7;
+export const DEFAULT_MUSIC_VOLUME = 1;
+export const DEFAULT_EFFECTS_VOLUME = 1;

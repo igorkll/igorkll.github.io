@@ -75,7 +75,11 @@ resize();
 
 // -------------------------------------
 
-window.addEventListener('resize', resize);
+document.addEventListener("click", () => {
+    document.documentElement.requestFullscreen();
+});
+
+window.addEventListener("resize", resize);
 
 let firstFrame = true;
 

@@ -13,9 +13,10 @@ export function createAudioFromBuffer(mp3Data) {
     return audio;
 }
 
-export function playAudio(audio) {
+export function playAudio(audio, volume=1) {
     audio.addEventListener("ended", () => stopAudio(audio))
 
+    audio.volume = volume;
     audio.loop = false;
     audio.play();
 }
@@ -39,4 +40,12 @@ export function randomInt(min, max) {
 
 export function randomFloat(min, max) {
     return Math.random() * (max - min) + min;
+}
+
+export function setStorage(storageData) {
+    localStorage.setItem("settings", JSON.stringify(storageData));
+}
+
+export function getStorage() {
+    return JSON.parse(localStorage.getItem("settings")) ?? {};
 }

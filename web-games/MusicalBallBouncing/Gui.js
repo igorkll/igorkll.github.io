@@ -27,6 +27,16 @@ function stopGame() {
     hideCursor(false);
 }
 
+export function getMusicVolume() {
+    const storageData = Utils.getStorage();
+    return (storageData.master_volume ?? Consts.DEFAULT_MASTER_VOLUME) * (storageData.music_volume ?? Consts.DEFAULT_MUSIC_VOLUME);
+}
+
+export function getEffectsVolume() {
+    const storageData = Utils.getStorage();
+    return (storageData.master_volume ?? Consts.DEFAULT_MASTER_VOLUME) * (storageData.effects_volume ?? Consts.DEFAULT_EFFECTS_VOLUME);
+}
+
 function startGame(musicItem) {
     stopGame();
 
@@ -38,7 +48,7 @@ function startGame(musicItem) {
         audio = Utils.createAudioFromBuffer(musicItem.mp3data);
     }
 
-    audio.volume = 0.1;
+    audio.volume = getMusicVolume();
     audio.loop = true;
     audio.play();
 
@@ -53,7 +63,7 @@ function startGame(musicItem) {
 
 export function gameover() {
     stopGame();
-    Utils.playAudio(Utils.audioFromUrl("./sounds/gameover.mp3"));
+    Utils.playAudio(Utils.audioFromUrl("./sounds/gameover.mp3"), getEffectsVolume());
 }
 
 document.addEventListener('visibilitychange', () => {
@@ -66,15 +76,15 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-function addSeekBarForMusicValue(container, musicItem, field, defVal, min, max, saveCallback) {
-    let seekbar = Modals.addSeekBar(container, musicItem[field] ?? defVal, null, (val) => {
-        musicItem[field] = val;
+function addSeekBar(container, changeData, field, defVal, min, max, saveCallback) {
+    let seekbar = Modals.addSeekBar(container, changeData[field] ?? defVal, null, (val) => {
+        changeData[field] = val;
         saveCallback();
     }, min, max);
     seekbar.style.alignSelf = 'stretch';
 
     return () => {
-        seekbar.value = musicItem[field];
+        seekbar.value = changeData[field];
     };
 }
 
@@ -89,28 +99,34 @@ function editMusic(musicItem) {
 
     let forceUpdateValues = [];
 
+    let textInput = Modals.addTextInput(modal, musicItem.title, (text) => {
+        musicItem.title = text;
+        saveCallback();
+    });
+    textInput.classList.add("flex");
+
     let container = Modals.addVContainer(modal);
     Modals.addSubTitle(container, "Rhythm");
     forceUpdateValues.push(
-        addSeekBarForMusicValue(container, musicItem, "rhythm", Consts.DEFAULT_TRACK_RHYTHM, Consts.RHYTHM_MIN, Consts.RHYTHM_MAX, saveCallback)
+        addSeekBar(container, musicItem, "rhythm", Consts.DEFAULT_TRACK_RHYTHM, Consts.RHYTHM_MIN, Consts.RHYTHM_MAX, saveCallback)
     );
 
     container = Modals.addVContainer(modal);
     Modals.addSubTitle(container, "Platform width");
     forceUpdateValues.push(
-        addSeekBarForMusicValue(container, musicItem, "platform_width_mul", Consts.DEFAULT_TRACK_PLATFORM_WIDTH_MUL, Consts.TRACK_SETS_MUL_MIN, Consts.TRACK_SETS_MUL_MAX, saveCallback)
+        addSeekBar(container, musicItem, "platform_width_mul", Consts.DEFAULT_TRACK_PLATFORM_WIDTH_MUL, Consts.TRACK_SETS_MUL_MIN, Consts.TRACK_SETS_MUL_MAX, saveCallback)
     );
 
     container = Modals.addVContainer(modal);
     Modals.addSubTitle(container, "Ball diameter");
     forceUpdateValues.push(
-        addSeekBarForMusicValue(container, musicItem, "ball_diameter_mul", Consts.DEFAULT_TRACK_BALL_DIAMETER_MUL, Consts.TRACK_SETS_MUL_MIN, Consts.TRACK_SETS_MUL_MAX, saveCallback)
+        addSeekBar(container, musicItem, "ball_diameter_mul", Consts.DEFAULT_TRACK_BALL_DIAMETER_MUL, Consts.TRACK_SETS_MUL_MIN, Consts.TRACK_SETS_MUL_MAX, saveCallback)
     );
 
     container = Modals.addVContainer(modal);
     Modals.addSubTitle(container, "Platform speed");
     forceUpdateValues.push(
-        addSeekBarForMusicValue(container, musicItem, "platform_speed_mul", Consts.DEFAULT_TRACK_PLATFORM_SPEED_MUL, Consts.TRACK_SETS_MUL_MIN, Consts.TRACK_SETS_MUL_MAX, saveCallback)
+        addSeekBar(container, musicItem, "platform_speed_mul", Consts.DEFAULT_TRACK_PLATFORM_SPEED_MUL, Consts.TRACK_SETS_MUL_MIN, Consts.TRACK_SETS_MUL_MAX, saveCallback)
     );
 
     container = Modals.addContainer(modal, false);
@@ -134,8 +150,7 @@ function editMusic(musicItem) {
             forceUpdateValue();
         });
 
-        await MusicManager.saveMusic(musicItem);
-        refreshMusicList();
+        saveCallback();
     });
 
     resetButton.addEventListener("click", async () => {
@@ -148,8 +163,7 @@ function editMusic(musicItem) {
             forceUpdateValue();
         });
 
-        await MusicManager.saveMusic(musicItem);
-        refreshMusicList();
+        saveCallback();
     });
 
     saveButton.addEventListener("click", async () => {
@@ -216,6 +230,66 @@ function refreshMusicList() {
     })
 }
 
+function modalSettings() {
+    const modal = Modals.createBaseModal("Settings")
+
+    const storageData = Utils.getStorage();
+
+    let saveOnDone = false;
+    const saveCallback = () => {
+        saveOnDone = true;
+    };
+
+    let forceUpdateValues = [];
+
+    let container = Modals.addVContainer(modal);
+    Modals.addSubTitle(container, "Master volume");
+    forceUpdateValues.push(
+        addSeekBar(container, storageData, "master_volume", Consts.DEFAULT_MASTER_VOLUME, 0, 1, saveCallback)
+    );
+
+    container = Modals.addVContainer(modal);
+    Modals.addSubTitle(container, "Music volume");
+    forceUpdateValues.push(
+        addSeekBar(container, storageData, "music_volume", Consts.DEFAULT_MUSIC_VOLUME, 0, 1, saveCallback)
+    );
+
+    container = Modals.addVContainer(modal);
+    Modals.addSubTitle(container, "Effects volume");
+    forceUpdateValues.push(
+        addSeekBar(container, storageData, "effects_volume", Consts.DEFAULT_EFFECTS_VOLUME, 0, 1, saveCallback)
+    );
+
+    container = Modals.addContainer(modal, false);
+    const saveButton = Modals.addButton(container, "Save");
+    saveButton.style.flex = "1";
+    container.appendChild(saveButton)
+
+    const resetButton = Modals.addButton(container, "Reset");
+    container.appendChild(resetButton)
+
+    resetButton.addEventListener("click", async () => {
+        storageData.master_volume = Consts.DEFAULT_MASTER_VOLUME;
+        storageData.music_volume = Consts.DEFAULT_MUSIC_VOLUME;
+        storageData.effects_volume = Consts.DEFAULT_EFFECTS_VOLUME;
+
+        forceUpdateValues.forEach(forceUpdateValue => {
+            forceUpdateValue();
+        });
+
+        saveCallback();
+    });
+
+    saveButton.addEventListener("click", async () => {
+        Modals.closeModal()
+        if (saveOnDone) {
+            Utils.setStorage(storageData);
+        }
+    });
+
+    Modals.openModalWindow(modal)
+}
+
 export function init() {
     document.getElementById("import").addEventListener("click", () => {
         Modals.windowSelectFile("mp3", true).then(mp3data => {
@@ -229,6 +303,10 @@ export function init() {
             };
             MusicManager.saveMusic(importTbl, true).then(refreshMusicList);
         });
+    })
+
+    document.getElementById("settings").addEventListener("click", () => {
+        modalSettings();
     })
 
     refreshMusicList()

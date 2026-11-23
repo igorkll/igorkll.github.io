@@ -213,6 +213,15 @@ function checkPlatformCollision(platform) {
     return true;
 }
 
+function forceSyncPlatforms(collidenPlatform) {
+    let platformOffset = ball.position.z - collidenPlatform.position.z;
+
+    for (let i = platforms.length - 1; i >= 0; i--) {
+        const platform = platforms[i];
+        platform.position.z += platformOffset;
+    }
+}
+
 export function render(delta) {
     current_time += delta;
 
@@ -226,12 +235,17 @@ export function render(delta) {
 
     if (current_running) {
         let platformCollide = firstJump;
+        let collidenPlatform;
         firstJump = false;
 
         for (let i = platforms.length - 1; i >= 0; i--) {
             const platform = platforms[i];
+
             platform.position.z += getDefaultSpeed() * delta;
-            if (!platformCollide && checkPlatformCollision(platform)) platformCollide = true;
+            if (!platformCollide && checkPlatformCollision(platform)) {
+                platformCollide = true;
+                collidenPlatform = platform;
+            }
 
             if (platform.position.z >= Consts.PLATFORM_DELETE_POSITION) {
                 Main.scene.remove(platforms[i]);
@@ -241,6 +255,7 @@ export function render(delta) {
         
         if (current_height_pos <= Consts.GROUND_Y) {
             if (platformCollide) {
+                if (collidenPlatform) forceSyncPlatforms(collidenPlatform);
                 jump();
                 spawnPlatform(current_platform_offset_z);
                 current_height_pos = Consts.GROUND_Y;
