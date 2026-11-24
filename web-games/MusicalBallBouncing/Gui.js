@@ -39,7 +39,7 @@ export function getEffectsVolume() {
 
 function startGame(musicItem) {
     document.documentElement.requestFullscreen();
-    
+
     stopGame();
 
     let audio;
@@ -191,12 +191,12 @@ function deleteMusic(musicItem) {
 function addMusicToList(musicItem, editable=false) {
     const item = document.createElement("div")
     item.classList.add("gui_music_item")
-    item.textContent = musicItem.title;
     item.addEventListener("click", () => startGame(musicItem));
 
-    const flexItem = document.createElement("div");
-    flexItem.classList.add("flex");
-    item.appendChild(flexItem);
+    const textItem = document.createElement("div");
+    textItem.classList.add("gui_music_item_text");
+    textItem.textContent = musicItem.title;
+    item.appendChild(textItem);
 
     if (editable) {
         let itemButton = document.createElement("div");

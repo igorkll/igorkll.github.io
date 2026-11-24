@@ -200,7 +200,20 @@ input[type="text"] {
     border-radius: 7px;
 
     margin-left: 8px;
+    flex-shrink: 0;
 
+}
+
+.gui_music_item_text {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(100% - (70px - (8px * 2)) - (8px * 3));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+    padding: 4px;
+    margin: -4px;
 }
 
 .gui_music_button {
