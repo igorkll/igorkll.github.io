@@ -1,7 +1,28 @@
 let enabled = false;
 let lastInteractionType = null;
-
+let updateFrame = null;
 const pointers = new Map();
+
+function scheduleUpdate() {
+    if (updateFrame !== null || !enabled) return;
+
+    updateFrame = requestAnimationFrame(() => {
+        updateFrame = null;
+        if (enabled) update();
+    });
+}
+
+function cancelUpdate() {
+    if (updateFrame !== null) {
+        cancelAnimationFrame(updateFrame);
+        updateFrame = null;
+    }
+}
+
+function updateImmediately() {
+    cancelUpdate();
+    if (enabled) update();
+}
 
 function removeClassFromAllElements(className) {
     document.querySelectorAll(`.${className}`).forEach(element => {
@@ -10,7 +31,7 @@ function removeClassFromAllElements(className) {
 }
 
 function getElementsAt(x, y, all=false) {
-    const elements = document.elementsFromPoint(x, y);
+    const elements = document.elementsFromPoint(x, y).filter(element => !element.classList.contains("touch_hybrid_safe_hover-ignore"));
     return all ? elements : elements.slice(0, 1);
 }
 
@@ -77,7 +98,7 @@ function handle_pointerdown(e) {
     getElementsAt(e.clientX, e.clientY, false).forEach(element => element.classList.add("touch_hybrid_safe_hover-ts_active"));
     getElementsAt(e.clientX, e.clientY, true).forEach(element => element.classList.add("touch_hybrid_safe_hover-ts_active-bubble"));
 
-    update();
+    updateImmediately();
 }
 
 function handle_pointermove(e) {
@@ -90,7 +111,7 @@ function handle_pointermove(e) {
         isPressed: e.buttons !== 0
     });
 
-    update();
+    scheduleUpdate();
 }
 
 function handle_pointerup_pointercancel(e) {
@@ -102,7 +123,7 @@ function handle_pointerup_pointercancel(e) {
     });
 
     if (e.pointerType !== "mouse") {
-        update();
+        scheduleUpdate();
     }
 }
 
@@ -119,6 +140,8 @@ export function enable() {
 
 export function disable() {
     if (!enabled) return;
+
+    updateImmediately();
 
     document.removeEventListener("pointerdown", handle_pointerdown);
     document.removeEventListener("pointermove", handle_pointermove);

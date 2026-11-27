@@ -1165,6 +1165,23 @@ null, [
     ['Download', 'VmCraft', 'dlgithub_source_zip']
 ], ['js'], null, states.WIP, 'Games');
 
+addCard('MusicalBallBouncing', 
+null,
+null, [
+    'images/MusicalBallBouncing/1.png',
+    'images/MusicalBallBouncing/2.png',
+    'images/MusicalBallBouncing/3.png',
+    'images/MusicalBallBouncing/4.png',
+    'images/MusicalBallBouncing/5.png',
+    'images/MusicalBallBouncing/6.png',
+    'images/MusicalBallBouncing/7.png',
+    'images/MusicalBallBouncing/8.png'
+], 
+[
+    ['Project page', 'https://github.com/igorkll/web-games/tree/main/MusicalBallBouncing'],
+    ['Play online', 'https://igorkll.github.io/web-games/MusicalBallBouncing']
+], ['js'], null, states.SUPPORTED, 'Games');
+
 // --------------------------------------------------------------- Ideas
 
 addNote('Syberia Continuation Game Generator with AI', 
@@ -1260,5 +1277,37 @@ null, null,
 [
     ['Project page', 'https://github.com/igorkll/TSGL']
 ], ['c'], null, states.SUPPORTED, 'Libraries');
+
+addCard('touch_hybrid_safe_hover_js', 
+`An alternative implementation of hover in JavaScript that works correctly on devices with a mouse, touchscreens, and hybrid devices that have both a mouse and a touchscreen.
+
+enable
+import * as touch_hybrid_safe_hover from './touch_hybrid_safe_hover.js';
+touch_hybrid_safe_hover.enable();
+
+classes
+the library itself adds these classes to your elements so that you can change the visual style
+* "touch_hybrid_safe_hover-ts_active" - When using a mouse, it works like a regular hover. when using a touchscreen or stylus, it triggers when the finger is on the element. The class will disappear immediately if you move your finger from the element (Even if you don’t release your finger from the screen, just move it). It will appear ONLY if the click occurred within the element (this is what distinguishes this class from the next one).
+* "touch_hybrid_safe_hover-ts_hover" - When using a mouse, it works like a regular hover. When using a touch screen or stylus, it appears when the finger is above the element and disappears when the finger moves outside the element. It appears even if the click actually occurred outside the element and then the finger moved onto the element. this allows you to implement the logic where you press your finger on the touch screen, move it to the desired element (and they bounce while you drag your finger across the screen), and then the correct one is selected when you release your finger on it.
+* "touch_hybrid_safe_hover-ts_none" - When using a mouse, it works like a regular hover. it doesn't work on the touchscreen or pen at all
+* "touch_hybrid_safe_hover-ts_active-bubble" - It works as the first alternative, it just pops up.
+* "touch_hybrid_safe_hover-ts_hover-bubble" - It works as the first alternative, it just pops up.
+* "touch_hybrid_safe_hover-ts_none-bubble" - It works as the first alternative, it just pops up.
+
+control classes
+these are the control classes. they affect how the library handles the element. the library itself does not add them
+* "touch_hybrid_safe_hover-ignore" - forces the library to ignore elements with this class. this is necessary if you need to use a non-bubble class, but in your element there is some element on top that needs to be ignored (for example, a picture in a button that is located in another button that does not allow you to use a bubble class)
+
+functions
+* enable - activates the library
+* disable - deactivates the library
+* isEnabled - returns true if the library is activated
+* getLastInteractionType - null / "mouse" / "touch" / "pen"
+`,
+null, ["images/touch_hybrid_safe_hover.png"],
+[
+    ['Project page', 'https://github.com/igorkll/touch_hybrid_safe_hover_js'],
+    ['Test online', 'https://igorkll.github.io/test/touch_hybrid_safe_hover_js']
+], ['js'], null, states.SUPPORTED, 'Libraries');
 
 }
