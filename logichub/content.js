@@ -1307,7 +1307,7 @@ functions
 null, ["images/touch_hybrid_safe_hover.png"],
 [
     ['Project page', 'https://github.com/igorkll/touch_hybrid_safe_hover_js'],
-    ['Test online', 'https://igorkll.github.io/test/touch_hybrid_safe_hover_js']
+    ['Test online', 'https://igorkll.github.io/test/touch_hybrid_safe_hover_js/example.html']
 ], ['js'], null, states.SUPPORTED, 'Libraries');
 
 }
